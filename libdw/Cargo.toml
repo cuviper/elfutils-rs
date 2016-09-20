@@ -1,0 +1,14 @@
+[package]
+name = "libdw"
+version = "0.0.1"
+license = "MIT/Apache-2.0"
+authors = ["Josh Stone <jistone@redhat.com>"]
+repository = "https://github.com/cuviper/elfutils-rs"
+description = "Placeholder for bindings to elfutils"
+
+[dependencies]
+
+[dependencies.libdw-sys]
+optional = false
+path = "../libdw-sys"
+version = "0.0.1"
