@@ -1,6 +1,9 @@
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-    }
-}
+extern crate libc;
+extern crate libelf_sys as ffi;
+
+
+mod error;
+pub use error::{Error, Result};
+
+mod elf;
+pub use elf::Elf;
