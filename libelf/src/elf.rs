@@ -2,23 +2,31 @@ use ffi;
 use libc;
 use std::ptr;
 
+use std::marker::PhantomData;
 use std::os::unix::io::AsRawFd;
 
 use super::Result;
 
 
 pub struct Elf<'a> {
-    inner: &'a mut ffi::Elf,
+    inner: *mut ffi::Elf,
+    phantom: PhantomData<&'a mut ffi::Elf>,
 }
 
 impl<'a> Elf<'a> {
+    fn new(elf: &mut ffi::Elf) -> Elf {
+        Elf {
+            inner: elf,
+            phantom: PhantomData,
+        }
+    }
+
     pub fn from_fd<FD: AsRawFd>(fd: &FD) -> Result<Elf> {
         let fd = fd.as_raw_fd();
         unsafe {
             ffi::elf_version(ffi::EV_CURRENT);
             ffi::elf_begin(fd, ffi::ELF_C_READ, ptr::null_mut())
-                .as_mut()
-                .map(|e| Elf { inner: e })
+                .as_mut().map(Elf::new)
                 .ok_or_else(::error::last)
         }
     }
@@ -27,8 +35,7 @@ impl<'a> Elf<'a> {
         let ptr = mem.as_mut_ptr() as *mut libc::c_char;
         unsafe {
             ffi::elf_memory(ptr, mem.len())
-                .as_mut()
-                .map(|e| Elf { inner: e })
+                .as_mut().map(Elf::new)
                 .ok_or_else(::error::last)
         }
     }
