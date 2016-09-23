@@ -4,7 +4,7 @@ use std::mem;
 
 use ffi::Dwarf_Off;
 
-use std::cell::RefCell;
+use std::cell::UnsafeCell;
 use std::marker::PhantomData;
 
 use super::Result;
@@ -13,7 +13,7 @@ use super::Dwarf;
 
 #[derive(Debug)]
 pub struct Die<'a> {
-    inner: RefCell<ffi::Dwarf_Die>,
+    inner: UnsafeCell<ffi::Dwarf_Die>,
     phantom: PhantomData<&'a Dwarf<'a>>,
 }
 
@@ -42,7 +42,7 @@ pub fn offdie_types<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'
 impl<'a> Die<'a> {
     fn new(die: ffi::Dwarf_Die) -> Die<'a> {
         Die {
-            inner: RefCell::new(die),
+            inner: UnsafeCell::new(die),
             phantom: PhantomData,
         }
     }
@@ -51,7 +51,7 @@ impl<'a> Die<'a> {
         DieChildren {
             first: true,
             finished: false,
-            die: *self.inner.borrow(),
+            die: unsafe { *self.inner.get() },
             phantom: PhantomData,
         }
     }
@@ -60,14 +60,14 @@ impl<'a> Die<'a> {
         where F: FnMut(&Die<'a>) -> bool
     {
         unsafe {
-            let mut child = Die {
-                inner: RefCell::new(mem::uninitialized()),
+            let child = Die {
+                inner: UnsafeCell::new(mem::uninitialized()),
                 phantom: PhantomData,
             };
 
             let mut rc = {
-                let parent = &mut *self.inner.borrow_mut();
-                let child = child.inner.get_mut();
+                let parent = self.inner.get();
+                let child = child.inner.get();
                 ffi::dwarf_child(parent, child)
             };
 
@@ -78,7 +78,7 @@ impl<'a> Die<'a> {
                     return Ok(());
                 }
 
-                let child = child.inner.get_mut();
+                let child = child.inner.get();
                 rc = ffi::dwarf_siblingof(child, child);
             }
         }
@@ -101,8 +101,7 @@ impl<'a> Die<'a> {
         }
 
         let rc = unsafe {
-            ffi::dwarf_getattrs(&mut *self.inner.borrow_mut(),
-                                Some(callback::<F>),
+            ffi::dwarf_getattrs(self.inner.get(), Some(callback::<F>),
                                 &mut f as *mut F as *mut _, 0)
         };
 
@@ -130,7 +129,7 @@ impl<'a> Iterator for DieChildren<'a> {
         if self.finished { return None }
 
         let rc = unsafe {
-            let die: *mut _ = &mut self.die;
+            let die = &mut self.die;
             if self.first {
                 self.first = false;
                 ffi::dwarf_child(die, die)
