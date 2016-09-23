@@ -56,6 +56,15 @@ impl<'a> Die<'a> {
         }
     }
 
+    pub fn has_children(&self) -> Result<bool> {
+        let rc = unsafe { ffi::dwarf_haschildren(self.inner.get()) };
+        if rc >= 0 {
+            Ok(rc > 0)
+        } else {
+            Err(::error::last())
+        }
+    }
+
     pub fn with_children<F>(&self, mut f: F) -> Result<()>
         where F: FnMut(&Die<'a>) -> bool
     {

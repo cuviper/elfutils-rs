@@ -43,8 +43,10 @@ fn info_iter(b: &mut test::Bencher) {
             true
         }).unwrap();
 
-        for child in die.children() {
-            recurse_die(child.as_ref().unwrap());
+        if die.has_children().unwrap() {
+            for child in die.children() {
+                recurse_die(child.as_ref().unwrap());
+            }
         }
     }
 }
