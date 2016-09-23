@@ -56,6 +56,35 @@ impl<'a> Die<'a> {
         }
     }
 
+    pub fn with_children<F>(&self, mut f: F) -> Result<()>
+        where F: FnMut(&Die<'a>) -> bool
+    {
+        unsafe {
+            let mut child = Die {
+                inner: RefCell::new(mem::uninitialized()),
+                phantom: PhantomData,
+            };
+
+            let mut rc = {
+                let parent = &mut *self.inner.borrow_mut();
+                let child = child.inner.get_mut();
+                ffi::dwarf_child(parent, child)
+            };
+
+            loop {
+                if rc < 0 {
+                    return Err(::error::last());
+                } else if rc > 0 || !f(&child) {
+                    return Ok(());
+                }
+
+                let child = child.inner.get_mut();
+                let mut previous = *child;
+                rc = ffi::dwarf_siblingof(&mut previous, child);
+            }
+        }
+    }
+
     pub fn with_attrs<F>(&self, mut f: F) -> Result<()>
         where F: FnMut(&mut ffi::Dwarf_Attribute) -> bool
     {
