@@ -79,8 +79,7 @@ impl<'a> Die<'a> {
                 }
 
                 let child = child.inner.get_mut();
-                let mut previous = *child;
-                rc = ffi::dwarf_siblingof(&mut previous, child);
+                rc = ffi::dwarf_siblingof(child, child);
             }
         }
     }
@@ -130,20 +129,18 @@ impl<'a> Iterator for DieChildren<'a> {
     fn next(&mut self) -> Option<Self::Item> {
         if self.finished { return None }
 
-        let mut next_die;
         let rc = unsafe {
-            next_die = mem::uninitialized();
+            let die: *mut _ = &mut self.die;
             if self.first {
                 self.first = false;
-                ffi::dwarf_child(&mut self.die, &mut next_die)
+                ffi::dwarf_child(die, die)
             } else {
-                ffi::dwarf_siblingof(&mut self.die, &mut next_die)
+                ffi::dwarf_siblingof(die, die)
             }
         };
 
         if rc == 0 {
-            self.die = next_die;
-            Some(Ok(Die::new(next_die)))
+            Some(Ok(Die::new(self.die)))
         } else if rc < 0 {
             self.finished = true;
             Some(Err(::error::last()))
