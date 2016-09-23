@@ -8,6 +8,7 @@ use std::os::unix::io::AsRawFd;
 use super::Result;
 
 
+#[derive(Debug)]
 pub struct Elf<'a> {
     inner: *mut ffi::Elf,
     phantom: PhantomData<&'a mut ffi::Elf>,
@@ -31,13 +32,17 @@ impl<'a> Elf<'a> {
         }
     }
 
-    pub fn from_slice(mem: &mut [u8]) -> Result<Elf> {
+    pub fn from_mem(mem: &mut [u8]) -> Result<Elf> {
         let ptr = mem.as_mut_ptr() as *mut libc::c_char;
         unsafe {
             ffi::elf_memory(ptr, mem.len())
                 .as_mut().map(Elf::new)
                 .ok_or_else(::error::last)
         }
+    }
+
+    pub fn as_ptr(&self) -> *mut ffi::Elf {
+        self.inner
     }
 }
 
@@ -65,6 +70,6 @@ mod tests {
     #[test]
     fn empty_mem() {
         // elfutils doesn't mind an empty ELF!
-        Elf::from_slice(&mut []).unwrap();
+        Elf::from_mem(&mut []).unwrap();
     }
 }

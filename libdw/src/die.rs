@@ -1,0 +1,126 @@
+use ffi;
+use libc;
+use std::mem;
+
+use ffi::Dwarf_Off;
+
+use std::cell::RefCell;
+use std::marker::PhantomData;
+
+use super::Result;
+use super::Dwarf;
+
+
+#[derive(Debug)]
+pub struct Die<'a> {
+    inner: RefCell<ffi::Dwarf_Die>,
+    phantom: PhantomData<&'a Dwarf<'a>>,
+}
+
+pub fn offdie<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'a>> {
+    unsafe {
+        let mut die = mem::uninitialized();
+        if ffi::dwarf_offdie(dwarf.as_ptr(), offset, &mut die).is_null() {
+            Err(::error::last())
+        } else {
+            Ok(Die::new(die))
+        }
+    }
+}
+
+pub fn offdie_types<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'a>> {
+    unsafe {
+        let mut die = mem::uninitialized();
+        if ffi::dwarf_offdie_types(dwarf.as_ptr(), offset, &mut die).is_null() {
+            Err(::error::last())
+        } else {
+            Ok(Die::new(die))
+        }
+    }
+}
+
+impl<'a> Die<'a> {
+    fn new(die: ffi::Dwarf_Die) -> Die<'a> {
+        Die {
+            inner: RefCell::new(die),
+            phantom: PhantomData,
+        }
+    }
+
+    pub fn children(&'a self) -> DieChildren<'a> {
+        DieChildren {
+            first: true,
+            finished: false,
+            die: *self.inner.borrow(),
+            phantom: PhantomData,
+        }
+    }
+
+    pub fn with_attrs<F>(&self, mut f: F) -> Result<()>
+        where F: FnMut(&mut ffi::Dwarf_Attribute) -> bool
+    {
+        unsafe extern "C" fn callback<F>(attr: *mut ffi::Dwarf_Attribute,
+                                         fn_ptr: *mut libc::c_void)
+                                         -> libc::c_int
+            where F: FnMut(&mut ffi::Dwarf_Attribute) -> bool
+        {
+            let f = fn_ptr as *mut F;
+            if (*f)(&mut *attr) {
+                ffi::DWARF_CB_OK as libc::c_int
+            } else {
+                ffi::DWARF_CB_ABORT as libc::c_int
+            }
+        }
+
+        let rc = unsafe {
+            ffi::dwarf_getattrs(&mut *self.inner.borrow_mut(),
+                                Some(callback::<F>),
+                                &mut f as *mut F as *mut _, 0)
+        };
+
+        if rc < 0 {
+            Err(::error::last())
+        } else {
+            Ok(())
+        }
+    }
+}
+
+
+#[derive(Debug)]
+pub struct DieChildren<'a> {
+    first: bool,
+    finished: bool,
+    die: ffi::Dwarf_Die,
+    phantom: PhantomData<&'a Dwarf<'a>>,
+}
+
+impl<'a> Iterator for DieChildren<'a> {
+    type Item = Result<Die<'a>>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.finished { return None }
+
+        let mut next_die;
+        let rc = unsafe {
+            next_die = mem::uninitialized();
+            if self.first {
+                self.first = false;
+                ffi::dwarf_child(&mut self.die, &mut next_die)
+            } else {
+                ffi::dwarf_siblingof(&mut self.die, &mut next_die)
+            }
+        };
+
+        if rc == 0 {
+            self.die = next_die;
+            Some(Ok(Die::new(next_die)))
+        } else if rc < 0 {
+            self.finished = true;
+            Some(Err(::error::last()))
+        } else {
+            self.finished = true;
+            None
+        }
+    }
+}
