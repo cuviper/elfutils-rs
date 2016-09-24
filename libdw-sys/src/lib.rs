@@ -11,8 +11,8 @@ pub const DWARF_C_READ: Dwarf_Cmd = 0;
 pub const DWARF_C_RDWR: Dwarf_Cmd = 1;
 pub const DWARF_C_WRITE: Dwarf_Cmd = 2;
 pub type Enum_Unnamed1 = u32;
-pub const DWARF_CB_OK: Enum_Unnamed1 = 0;
-pub const DWARF_CB_ABORT: Enum_Unnamed1 = 1;
+pub const DWARF_CB_OK: ::libc::c_int = 0;
+pub const DWARF_CB_ABORT: ::libc::c_int = 1;
 pub type Enum_Unnamed2 = u32;
 pub const DW_TAG_invalid: Enum_Unnamed2 = 0;
 pub type Dwarf_Off = GElf_Off;
@@ -44,6 +44,7 @@ pub struct Dwarf_Attribute {
     pub cu: *mut Dwarf_CU,
 }
 impl ::std::default::Default for Dwarf_Attribute {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -54,6 +55,7 @@ pub struct Dwarf_Block {
     pub data: *mut ::libc::c_uchar,
 }
 impl ::std::default::Default for Dwarf_Block {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -66,6 +68,7 @@ pub struct Dwarf_Die {
     pub padding__: ::libc::c_long,
 }
 impl ::std::default::Default for Dwarf_Die {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -77,6 +80,7 @@ pub struct Dwarf_Global {
     pub name: *const ::libc::c_char,
 }
 impl ::std::default::Default for Dwarf_Global {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -89,6 +93,7 @@ pub struct Dwarf_Op {
     pub offset: Dwarf_Word,
 }
 impl ::std::default::Default for Dwarf_Op {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -107,6 +112,7 @@ pub struct Dwarf_CIE {
     pub fde_augmentation_data_size: size_t,
 }
 impl ::std::default::Default for Dwarf_CIE {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -118,6 +124,7 @@ pub struct Dwarf_FDE {
     pub end: *const uint8_t,
 }
 impl ::std::default::Default for Dwarf_FDE {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -127,20 +134,24 @@ pub struct Dwarf_CFI_Entry {
     pub _bindgen_data_: [u64; 10usize],
 }
 impl Dwarf_CFI_Entry {
+#[inline]
     pub unsafe fn CIE_id(&mut self) -> *mut Dwarf_Off {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
+#[inline]
     pub unsafe fn cie(&mut self) -> *mut Dwarf_CIE {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
+#[inline]
     pub unsafe fn fde(&mut self) -> *mut Dwarf_FDE {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
 }
 impl ::std::default::Default for Dwarf_CFI_Entry {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub enum Dwarf_Frame_s { }
@@ -207,6 +218,7 @@ pub struct Dwfl_Callbacks {
     pub debuginfo_path: *mut *mut ::libc::c_char,
 }
 impl ::std::default::Default for Dwfl_Callbacks {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub enum argp { }
@@ -252,6 +264,7 @@ pub struct Dwfl_Thread_Callbacks {
                                                                       *mut ::libc::c_void)>,
 }
 impl ::std::default::Default for Dwfl_Thread_Callbacks {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 extern "C" {

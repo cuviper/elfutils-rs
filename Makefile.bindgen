@@ -1,0 +1,37 @@
+LIBELF = libelf-sys/src/lib.rs
+LIBELF_H = /usr/include/gelf.h /usr/include/libelf.h /usr/include/elf.h
+
+LIBDW = libdw-sys/src/lib.rs
+LIBDW_H = /usr/include/elfutils/libdwfl.h /usr/include/elfutils/libdw.h
+
+DWARF = libdw-sys/src/dwarf.rs
+DWARF_H = /usr/include/dwarf.h
+
+BG = bindgen
+BGFLAGS = --ctypes-prefix=libc --no-rust-enums --convert-macros \
+    --macro-int-types=uint,uint,uint,ulonglong,sint,sint,sint,slonglong
+
+all: $(LIBELF) $(LIBDW) $(DWARF)
+
+.PHONY: all
+
+SHELL = /bin/bash
+
+$(LIBELF): $(LIBELF_H)
+	$(BG) $(BGFLAGS) --match=elf.h $< --output $@
+	sed -i -e '/\bfn .*{/i#[inline]' $@
+	echo 'include!{"imports.rs"}' >>$@
+
+$(LIBDW): $(LIBDW_H)
+	$(BG) $(BGFLAGS) --match=elfutils $< --output $@
+	sed -i -e '/const DWARF_CB/s/Enum\w*/::libc::c_int/g' $@
+	sed -i -e '/\bfn .*{/i#[inline]' $@
+	echo 'include!{"imports.rs"}' >>$@
+
+$(DWARF): $(DWARF_H)
+	$(BG) $(BGFLAGS) --match=dwarf.h $< --output $@
+	sed -i -e 's/\bEnum/DW_&/g' $@
+	sed -i -e '/\bfn .*{/i#[inline]' $@
+
+
+$(LIBELF) $(LIBDW) $(DWARF): Makefile.bindgen

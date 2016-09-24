@@ -2372,6 +2372,7 @@ pub struct Elf32_Ehdr {
     pub e_shstrndx: Elf32_Half,
 }
 impl ::std::default::Default for Elf32_Ehdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2394,6 +2395,7 @@ pub struct Elf64_Ehdr {
     pub e_shstrndx: Elf64_Half,
 }
 impl ::std::default::Default for Elf64_Ehdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2412,6 +2414,7 @@ pub struct Elf32_Shdr {
     pub sh_entsize: Elf32_Word,
 }
 impl ::std::default::Default for Elf32_Shdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2430,6 +2433,7 @@ pub struct Elf64_Shdr {
     pub sh_entsize: Elf64_Xword,
 }
 impl ::std::default::Default for Elf64_Shdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2441,6 +2445,7 @@ pub struct Elf32_Chdr {
     pub ch_addralign: Elf32_Word,
 }
 impl ::std::default::Default for Elf32_Chdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2453,6 +2458,7 @@ pub struct Elf64_Chdr {
     pub ch_addralign: Elf64_Xword,
 }
 impl ::std::default::Default for Elf64_Chdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2467,6 +2473,7 @@ pub struct Elf32_Sym {
     pub st_shndx: Elf32_Section,
 }
 impl ::std::default::Default for Elf32_Sym {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2481,6 +2488,7 @@ pub struct Elf64_Sym {
     pub st_size: Elf64_Xword,
 }
 impl ::std::default::Default for Elf64_Sym {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2491,6 +2499,7 @@ pub struct Elf32_Syminfo {
     pub si_flags: Elf32_Half,
 }
 impl ::std::default::Default for Elf32_Syminfo {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2501,6 +2510,7 @@ pub struct Elf64_Syminfo {
     pub si_flags: Elf64_Half,
 }
 impl ::std::default::Default for Elf64_Syminfo {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2511,6 +2521,7 @@ pub struct Elf32_Rel {
     pub r_info: Elf32_Word,
 }
 impl ::std::default::Default for Elf32_Rel {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2521,6 +2532,7 @@ pub struct Elf64_Rel {
     pub r_info: Elf64_Xword,
 }
 impl ::std::default::Default for Elf64_Rel {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2532,6 +2544,7 @@ pub struct Elf32_Rela {
     pub r_addend: Elf32_Sword,
 }
 impl ::std::default::Default for Elf32_Rela {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2543,6 +2556,7 @@ pub struct Elf64_Rela {
     pub r_addend: Elf64_Sxword,
 }
 impl ::std::default::Default for Elf64_Rela {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2559,6 +2573,7 @@ pub struct Elf32_Phdr {
     pub p_align: Elf32_Word,
 }
 impl ::std::default::Default for Elf32_Phdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2575,6 +2590,7 @@ pub struct Elf64_Phdr {
     pub p_align: Elf64_Xword,
 }
 impl ::std::default::Default for Elf64_Phdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2585,6 +2601,7 @@ pub struct Elf32_Dyn {
     pub d_un: Union_Unnamed1,
 }
 impl ::std::default::Default for Elf32_Dyn {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2594,16 +2611,19 @@ pub struct Union_Unnamed1 {
     pub _bindgen_data_: [u32; 1usize],
 }
 impl Union_Unnamed1 {
+#[inline]
     pub unsafe fn d_val(&mut self) -> *mut Elf32_Word {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
+#[inline]
     pub unsafe fn d_ptr(&mut self) -> *mut Elf32_Addr {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
 }
 impl ::std::default::Default for Union_Unnamed1 {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2614,6 +2634,7 @@ pub struct Elf64_Dyn {
     pub d_un: Union_Unnamed2,
 }
 impl ::std::default::Default for Elf64_Dyn {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2623,16 +2644,19 @@ pub struct Union_Unnamed2 {
     pub _bindgen_data_: [u64; 1usize],
 }
 impl Union_Unnamed2 {
+#[inline]
     pub unsafe fn d_val(&mut self) -> *mut Elf64_Xword {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
+#[inline]
     pub unsafe fn d_ptr(&mut self) -> *mut Elf64_Addr {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
 }
 impl ::std::default::Default for Union_Unnamed2 {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2648,6 +2672,7 @@ pub struct Elf32_Verdef {
     pub vd_next: Elf32_Word,
 }
 impl ::std::default::Default for Elf32_Verdef {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2663,6 +2688,7 @@ pub struct Elf64_Verdef {
     pub vd_next: Elf64_Word,
 }
 impl ::std::default::Default for Elf64_Verdef {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2673,6 +2699,7 @@ pub struct Elf32_Verdaux {
     pub vda_next: Elf32_Word,
 }
 impl ::std::default::Default for Elf32_Verdaux {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2683,6 +2710,7 @@ pub struct Elf64_Verdaux {
     pub vda_next: Elf64_Word,
 }
 impl ::std::default::Default for Elf64_Verdaux {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2696,6 +2724,7 @@ pub struct Elf32_Verneed {
     pub vn_next: Elf32_Word,
 }
 impl ::std::default::Default for Elf32_Verneed {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2709,6 +2738,7 @@ pub struct Elf64_Verneed {
     pub vn_next: Elf64_Word,
 }
 impl ::std::default::Default for Elf64_Verneed {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2722,6 +2752,7 @@ pub struct Elf32_Vernaux {
     pub vna_next: Elf32_Word,
 }
 impl ::std::default::Default for Elf32_Vernaux {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2735,6 +2766,7 @@ pub struct Elf64_Vernaux {
     pub vna_next: Elf64_Word,
 }
 impl ::std::default::Default for Elf64_Vernaux {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2745,6 +2777,7 @@ pub struct Elf32_auxv_t {
     pub a_un: Union_Unnamed3,
 }
 impl ::std::default::Default for Elf32_auxv_t {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2754,12 +2787,14 @@ pub struct Union_Unnamed3 {
     pub _bindgen_data_: [u32; 1usize],
 }
 impl Union_Unnamed3 {
+#[inline]
     pub unsafe fn a_val(&mut self) -> *mut uint32_t {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
 }
 impl ::std::default::Default for Union_Unnamed3 {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2770,6 +2805,7 @@ pub struct Elf64_auxv_t {
     pub a_un: Union_Unnamed4,
 }
 impl ::std::default::Default for Elf64_auxv_t {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2779,12 +2815,14 @@ pub struct Union_Unnamed4 {
     pub _bindgen_data_: [u64; 1usize],
 }
 impl Union_Unnamed4 {
+#[inline]
     pub unsafe fn a_val(&mut self) -> *mut uint64_t {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
 }
 impl ::std::default::Default for Union_Unnamed4 {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2796,6 +2834,7 @@ pub struct Elf32_Nhdr {
     pub n_type: Elf32_Word,
 }
 impl ::std::default::Default for Elf32_Nhdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2807,6 +2846,7 @@ pub struct Elf64_Nhdr {
     pub n_type: Elf64_Word,
 }
 impl ::std::default::Default for Elf64_Nhdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2821,6 +2861,7 @@ pub struct Elf32_Move {
     _bindgen_padding_0_: [u8; 4usize],
 }
 impl ::std::default::Default for Elf32_Move {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2835,6 +2876,7 @@ pub struct Elf64_Move {
     _bindgen_padding_0_: [u8; 4usize],
 }
 impl ::std::default::Default for Elf64_Move {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2844,16 +2886,19 @@ pub struct Elf32_gptab {
     pub _bindgen_data_: [u32; 2usize],
 }
 impl Elf32_gptab {
+#[inline]
     pub unsafe fn gt_header(&mut self) -> *mut Struct_Unnamed5 {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
+#[inline]
     pub unsafe fn gt_entry(&mut self) -> *mut Struct_Unnamed6 {
         let raw: *mut u8 = ::std::mem::transmute(&self._bindgen_data_);
         ::std::mem::transmute(raw.offset(0))
     }
 }
 impl ::std::default::Default for Elf32_gptab {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2864,6 +2909,7 @@ pub struct Struct_Unnamed5 {
     pub gt_unused: Elf32_Word,
 }
 impl ::std::default::Default for Struct_Unnamed5 {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2874,6 +2920,7 @@ pub struct Struct_Unnamed6 {
     pub gt_bytes: Elf32_Word,
 }
 impl ::std::default::Default for Struct_Unnamed6 {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2885,6 +2932,7 @@ pub struct Elf32_RegInfo {
     pub ri_gp_value: Elf32_Sword,
 }
 impl ::std::default::Default for Elf32_RegInfo {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2897,6 +2945,7 @@ pub struct Elf_Options {
     pub info: Elf32_Word,
 }
 impl ::std::default::Default for Elf_Options {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2907,6 +2956,7 @@ pub struct Elf_Options_Hw {
     pub hwp_flags2: Elf32_Word,
 }
 impl ::std::default::Default for Elf_Options_Hw {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2920,6 +2970,7 @@ pub struct Elf32_Lib {
     pub l_flags: Elf32_Word,
 }
 impl ::std::default::Default for Elf32_Lib {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -2933,6 +2984,7 @@ pub struct Elf64_Lib {
     pub l_flags: Elf64_Word,
 }
 impl ::std::default::Default for Elf64_Lib {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type Elf32_Conflict = Elf32_Addr;
@@ -2953,6 +3005,7 @@ pub struct Elf_MIPS_ABIFlags_v0 {
     pub flags2: Elf32_Word,
 }
 impl ::std::default::Default for Elf_MIPS_ABIFlags_v0 {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type Enum_Unnamed7 = u32;
@@ -3005,6 +3058,7 @@ pub struct Elf_Data {
     pub d_align: size_t,
 }
 impl ::std::default::Default for Elf_Data {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub type Elf_Cmd = u32;
@@ -3047,6 +3101,7 @@ pub struct Elf_Arhdr {
     pub ar_rawname: *mut ::libc::c_char,
 }
 impl ::std::default::Default for Elf_Arhdr {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 #[repr(C)]
@@ -3058,6 +3113,7 @@ pub struct Elf_Arsym {
     pub as_hash: ::libc::c_ulong,
 }
 impl ::std::default::Default for Elf_Arsym {
+#[inline]
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
 pub enum Elf { }

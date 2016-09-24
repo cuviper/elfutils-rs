@@ -9,7 +9,7 @@ use std::ffi::CStr;
 pub type Result<T> = result::Result<T, Error>;
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Error {
     errno: libc::c_int,
 }
@@ -19,6 +19,12 @@ impl Error {
         // Normalize 0 to -1, which behaves the same except it always returns a legal string
         let errno = match self.errno { 0 => -1, e => e };
         unsafe { CStr::from_ptr(ffi::dwarf_errmsg(errno)) }
+    }
+}
+
+impl<'a> From<&'a Error> for Error {
+    fn from(other: &'a Error) -> Error {
+        *other
     }
 }
 
@@ -42,3 +48,18 @@ pub fn last() -> Error {
     }
 }
 
+macro_rules! itry {
+    ($expr:expr) => ({
+        let i = $expr;
+        if i < 0 { return Err(::error::last()) }
+        i
+    })
+}
+
+macro_rules! ptry {
+    ($expr:expr) => ({
+        let p = $expr;
+        if p.is_null() { return Err(::error::last()) }
+        p
+    })
+}

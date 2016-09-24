@@ -12,7 +12,7 @@ use std::env;
 use std::fs;
 use std::path;
 
-use libdw::{Dwarf, Die};
+use libdw::{Result, Dwarf, Die};
 
 fn test_path() -> path::PathBuf {
     match env::var_os("BENCH_FILE") {
@@ -24,59 +24,63 @@ fn test_path() -> path::PathBuf {
 
 #[bench]
 fn info_iter(b: &mut test::Bencher) {
-    b.iter(|| {
+    b.iter(|| -> Result<()> {
         let f = fs::File::open(test_path()).unwrap();
-        let dw = Dwarf::from_fd(&f).unwrap();
+        let dw = try!(Dwarf::from_fd(&f));
 
         for cu in dw.compile_units() {
-            if let Ok(cu) = cu {
-                if let Ok(ref die) = cu.get_die() {
-                    recurse_die(die);
-                }
-            }
+            let die = try!(cu).get_die();
+            let die = try!(die.as_ref());
+            try!(recurse_die(die));
         }
+
+        Ok(())
     });
 
-    fn recurse_die<'a>(die: &Die<'a>) {
-        die.with_attrs(|a| {
-            test::black_box(a);
-            true
-        }).unwrap();
+    fn recurse_die<'a>(die: &Die<'a>) -> Result<()> {
+        for attr in &try!(die.attrs()) {
+            test::black_box(attr);
+        }
 
-        if die.has_children().unwrap() {
-            for child in die.children() {
-                recurse_die(child.as_ref().unwrap());
+        if try!(die.has_children()) {
+            for child in die.iter_children() {
+                let child = try!(child.as_ref());
+                try!(recurse_die(child));
             }
         }
+
+        Ok(())
     }
 }
 
 
 #[bench]
 fn info_nested(b: &mut test::Bencher) {
-    b.iter(|| {
+    b.iter(|| -> Result<()> {
         let f = fs::File::open(test_path()).unwrap();
-        let dw = Dwarf::from_fd(&f).unwrap();
+        let dw = try!(Dwarf::from_fd(&f));
 
         for cu in dw.compile_units() {
-            if let Ok(cu) = cu {
-                if let Ok(ref die) = cu.get_die() {
-                    recurse_die(die);
-                }
-            }
+            let die = try!(cu).get_die();
+            let die = try!(die.as_ref());
+            try!(recurse_die(die));
         }
+
+        Ok(())
     });
 
-    fn recurse_die<'a>(die: &Die<'a>) {
-        die.with_attrs(|a| {
-            test::black_box(a);
-            true
-        }).unwrap();
+    fn recurse_die<'a>(die: &Die<'a>) -> Result<()> {
+        try!(die.for_each_attr(|attr| {
+            test::black_box(attr);
+            Ok(true)
+        }));
 
-        die.with_children(|child| {
-            recurse_die(child);
-            true
-        }).unwrap();
+        try!(die.for_each_child(|child| {
+            try!(recurse_die(child));
+            Ok(true)
+        }));
+
+        Ok(())
     }
 }
 

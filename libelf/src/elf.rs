@@ -15,7 +15,7 @@ pub struct Elf<'a> {
 }
 
 impl<'a> Elf<'a> {
-    fn new(elf: &mut ffi::Elf) -> Elf {
+    fn new(elf: *mut ffi::Elf) -> Elf<'a> {
         Elf {
             inner: elf,
             phantom: PhantomData,
@@ -24,23 +24,20 @@ impl<'a> Elf<'a> {
 
     pub fn from_fd<FD: AsRawFd>(fd: &FD) -> Result<Elf> {
         let fd = fd.as_raw_fd();
-        unsafe {
+        let elf = ptry!(unsafe {
             ffi::elf_version(ffi::EV_CURRENT);
             ffi::elf_begin(fd, ffi::ELF_C_READ, ptr::null_mut())
-                .as_mut().map(Elf::new)
-                .ok_or_else(::error::last)
-        }
+        });
+        Ok(Elf::new(elf))
     }
 
     pub fn from_mem(mem: &mut [u8]) -> Result<Elf> {
         let ptr = mem.as_mut_ptr() as *mut libc::c_char;
-        unsafe {
-            ffi::elf_memory(ptr, mem.len())
-                .as_mut().map(Elf::new)
-                .ok_or_else(::error::last)
-        }
+        let elf = ptry!(unsafe { ffi::elf_memory(ptr, mem.len()) });
+        Ok(Elf::new(elf))
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *mut ffi::Elf {
         self.inner
     }

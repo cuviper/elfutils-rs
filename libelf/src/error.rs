@@ -42,3 +42,18 @@ pub fn last() -> Error {
     }
 }
 
+macro_rules! itry {
+    ($expr:expr) => ({
+        let i = $expr;
+        if i < 0 { return Err(::error::last()) }
+        i
+    })
+}
+
+macro_rules! ptry {
+    ($expr:expr) => ({
+        let p = $expr;
+        if p.is_null() { return Err(::error::last()) }
+        p
+    })
+}

@@ -16,7 +16,7 @@ pub struct Dwarf<'a> {
 }
 
 impl<'a> Dwarf<'a> {
-    fn new(dwarf: &mut ffi::Dwarf) -> Dwarf {
+    fn new(dwarf: *mut ffi::Dwarf) -> Dwarf<'a> {
         Dwarf {
             inner: dwarf,
             phantom: PhantomData,
@@ -25,19 +25,15 @@ impl<'a> Dwarf<'a> {
 
     pub fn from_fd<FD: AsRawFd>(fd: &FD) -> Result<Dwarf> {
         let fd = fd.as_raw_fd();
-        unsafe {
-            ffi::dwarf_begin(fd, ffi::DWARF_C_READ)
-                .as_mut().map(Dwarf::new)
-                .ok_or_else(::error::last)
-        }
+        let dwarf = ptry!(unsafe { ffi::dwarf_begin(fd, ffi::DWARF_C_READ) });
+        Ok(Dwarf::new(dwarf))
     }
 
     pub fn from_elf<'b>(elf: &'b libelf::Elf) -> Result<Dwarf<'b>> {
-        unsafe {
+        let dwarf = ptry!(unsafe {
             ffi::dwarf_begin_elf(elf.as_ptr(), ffi::DWARF_C_READ, ptr::null_mut())
-                .as_mut().map(Dwarf::new)
-                .ok_or_else(::error::last)
-        }
+        });
+        Ok(Dwarf::new(dwarf))
     }
 
     pub fn compile_units(&self) -> CompileUnits {
@@ -48,6 +44,7 @@ impl<'a> Dwarf<'a> {
         ::units::type_units(self)
     }
 
+    #[inline]
     pub fn as_ptr(&self) -> *mut ffi::Dwarf {
         self.inner
     }
