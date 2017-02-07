@@ -24,17 +24,15 @@ impl<'a> Elf<'a> {
 
     pub fn from_fd<FD: AsRawFd>(fd: &FD) -> Result<Elf> {
         let fd = fd.as_raw_fd();
-        let elf = ptry!(unsafe {
-            ffi::elf_version(ffi::EV_CURRENT);
-            ffi::elf_begin(fd, ffi::ELF_C_READ, ptr::null_mut())
-        });
-        Ok(Elf::new(elf))
+        unsafe { ffi::elf_version(ffi::EV_CURRENT); }
+        ffi!(elf_begin(fd, ffi::ELF_C_READ, ptr::null_mut()))
+            .map(Elf::new)
     }
 
     pub fn from_mem(mem: &mut [u8]) -> Result<Elf> {
         let ptr = mem.as_mut_ptr() as *mut libc::c_char;
-        let elf = ptry!(unsafe { ffi::elf_memory(ptr, mem.len()) });
-        Ok(Elf::new(elf))
+        ffi!(elf_memory(ptr, mem.len()))
+            .map(Elf::new)
     }
 
     #[inline]

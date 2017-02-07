@@ -8,6 +8,30 @@ use std::ffi::CStr;
 
 pub type Result<T> = result::Result<T, Error>;
 
+pub trait IntoResult: Sized {
+    fn into_result(self) -> Result<Self>;
+}
+
+impl IntoResult for libc::c_int {
+    fn into_result(self) -> Result<Self> {
+        if self < 0 {
+            Err(Error::last())
+        } else {
+            Ok(self)
+        }
+    }
+}
+
+impl<T> IntoResult for *mut T {
+    fn into_result(self) -> Result<Self> {
+        if self.is_null() {
+            Err(Error::last())
+        } else {
+            Ok(self)
+        }
+    }
+}
+
 
 #[derive(Debug)]
 pub struct Error {
@@ -15,6 +39,12 @@ pub struct Error {
 }
 
 impl Error {
+    fn last() -> Error {
+        Error {
+            errno: unsafe { ffi::elf_errno() },
+        }
+    }
+
     fn to_cstr(&self) -> &'static CStr {
         // Normalize 0 to -1, which behaves the same except it always returns a legal string
         let errno = match self.errno { 0 => -1, e => e };
@@ -36,24 +66,9 @@ impl fmt::Display for Error {
 }
 
 
-pub fn last() -> Error {
-    Error {
-        errno: unsafe { ffi::elf_errno() },
-    }
-}
-
-macro_rules! itry {
-    ($expr:expr) => ({
-        let i = $expr;
-        if i < 0 { return Err(::error::last()) }
-        i
-    })
-}
-
-macro_rules! ptry {
-    ($expr:expr) => ({
-        let p = $expr;
-        if p.is_null() { return Err(::error::last()) }
-        p
+macro_rules! ffi {
+    ($func:ident ($($arg:expr),*)) => ({
+        let result = unsafe { ffi::$func($($arg),*) };
+        ::error::IntoResult::into_result(result)
     })
 }

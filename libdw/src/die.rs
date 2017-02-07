@@ -18,13 +18,13 @@ pub struct Die<'a> {
 
 pub fn offdie<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'a>> {
     let die = Die::default();
-    ptry!(unsafe { ffi::dwarf_offdie(dwarf.as_ptr(), offset, die.as_ptr()) });
+    ffi!(dwarf_offdie(dwarf.as_ptr(), offset, die.as_ptr()))?;
     Ok(die)
 }
 
 pub fn offdie_types<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'a>> {
     let die = Die::default();
-    ptry!(unsafe { ffi::dwarf_offdie_types(dwarf.as_ptr(), offset, die.as_ptr()) });
+    ffi!(dwarf_offdie_types(dwarf.as_ptr(), offset, die.as_ptr()))?;
     Ok(die)
 }
 
@@ -32,14 +32,14 @@ impl<'a> Die<'a> {
     fn get_abbrev(&self) -> Result<*mut ffi::Dwarf_Abbrev> {
         unsafe {
             if (*self.as_ptr()).abbrev.is_null() {
-                try!(self.has_children());
+                self.has_children()?;
             }
             Ok((*self.as_ptr()).abbrev)
         }
     }
 
     pub fn has_children(&self) -> Result<bool> {
-        let rc = itry!(unsafe { ffi::dwarf_haschildren(self.as_ptr()) });
+        let rc = ffi!(dwarf_haschildren(self.as_ptr()))?;
         Ok(rc > 0)
     }
 
@@ -56,25 +56,25 @@ impl<'a> Die<'a> {
     {
         let child = Die::default();
 
-        let mut rc = unsafe { ffi::dwarf_child(self.as_ptr(), child.as_ptr()) };
+        let mut rc = ffi!(dwarf_child(self.as_ptr(), child.as_ptr()))?;
 
-        while itry!(rc) == 0 && try!(f(&child)) {
+        while rc == 0 && f(&child)? {
             let ptr = child.as_ptr();
-            rc = unsafe { ffi::dwarf_siblingof(ptr, ptr) };
+            rc = ffi!(dwarf_siblingof(ptr, ptr))?;
         }
         Ok(())
     }
 
     pub fn attr_count(&self) -> Result<libc::size_t> {
         let mut count = 0;
-        let abbrev = try!(self.get_abbrev());
-        itry!(unsafe { ffi::dwarf_getattrcnt(abbrev, &mut count) });
+        let abbrev = self.get_abbrev()?;
+        ffi!(dwarf_getattrcnt(abbrev, &mut count))?;
         Ok(count)
     }
 
     pub fn attrs(&self) -> Result<Vec<ffi::Dwarf_Attribute>> {
-        let mut v = Vec::with_capacity(try!(self.attr_count()));
-        try!(self.for_each_attr(|a| { v.push(*a); Ok(true) }));
+        let mut v = Vec::with_capacity(self.attr_count()?);
+        self.for_each_attr(|a| { v.push(*a); Ok(true) })?;
         Ok(v)
     }
 
@@ -97,10 +97,8 @@ impl<'a> Die<'a> {
         }
 
         let mut arg = (Ok(()), f);
-        itry!(unsafe {
-            let argp = &mut arg as *mut Arg<F> as *mut _;
-            ffi::dwarf_getattrs(self.as_ptr(), Some(callback::<F>), argp, 0)
-        });
+        let argp = &mut arg as *mut Arg<F> as *mut _;
+        ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<F>), argp, 0))?;
         arg.0
     }
 
@@ -133,26 +131,22 @@ impl<'a> Iterator for DieChildren<'a> {
     fn next(&mut self) -> Option<Self::Item> {
         if self.finished { return None }
 
-        let rc = unsafe {
-            let die = self.die.as_ptr();
-            if self.first {
-                self.first = false;
-                ffi::dwarf_child(die, die)
-            } else {
-                ffi::dwarf_siblingof(die, die)
-            }
+        let die = self.die.as_ptr();
+        let rc = if self.first {
+            self.first = false;
+            ffi!(dwarf_child(die, die))
+        } else {
+            ffi!(dwarf_siblingof(die, die))
         };
 
-        if rc == 0 {
-            // prime the die->abbrev before we Clone
-            // self.die.get_abbrev().ok();
-            Some(Ok(self.die.clone()))
-        } else if rc < 0 {
-            self.finished = true;
-            Some(Err(::error::last()))
-        } else {
-            self.finished = true;
-            None
+        match rc {
+            Ok(0) => {
+                // prime the die->abbrev before we Clone
+                // self.die.get_abbrev().ok();
+                Some(Ok(self.die.clone()))
+            },
+            Ok(_) => { self.finished = true; None },
+            Err(e) => { self.finished = true; Some(Err(e)) },
         }
     }
 }

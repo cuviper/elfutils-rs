@@ -25,14 +25,12 @@ impl<'a> Dwarf<'a> {
 
     pub fn from_fd<FD: AsRawFd>(fd: &FD) -> Result<Dwarf> {
         let fd = fd.as_raw_fd();
-        let dwarf = ptry!(unsafe { ffi::dwarf_begin(fd, ffi::DWARF_C_READ) });
+        let dwarf = ffi!(dwarf_begin(fd, ffi::DWARF_C_READ))?;
         Ok(Dwarf::new(dwarf))
     }
 
     pub fn from_elf<'b>(elf: &'b libelf::Elf) -> Result<Dwarf<'b>> {
-        let dwarf = ptry!(unsafe {
-            ffi::dwarf_begin_elf(elf.as_ptr(), ffi::DWARF_C_READ, ptr::null_mut())
-        });
+        let dwarf = ffi!(dwarf_begin_elf(elf.as_ptr(), ffi::DWARF_C_READ, ptr::null_mut()))?;
         Ok(Dwarf::new(dwarf))
     }
 

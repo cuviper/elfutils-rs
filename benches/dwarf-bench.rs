@@ -26,26 +26,23 @@ fn test_path() -> path::PathBuf {
 fn info_iter(b: &mut test::Bencher) {
     b.iter(|| -> Result<()> {
         let f = fs::File::open(test_path()).unwrap();
-        let dw = try!(Dwarf::from_fd(&f));
+        let dw = Dwarf::from_fd(&f)?;
 
         for cu in dw.compile_units() {
-            let die = try!(cu).get_die();
-            let die = try!(die.as_ref());
-            try!(recurse_die(die));
+            recurse_die(&cu?.get_die()?)?;
         }
 
         Ok(())
     });
 
-    fn recurse_die<'a>(die: &Die<'a>) -> Result<()> {
-        for attr in &try!(die.attrs()) {
+    fn recurse_die(die: &Die) -> Result<()> {
+        for attr in &die.attrs()? {
             test::black_box(attr);
         }
 
-        if try!(die.has_children()) {
+        if die.has_children()? {
             for child in die.iter_children() {
-                let child = try!(child.as_ref());
-                try!(recurse_die(child));
+                recurse_die(&child?)?;
             }
         }
 
@@ -58,27 +55,25 @@ fn info_iter(b: &mut test::Bencher) {
 fn info_nested(b: &mut test::Bencher) {
     b.iter(|| -> Result<()> {
         let f = fs::File::open(test_path()).unwrap();
-        let dw = try!(Dwarf::from_fd(&f));
+        let dw = Dwarf::from_fd(&f)?;
 
         for cu in dw.compile_units() {
-            let die = try!(cu).get_die();
-            let die = try!(die.as_ref());
-            try!(recurse_die(die));
+            recurse_die(&cu?.get_die()?)?;
         }
 
         Ok(())
     });
 
-    fn recurse_die<'a>(die: &Die<'a>) -> Result<()> {
-        try!(die.for_each_attr(|attr| {
+    fn recurse_die(die: &Die) -> Result<()> {
+        die.for_each_attr(|attr| {
             test::black_box(attr);
             Ok(true)
-        }));
+        })?;
 
-        try!(die.for_each_child(|child| {
-            try!(recurse_die(child));
+        die.for_each_child(|child| {
+            recurse_die(child)?;
             Ok(true)
-        }));
+        })?;
 
         Ok(())
     }

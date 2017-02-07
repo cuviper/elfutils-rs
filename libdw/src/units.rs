@@ -33,21 +33,19 @@ impl<'a> Iterator for CompileUnits<'a> {
         let offset = self.offset;
         let mut header_size = 0;
 
-        let rc = unsafe {
-            ffi::dwarf_next_unit(self.dwarf.as_ptr(), offset, &mut self.offset,
+        let rc = ffi!(
+            dwarf_next_unit(self.dwarf.as_ptr(), offset, &mut self.offset,
                 &mut header_size, ptr::null_mut(), ptr::null_mut(), ptr::null_mut(),
                 ptr::null_mut(), ptr::null_mut(), ptr::null_mut())
-        };
+            );
 
-        if rc == 0 {
-            let die_offset = offset + header_size as Dwarf_Off;
-            Some(Ok(CompileUnit::new(self.dwarf, die_offset)))
-        } else if rc < 0 {
-            self.finished = true;
-            Some(Err(::error::last()))
-        } else {
-            self.finished = true;
-            None
+        match rc {
+            Ok(0) => {
+                let die_offset = offset + header_size as Dwarf_Off;
+                Some(Ok(CompileUnit::new(self.dwarf, die_offset)))
+            },
+            Ok(_) => { self.finished = true; None },
+            Err(e) => { self.finished = true; Some(Err(e)) },
         }
     }
 }
@@ -79,22 +77,20 @@ impl<'a> Iterator for TypeUnits<'a> {
         let mut signature = 0;
         let mut type_offset = 0;
 
-        let rc = unsafe {
-            ffi::dwarf_next_unit(self.dwarf.as_ptr(), offset, &mut self.offset,
+        let rc = ffi!(
+            dwarf_next_unit(self.dwarf.as_ptr(), offset, &mut self.offset,
                 &mut header_size, ptr::null_mut(), ptr::null_mut(), ptr::null_mut(),
                 ptr::null_mut(), &mut signature, &mut type_offset)
-        };
+            );
 
-        if rc == 0 {
-            let die_offset = offset + header_size as Dwarf_Off;
-            let type_offset = offset + type_offset;
-            Some(Ok(TypeUnit::new(self.dwarf, die_offset, type_offset, signature)))
-        } else if rc < 0 {
-            self.finished = true;
-            Some(Err(::error::last()))
-        } else {
-            self.finished = true;
-            None
+        match rc {
+            Ok(0) => {
+                let die_offset = offset + header_size as Dwarf_Off;
+                let type_offset = offset + type_offset;
+                Some(Ok(TypeUnit::new(self.dwarf, die_offset, type_offset, signature)))
+            },
+            Ok(_) => { self.finished = true; None },
+            Err(e) => { self.finished = true; Some(Err(e)) },
         }
     }
 }
