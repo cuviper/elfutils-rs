@@ -98,7 +98,7 @@ mod orig {
             let file = std::fs::File::open(test_path()).unwrap();
             let fd = file.as_raw_fd();
             let dwarf = unsafe {
-                libdw::dwarf_begin(fd, libdw::DWARF_C_READ)
+                libdw::dwarf_begin(fd, libdw::Dwarf_Cmd::DWARF_C_READ)
             };
             assert!(dwarf != null as *mut libdw::Dwarf);
 
