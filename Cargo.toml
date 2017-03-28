@@ -6,6 +6,9 @@ name = "elfutils"
 repository = "https://github.com/cuviper/elfutils-rs"
 version = "0.0.1"
 
+[workspace]
+members = ["libelf-sys", "libelf", "libdw-sys", "libdw", "libdwfl", "libdwfl"]
+
 [dependencies]
 libc = "0.2.16"
 
