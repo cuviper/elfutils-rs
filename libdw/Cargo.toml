@@ -1,10 +1,10 @@
 [package]
 authors = ["Josh Stone <jistone@redhat.com>"]
-description = "Placeholder for bindings to elfutils"
+description = "Bindings to elfutils"
 license = "MIT/Apache-2.0"
 name = "libdw"
 repository = "https://github.com/cuviper/elfutils-rs"
-version = "0.0.1"
+version = "0.0.2"
 
 [dependencies]
 libc = "0.2.16"
@@ -12,8 +12,9 @@ libc = "0.2.16"
 [dependencies.libdw-sys]
 optional = false
 path = "../libdw-sys"
-version = "0.0.1"
+version = "0.0.2"
 
 [dependencies.libelf]
 optional = false
 path = "../libelf"
+version = "0.0.2"
