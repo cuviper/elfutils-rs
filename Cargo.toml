@@ -10,7 +10,6 @@ version = "0.0.2"
 members = ["libelf-sys", "libelf", "libdw-sys", "libdw", "libdwfl", "libdwfl"]
 
 [dependencies]
-libc = "0.2.16"
 
 [dependencies.libdw]
 optional = false

@@ -1,5 +1,4 @@
 use ffi;
-use libc;
 
 use ffi::Dwarf_Off;
 
@@ -81,7 +80,7 @@ impl<'a> Die<'a> {
         Ok(())
     }
 
-    pub fn attr_count(&self) -> Result<libc::size_t> {
+    pub fn attr_count(&self) -> Result<usize> {
         let mut count = 0;
         let abbrev = self.get_abbrev()?;
         ffi!(dwarf_getattrcnt(abbrev, &mut count))?;
@@ -101,7 +100,7 @@ impl<'a> Die<'a> {
 
         unsafe extern "C" fn callback<F>(attr: *mut ffi::Dwarf_Attribute,
                                          argp: *mut raw::c_void)
-                                         -> libc::c_int
+                                         -> raw::c_int
             where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
         {
             let (ref mut res, ref mut f) = *(argp as *mut Arg<F>);
@@ -110,7 +109,7 @@ impl<'a> Die<'a> {
                 Ok(false) => ffi::DWARF_CB_ABORT,
                 Err(e) => { *res = Err(e); ffi::DWARF_CB_ABORT },
             };
-            res as libc::c_int
+            res as raw::c_int
         }
 
         let mut arg = (Ok(()), f);

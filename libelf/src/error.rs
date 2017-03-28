@@ -1,7 +1,7 @@
 use ffi;
-use libc;
 use std::error;
 use std::fmt;
+use std::os::raw;
 use std::result;
 use std::ffi::CStr;
 
@@ -12,7 +12,7 @@ pub trait IntoResult: Sized {
     fn into_result(self) -> Result<Self>;
 }
 
-impl IntoResult for libc::c_int {
+impl IntoResult for raw::c_int {
     fn into_result(self) -> Result<Self> {
         if self < 0 {
             Err(Error::last())
@@ -35,7 +35,7 @@ impl<T> IntoResult for *mut T {
 
 #[derive(Debug)]
 pub struct Error {
-    errno: libc::c_int,
+    errno: raw::c_int,
 }
 
 impl Error {

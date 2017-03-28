@@ -1,4 +1,3 @@
-extern crate libc;
 extern crate libelf;
 extern crate libdw_sys as ffi;
 

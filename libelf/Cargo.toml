@@ -7,7 +7,6 @@ repository = "https://github.com/cuviper/elfutils-rs"
 version = "0.0.2"
 
 [dependencies]
-libc = "0.2.16"
 
 [dependencies.libelf-sys]
 optional = false

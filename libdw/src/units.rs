@@ -2,7 +2,6 @@ use ffi;
 use std::ptr;
 
 use ffi::Dwarf_Off;
-use libc::uint64_t;
 
 use super::Result;
 use super::Dwarf;
@@ -122,12 +121,12 @@ pub struct TypeUnit<'a> {
     dwarf: &'a Dwarf<'a>,
     die_offset: Dwarf_Off,
     type_offset: Dwarf_Off,
-    signature: uint64_t,
+    signature: u64,
 }
 
 impl<'a> TypeUnit<'a> {
     fn new(dwarf: &'a Dwarf<'a>, die_offset: Dwarf_Off,
-           type_offset: Dwarf_Off, signature: uint64_t)
+           type_offset: Dwarf_Off, signature: u64)
         -> TypeUnit<'a>
     {
         TypeUnit {
@@ -146,7 +145,7 @@ impl<'a> TypeUnit<'a> {
         ::die::offdie_types(self.dwarf, self.type_offset)
     }
 
-    pub fn signature(&self) -> uint64_t {
+    pub fn signature(&self) -> u64 {
         self.signature
     }
 }

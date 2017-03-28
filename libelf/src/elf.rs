@@ -1,5 +1,5 @@
 use ffi;
-use libc;
+use std::os::raw;
 use std::ptr;
 
 use std::marker::PhantomData;
@@ -30,7 +30,7 @@ impl<'a> Elf<'a> {
     }
 
     pub fn from_mem(mem: &mut [u8]) -> Result<Elf> {
-        let ptr = mem.as_mut_ptr() as *mut libc::c_char;
+        let ptr = mem.as_mut_ptr() as *mut raw::c_char;
         ffi!(elf_memory(ptr, mem.len()))
             .map(Elf::new)
     }

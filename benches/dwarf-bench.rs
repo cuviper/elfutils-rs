@@ -3,7 +3,6 @@
 
 #![feature(test)]
 
-extern crate libc;
 extern crate libdw;
 extern crate libdw_sys;
 extern crate test;
