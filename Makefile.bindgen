@@ -1,37 +1,62 @@
-LIBELF = libelf-sys/src/lib.rs
-LIBELF_H = /usr/include/gelf.h /usr/include/libelf.h /usr/include/elf.h
-
-LIBDW = libdw-sys/src/lib.rs
-LIBDW_H = /usr/include/elfutils/libdwfl.h /usr/include/elfutils/libdw.h
-
-DWARF = libdw-sys/src/dwarf.rs
-DWARF_H = /usr/include/dwarf.h
-
 BG = bindgen
-BGFLAGS = --ctypes-prefix=libc --no-rust-enums --convert-macros \
-    --macro-int-types=uint,uint,uint,ulonglong,sint,sint,sint,slonglong
+BGFLAGS = --no-unstable-rust
 
-all: $(LIBELF) $(LIBDW) $(DWARF)
+LIBELF = libelf-sys/src/lib.rs
+LIBDW = libdw-sys/src/lib.rs
+
+all: $(LIBELF) $(LIBDW)
 
 .PHONY: all
 
 SHELL = /bin/bash
 
-$(LIBELF): $(LIBELF_H)
-	$(BG) $(BGFLAGS) --match=elf.h $< --output $@
-	sed -i -e '/\bfn .*{/i#[inline]' $@
-	echo 'include!{"imports.rs"}' >>$@
+LIBELF_H = libelf-sys/src/lib.h
+LIBELF_DEPS = /usr/include/libelf.h \
+	      /usr/include/gelf.h \
+	      /usr/include/elf.h
 
-$(LIBDW): $(LIBDW_H)
-	$(BG) $(BGFLAGS) --match=elfutils $< --output $@
-	sed -i -e '/const DWARF_CB/s/Enum\w*/::libc::c_int/g' $@
-	sed -i -e '/\bfn .*{/i#[inline]' $@
-	echo 'include!{"imports.rs"}' >>$@
+$(LIBELF): $(LIBELF_H) $(LIBELF_DEPS)
+	$(BG) $(BGFLAGS) $< \
+	    --whitelist-function '(elf|elf32|elf64|gelf)_.*' \
+	    --whitelist-type 'Elf|(Elf|Elf32|Elf64|GElf)_.*' \
+	    --whitelist-var 'ELF.*' \
+	    --whitelist-var 'AT_.*' \
+	    --whitelist-var '(DT|DF|DTF)_.*' \
+	    --whitelist-var '(EF|EFA|EI|EM|ET|EV)_.*' \
+	    --whitelist-var '(LITUSE|LL)_.*' \
+	    --whitelist-var 'MIPS_.*' \
+	    --whitelist-var 'NT_.*' \
+	    --whitelist-var '(ODK|OEX|OHW|OHWA\d|OPAD)_.*' \
+	    --whitelist-var '(PF|PN|PT)_.*' \
+	    --whitelist-var '(PPC|PPC64)_.*' \
+	    --whitelist-var '(R|RHF)_.*' \
+	    --whitelist-var '(SHF|SHN|SHT)_.*' \
+	    --whitelist-var '(STB|STN|STO|STT|STV)_.*' \
+	    --whitelist-var 'SYMINFO_.*' \
+	    --whitelist-var 'VER_.*' \
+	    --raw-line '#![allow(improper_ctypes)]' \
+	    --raw-line '#![allow(non_camel_case_types)]' \
+	    --raw-line '#![allow(non_snake_case)]' \
+	    --raw-line '#![allow(non_upper_case_globals)]' \
+	    --output $@
 
-$(DWARF): $(DWARF_H)
-	$(BG) $(BGFLAGS) --match=dwarf.h $< --output $@
-	sed -i -e 's/\bEnum/DW_&/g' $@
-	sed -i -e '/\bfn .*{/i#[inline]' $@
+LIBDW_H = libdw-sys/src/lib.h
+LIBDW_DEPS = /usr/include/elfutils/libdw.h \
+	     /usr/include/elfutils/libdwfl.h \
+	     /usr/include/elfutils/libdwelf.h \
+	     /usr/include/dwarf.h
+
+$(LIBDW): $(LIBDW_H) $(LIBDW_DEPS)
+	$(BG) $(BGFLAGS) $< \
+	    --whitelist-function '(dwarf|dwfl|dwelf)_.*' \
+	    --whitelist-type 'Dwarf|Dwarf_.*' \
+	    --whitelist-var '(DW|DWARF)_.*' \
+	    --constified-enum '(DW|DWARF)_.*' \
+	    --raw-line '#![allow(improper_ctypes)]' \
+	    --raw-line '#![allow(non_camel_case_types)]' \
+	    --raw-line '#![allow(non_snake_case)]' \
+	    --raw-line '#![allow(non_upper_case_globals)]' \
+	    --output $@
 
 
 $(LIBELF) $(LIBDW) $(DWARF): Makefile.bindgen

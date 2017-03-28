@@ -5,15 +5,31 @@ use ffi::Dwarf_Off;
 
 use std::cell::UnsafeCell;
 use std::marker::PhantomData;
+use std::os::raw;
+use std::ptr;
 
 use super::Result;
 use super::Dwarf;
 
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Die<'a> {
     inner: UnsafeCell<ffi::Dwarf_Die>,
     phantom: PhantomData<Dwarf<'a>>,
+}
+
+impl<'a> Default for Die<'a> {
+    fn default() -> Self {
+        Die {
+            inner: ffi::Dwarf_Die {
+                addr: ptr::null_mut(),
+                cu: ptr::null_mut(),
+                abbrev: ptr::null_mut(),
+                padding__: 0,
+            }.into(),
+            phantom: PhantomData,
+        }
+    }
 }
 
 pub fn offdie<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'a>> {
@@ -84,16 +100,17 @@ impl<'a> Die<'a> {
         type Arg<F> = (Result<()>, F);
 
         unsafe extern "C" fn callback<F>(attr: *mut ffi::Dwarf_Attribute,
-                                         argp: *mut libc::c_void)
+                                         argp: *mut raw::c_void)
                                          -> libc::c_int
             where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
         {
             let (ref mut res, ref mut f) = *(argp as *mut Arg<F>);
-            match f(&mut *attr) {
+            let res = match f(&mut *attr) {
                 Ok(true) => ffi::DWARF_CB_OK,
                 Ok(false) => ffi::DWARF_CB_ABORT,
                 Err(e) => { *res = Err(e); ffi::DWARF_CB_ABORT },
-            }
+            };
+            res as libc::c_int
         }
 
         let mut arg = (Ok(()), f);
