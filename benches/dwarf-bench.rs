@@ -22,6 +22,51 @@ fn test_path() -> path::PathBuf {
 
 
 #[bench]
+fn info_cus(b: &mut test::Bencher) {
+    b.iter(|| -> Result<()> {
+        let f = fs::File::open(test_path()).unwrap();
+        let dw = Dwarf::from_fd(&f)?;
+
+        for cu in dw.compile_units() {
+            let die = cu?.get_die()?;
+            for child in die.iter_children() {
+                test::black_box(&child?);
+            }
+        }
+
+        Ok(())
+    });
+}
+
+
+#[bench]
+fn info_dies(b: &mut test::Bencher) {
+    b.iter(|| -> Result<()> {
+        let f = fs::File::open(test_path()).unwrap();
+        let dw = Dwarf::from_fd(&f)?;
+
+        for cu in dw.compile_units() {
+            recurse_die(&cu?.get_die()?)?;
+        }
+
+        Ok(())
+    });
+
+    fn recurse_die(die: &Die) -> Result<()> {
+        test::black_box(die);
+
+        if die.has_children()? {
+            for child in die.iter_children() {
+                recurse_die(&child?)?;
+            }
+        }
+
+        Ok(())
+    }
+}
+
+
+#[bench]
 fn info_iter(b: &mut test::Bencher) {
     b.iter(|| -> Result<()> {
         let f = fs::File::open(test_path()).unwrap();
@@ -68,6 +113,37 @@ fn info_nested(b: &mut test::Bencher) {
             test::black_box(attr);
             Ok(true)
         })?;
+
+        die.for_each_child(|child| {
+            recurse_die(child)?;
+            Ok(true)
+        })?;
+
+        Ok(())
+    }
+}
+
+
+#[bench]
+fn info_nest_unchecked(b: &mut test::Bencher) {
+    b.iter(|| -> Result<()> {
+        let f = fs::File::open(test_path()).unwrap();
+        let dw = Dwarf::from_fd(&f)?;
+
+        for cu in dw.compile_units() {
+            recurse_die(&cu?.get_die()?)?;
+        }
+
+        Ok(())
+    });
+
+    fn recurse_die(die: &Die) -> Result<()> {
+        unsafe {
+            die.for_each_attr_unchecked(|attr| {
+                test::black_box(attr);
+                Ok(true)
+            })?;
+        }
 
         die.for_each_child(|child| {
             recurse_die(child)?;

@@ -92,6 +92,7 @@ impl fmt::Display for Error {
 
 macro_rules! ffi {
     ($func:ident ($($arg:expr),*)) => ({
+        #[allow(unused_unsafe)]
         let result = unsafe { ffi::$func($($arg),*) };
         ::error::IntoResult::into_result(result)
     })

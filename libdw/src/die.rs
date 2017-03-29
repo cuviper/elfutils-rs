@@ -5,7 +5,9 @@ use ffi::Dwarf_Off;
 use std::cell::UnsafeCell;
 use std::marker::PhantomData;
 use std::os::raw;
+use std::panic;
 use std::ptr;
+use std::thread;
 
 use super::Result;
 use super::Dwarf;
@@ -97,33 +99,91 @@ impl<'a> Die<'a> {
     #[inline]
     pub fn attrs(&self) -> Result<Vec<ffi::Dwarf_Attribute>> {
         let mut v = Vec::with_capacity(self.attr_count()?);
-        self.for_each_attr(|a| { v.push(*a); Ok(true) })?;
+        unsafe {
+            self.for_each_attr_unchecked(|a| { v.push(*a); Ok(true) })?;
+        }
         Ok(v)
     }
 
     pub fn for_each_attr<F>(&self, f: F) -> Result<()>
         where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
     {
-        type Arg<F> = (Result<()>, F);
+        type Arg<F> = thread::Result<(F, Result<()>)>;
+
+        let mut arg: Arg<F> = Ok((f, Ok(())));
+        let argp = &mut arg as *mut Arg<F> as *mut raw::c_void;
+        let ffi_result = ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<F>), argp, 0));
+
+        return match arg {
+            Ok((_, result)) => ffi_result.and(result),
+            Err(payload) => panic::resume_unwind(payload),
+        };
 
         unsafe extern "C" fn callback<F>(attr: *mut ffi::Dwarf_Attribute,
                                          argp: *mut raw::c_void)
                                          -> raw::c_int
             where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
         {
-            let (ref mut res, ref mut f) = *(argp as *mut Arg<F>);
-            let res = match f(&mut *attr) {
+            let argp = argp as *mut Arg<F>;
+            let rc = match *(argp) {
+                // We already panicked!
+                Err(_) => ffi::DWARF_CB_ABORT,
+
+                Ok((ref mut f, ref mut result)) => {
+                    // Asserted safe because we'll rethrow after the ffi returns,
+                    // so no one can see any possibly inconsistent state.
+                    let call = panic::AssertUnwindSafe(move || {
+                        match f(&mut *attr) {
+                            Ok(true) => ffi::DWARF_CB_OK,
+                            Ok(false) => ffi::DWARF_CB_ABORT,
+                            Err(e) => {
+                                *result = Err(e);
+                                ffi::DWARF_CB_ABORT
+                            },
+                        }
+                    });
+
+                    match panic::catch_unwind(call) {
+                        Ok(rc) => rc,
+                        Err(e) => {
+                            *argp = Err(e);
+                            ffi::DWARF_CB_ABORT
+                        },
+                    }
+                }
+            };
+            rc as raw::c_int
+        }
+    }
+
+    pub unsafe fn for_each_attr_unchecked<F>(&self, f: F) -> Result<()>
+        where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
+    {
+        type Arg<F> = (F, Result<()>);
+
+        let mut arg: Arg<F> = (f, Ok(()));
+        let argp = &mut arg as *mut Arg<F> as *mut raw::c_void;
+        ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<F>), argp, 0))?;
+
+        return arg.1;
+
+        unsafe extern "C" fn callback<F>(attr: *mut ffi::Dwarf_Attribute,
+                                         argp: *mut raw::c_void)
+                                         -> raw::c_int
+            where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
+        {
+            let (ref mut f, ref mut result) = *(argp as *mut Arg<F>);
+
+            let rc = match f(&mut *attr) {
                 Ok(true) => ffi::DWARF_CB_OK,
                 Ok(false) => ffi::DWARF_CB_ABORT,
-                Err(e) => { *res = Err(e); ffi::DWARF_CB_ABORT },
+                Err(e) => {
+                    *result = Err(e);
+                    ffi::DWARF_CB_ABORT
+                },
             };
-            res as raw::c_int
+            rc as raw::c_int
         }
-
-        let mut arg = (Ok(()), f);
-        let argp = &mut arg as *mut Arg<F> as *mut _;
-        ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<F>), argp, 0))?;
-        arg.0
     }
 
     #[inline]
