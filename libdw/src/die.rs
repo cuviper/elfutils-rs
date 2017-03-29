@@ -1,7 +1,5 @@
 use ffi;
 
-use ffi::Dwarf_Off;
-
 use std::cell::UnsafeCell;
 use std::marker::PhantomData;
 use std::os::raw;
@@ -32,20 +30,6 @@ impl<'a> Default for Die<'a> {
             phantom: PhantomData,
         }
     }
-}
-
-#[inline]
-pub fn offdie<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'a>> {
-    let die = Die::default();
-    ffi!(dwarf_offdie(dwarf.as_ptr(), offset, die.as_ptr()))?;
-    Ok(die)
-}
-
-#[inline]
-pub fn offdie_types<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'a>> {
-    let die = Die::default();
-    ffi!(dwarf_offdie_types(dwarf.as_ptr(), offset, die.as_ptr()))?;
-    Ok(die)
 }
 
 impl<'a> Die<'a> {
