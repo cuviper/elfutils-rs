@@ -46,6 +46,13 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
+    pub fn unit(&self) -> Result<Self> {
+        let die = Die::default();
+        ffi!(dwarf_diecu(self.as_ptr(), die.as_ptr(), ptr::null_mut(), ptr::null_mut()))?;
+        Ok(die)
+    }
+
+    #[inline]
     pub fn offset(&self) -> ffi::Dwarf_Off {
         raw_ffi!(dwarf_dieoffset(self.as_ptr()))
     }
