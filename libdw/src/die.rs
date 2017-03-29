@@ -14,7 +14,7 @@ use super::Dwarf;
 #[derive(Debug)]
 pub struct Die<'a> {
     inner: UnsafeCell<ffi::Dwarf_Die>,
-    phantom: PhantomData<Dwarf<'a>>,
+    phantom: PhantomData<&'a Dwarf<'a>>,
 }
 
 impl<'a> Default for Die<'a> {
