@@ -58,7 +58,7 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
-    pub fn cuoffset(&self) -> ffi::Dwarf_Off {
+    pub fn unit_offset(&self) -> ffi::Dwarf_Off {
         raw_ffi!(dwarf_cuoffset(self.as_ptr()))
     }
 
