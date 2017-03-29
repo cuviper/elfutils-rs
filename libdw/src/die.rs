@@ -46,6 +46,28 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
+    pub fn child(&self) -> Result<Option<Self>> {
+        let die = Die::default();
+        let rc = ffi!(dwarf_child(self.as_ptr(), die.as_ptr()))?;
+        if rc == 0 {
+            Ok(Some(die))
+        } else {
+            Ok(None)
+        }
+    }
+
+    #[inline]
+    pub fn siblingof(&self) -> Result<Option<Self>> {
+        let die = Die::default();
+        let rc = ffi!(dwarf_siblingof(self.as_ptr(), die.as_ptr()))?;
+        if rc == 0 {
+            Ok(Some(die))
+        } else {
+            Ok(None)
+        }
+    }
+
+    #[inline]
     pub fn has_children(&self) -> Result<bool> {
         let rc = ffi!(dwarf_haschildren(self.as_ptr()))?;
         Ok(rc > 0)
