@@ -159,7 +159,7 @@ impl<'a> Iterator for DieChildren<'a> {
         match rc {
             Ok(0) => {
                 // prime the die->abbrev before we Clone
-                // self.die.get_abbrev().ok();
+                self.die.get_abbrev().ok();
                 Some(Ok(self.die.clone()))
             },
             Ok(_) => { self.finished = true; None },
