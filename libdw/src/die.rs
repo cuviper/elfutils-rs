@@ -46,6 +46,16 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
+    pub fn offset(&self) -> ffi::Dwarf_Off {
+        raw_ffi!(dwarf_dieoffset(self.as_ptr()))
+    }
+
+    #[inline]
+    pub fn cuoffset(&self) -> ffi::Dwarf_Off {
+        raw_ffi!(dwarf_cuoffset(self.as_ptr()))
+    }
+
+    #[inline]
     pub fn child(&self) -> Result<Option<Self>> {
         let die = Die::default();
         let rc = ffi!(dwarf_child(self.as_ptr(), die.as_ptr()))?;

@@ -90,10 +90,17 @@ impl fmt::Display for Error {
 }
 
 
+macro_rules! raw_ffi {
+    ($func:ident ($($arg:expr),*)) => ({
+        #[allow(unused_unsafe)]
+        unsafe { ffi::$func($($arg),*) }
+    })
+}
+
 macro_rules! ffi {
     ($func:ident ($($arg:expr),*)) => ({
         #[allow(unused_unsafe)]
-        let result = unsafe { ffi::$func($($arg),*) };
+        let result = raw_ffi!($func($($arg),*));
         ::error::IntoResult::into_result(result)
     })
 }
