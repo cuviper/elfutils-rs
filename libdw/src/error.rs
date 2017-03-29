@@ -53,7 +53,7 @@ pub struct Error {
 
 impl Error {
     #[inline]
-    fn last() -> Error {
+    pub fn last() -> Error {
         Error {
             errno: unsafe { ffi::dwarf_errno() },
         }
@@ -99,8 +99,18 @@ macro_rules! raw_ffi {
 
 macro_rules! ffi {
     ($func:ident ($($arg:expr),*)) => ({
-        #[allow(unused_unsafe)]
         let result = raw_ffi!($func($($arg),*));
         ::error::IntoResult::into_result(result)
+    })
+}
+
+macro_rules! ffi_check {
+    ($func:ident ($($arg:expr),*) != $error:expr) => ({
+        let result = raw_ffi!($func($($arg),*));
+        if result != $error {
+            Ok(result)
+        } else {
+            Err(::Error::last())
+        }
     })
 }

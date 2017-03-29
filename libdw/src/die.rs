@@ -212,6 +212,13 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
+    pub fn tag(&self) -> Result<u32> {
+        let invalid = ffi::DW_TAG_invalid as raw::c_int;
+        let tag = ffi_check!(dwarf_tag(self.as_ptr()) != invalid)?;
+        Ok(tag as u32)
+    }
+
+    #[inline]
     pub fn as_ptr(&self) -> *mut ffi::Dwarf_Die {
         self.inner.get()
     }
