@@ -1,5 +1,9 @@
 BG = bindgen
 BGFLAGS = --no-unstable-rust
+CPPFLAGS = -Ielfutils/libelf \
+	   -Ielfutils/libdw \
+	   -Ielfutils/libdwfl \
+	   -Ielfutils/libdwelf
 
 LIBELF = libelf-sys/src/lib.rs
 LIBDW = libdw-sys/src/lib.rs
@@ -11,9 +15,9 @@ all: $(LIBELF) $(LIBDW)
 SHELL = /bin/bash
 
 LIBELF_H = libelf-sys/src/lib.h
-LIBELF_DEPS = /usr/include/libelf.h \
-	      /usr/include/gelf.h \
-	      /usr/include/elf.h
+LIBELF_DEPS = elfutils/libelf/libelf.h \
+	      elfutils/libelf/gelf.h \
+	      elfutils/libelf/elf.h
 
 $(LIBELF): $(LIBELF_H) $(LIBELF_DEPS)
 	$(BG) $(BGFLAGS) $< \
@@ -38,13 +42,14 @@ $(LIBELF): $(LIBELF_H) $(LIBELF_DEPS)
 	    --raw-line '#![allow(non_camel_case_types)]' \
 	    --raw-line '#![allow(non_snake_case)]' \
 	    --raw-line '#![allow(non_upper_case_globals)]' \
-	    --output $@
+	    --output $@ -- $(CPPFLAGS)
 
 LIBDW_H = libdw-sys/src/lib.h
-LIBDW_DEPS = /usr/include/elfutils/libdw.h \
-	     /usr/include/elfutils/libdwfl.h \
-	     /usr/include/elfutils/libdwelf.h \
-	     /usr/include/dwarf.h
+LIBDW_DEPS = elfutils/libdw/libdw.h \
+	     elfutils/libdwfl/libdwfl.h \
+	     elfutils/libdwelf/libdwelf.h \
+	     elfutils/libdw/dwarf.h \
+	     $(LIBELF_DEPS)
 
 $(LIBDW): $(LIBDW_H) $(LIBDW_DEPS)
 	$(BG) $(BGFLAGS) $< \
@@ -57,7 +62,7 @@ $(LIBDW): $(LIBDW_H) $(LIBDW_DEPS)
 	    --raw-line '#![allow(non_camel_case_types)]' \
 	    --raw-line '#![allow(non_snake_case)]' \
 	    --raw-line '#![allow(non_upper_case_globals)]' \
-	    --output $@
+	    --output $@ -- $(CPPFLAGS)
 
 
 $(LIBELF) $(LIBDW) $(DWARF): Makefile.bindgen

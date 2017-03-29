@@ -6,6 +6,7 @@ license = "MIT/Apache-2.0"
 name = "libelf-sys"
 repository = "https://github.com/cuviper/elfutils-rs"
 version = "0.0.2"
+include = ["Cargo.toml", "build.rs", "src/**/*.rs"]
 
 [build-dependencies]
 pkg-config = "0.3.8"

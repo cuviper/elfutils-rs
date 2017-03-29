@@ -1,0 +1,3 @@
+[submodule "elfutils"]
+	path = elfutils
+	url = git://sourceware.org/git/elfutils

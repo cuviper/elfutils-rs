@@ -1,4 +1,4 @@
-#include <elfutils/libdw.h>
-#include <elfutils/libdwfl.h>
-#include <elfutils/libdwelf.h>
+#include <libdw.h>
+#include <libdwfl.h>
+#include <libdwelf.h>
 #include <dwarf.h>

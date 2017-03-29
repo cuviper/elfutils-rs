@@ -1613,6 +1613,7 @@ extern "C" {
     pub fn dwfl_standard_argp() -> *const argp;
 }
 extern "C" {
+    /*** Relocation of addresses from Dwfl ***/
     pub fn dwfl_module_relocations(mod_: *mut Dwfl_Module)
      -> ::std::os::raw::c_int;
 }
@@ -1633,6 +1634,7 @@ extern "C" {
      -> ::std::os::raw::c_int;
 }
 extern "C" {
+    /*** ELF access functions ***/
     pub fn dwfl_module_getelf(arg1: *mut Dwfl_Module, bias: *mut GElf_Addr)
      -> *mut Elf;
 }
@@ -1680,6 +1682,7 @@ extern "C" {
                                        bias: *mut Dwarf_Addr) -> *mut Elf_Scn;
 }
 extern "C" {
+    /*** Dwarf access functions ***/
     pub fn dwfl_module_getdwarf(arg1: *mut Dwfl_Module, bias: *mut Dwarf_Addr)
      -> *mut Dwarf;
 }
@@ -1774,6 +1777,7 @@ extern "C" {
      -> *const ::std::os::raw::c_char;
 }
 extern "C" {
+    /*** Machine backend access functions ***/
     pub fn dwfl_module_return_value_location(mod_: *mut Dwfl_Module,
                                              functypedie: *mut Dwarf_Die,
                                              locops: *mut *const Dwarf_Op)
