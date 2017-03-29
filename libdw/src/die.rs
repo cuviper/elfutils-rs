@@ -32,12 +32,14 @@ impl<'a> Default for Die<'a> {
     }
 }
 
+#[inline]
 pub fn offdie<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'a>> {
     let die = Die::default();
     ffi!(dwarf_offdie(dwarf.as_ptr(), offset, die.as_ptr()))?;
     Ok(die)
 }
 
+#[inline]
 pub fn offdie_types<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'a>> {
     let die = Die::default();
     ffi!(dwarf_offdie_types(dwarf.as_ptr(), offset, die.as_ptr()))?;
@@ -45,6 +47,7 @@ pub fn offdie_types<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'
 }
 
 impl<'a> Die<'a> {
+    #[inline]
     fn get_abbrev(&self) -> Result<*mut ffi::Dwarf_Abbrev> {
         unsafe {
             if (*self.as_ptr()).abbrev.is_null() {
@@ -54,11 +57,13 @@ impl<'a> Die<'a> {
         }
     }
 
+    #[inline]
     pub fn has_children(&self) -> Result<bool> {
         let rc = ffi!(dwarf_haschildren(self.as_ptr()))?;
         Ok(rc > 0)
     }
 
+    #[inline]
     pub fn iter_children(&self) -> DieChildren<'a> {
         DieChildren {
             first: true,
@@ -81,6 +86,7 @@ impl<'a> Die<'a> {
         Ok(())
     }
 
+    #[inline]
     pub fn attr_count(&self) -> Result<usize> {
         let mut count = 0;
         let abbrev = self.get_abbrev()?;
@@ -88,6 +94,7 @@ impl<'a> Die<'a> {
         Ok(count)
     }
 
+    #[inline]
     pub fn attrs(&self) -> Result<Vec<ffi::Dwarf_Attribute>> {
         let mut v = Vec::with_capacity(self.attr_count()?);
         self.for_each_attr(|a| { v.push(*a); Ok(true) })?;
@@ -126,6 +133,7 @@ impl<'a> Die<'a> {
 }
 
 impl<'a> Clone for Die<'a> {
+    #[inline]
     fn clone(&self) -> Self {
         Die {
             inner: UnsafeCell::new(unsafe { *self.as_ptr() }),
@@ -145,6 +153,7 @@ pub struct DieChildren<'a> {
 impl<'a> Iterator for DieChildren<'a> {
     type Item = Result<Die<'a>>;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         if self.finished { return None }
 

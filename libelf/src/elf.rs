@@ -15,6 +15,7 @@ pub struct Elf<'a> {
 }
 
 impl<'a> Elf<'a> {
+    #[inline]
     fn new(elf: *mut ffi::Elf) -> Elf<'a> {
         Elf {
             inner: elf,
@@ -22,6 +23,7 @@ impl<'a> Elf<'a> {
         }
     }
 
+    #[inline]
     pub fn from_fd<FD: AsRawFd>(fd: &FD) -> Result<Elf> {
         let fd = fd.as_raw_fd();
         unsafe { ffi::elf_version(ffi::EV_CURRENT); }
@@ -29,6 +31,7 @@ impl<'a> Elf<'a> {
             .map(Elf::new)
     }
 
+    #[inline]
     pub fn from_mem(mem: &mut [u8]) -> Result<Elf> {
         let ptr = mem.as_mut_ptr() as *mut raw::c_char;
         ffi!(elf_memory(ptr, mem.len()))
@@ -42,6 +45,7 @@ impl<'a> Elf<'a> {
 }
 
 impl<'a> Drop for Elf<'a> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::elf_end(self.inner);

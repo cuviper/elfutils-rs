@@ -16,6 +16,7 @@ pub struct Dwarf<'a> {
 }
 
 impl<'a> Dwarf<'a> {
+    #[inline]
     fn new(dwarf: *mut ffi::Dwarf) -> Dwarf<'a> {
         Dwarf {
             inner: dwarf,
@@ -23,22 +24,26 @@ impl<'a> Dwarf<'a> {
         }
     }
 
+    #[inline]
     pub fn from_fd<FD: AsRawFd>(fd: &FD) -> Result<Dwarf> {
         let fd = fd.as_raw_fd();
         let dwarf = ffi!(dwarf_begin(fd, ffi::Dwarf_Cmd::DWARF_C_READ))?;
         Ok(Dwarf::new(dwarf))
     }
 
+    #[inline]
     pub fn from_elf<'b>(elf: &'b libelf::Elf) -> Result<Dwarf<'b>> {
         let elf = elf.as_ptr() as *mut _; // FIXME distinct bindgen Elf types
         let dwarf = ffi!(dwarf_begin_elf(elf, ffi::Dwarf_Cmd::DWARF_C_READ, ptr::null_mut()))?;
         Ok(Dwarf::new(dwarf))
     }
 
+    #[inline]
     pub fn compile_units(&self) -> CompileUnits {
         ::units::compile_units(self)
     }
 
+    #[inline]
     pub fn type_units(&self) -> TypeUnits {
         ::units::type_units(self)
     }
@@ -50,6 +55,7 @@ impl<'a> Dwarf<'a> {
 }
 
 impl<'a> Drop for Dwarf<'a> {
+    #[inline]
     fn drop(&mut self) {
         unsafe {
             ffi::dwarf_end(self.inner);

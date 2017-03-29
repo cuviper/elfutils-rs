@@ -15,6 +15,7 @@ pub struct CompileUnits<'a> {
     finished: bool,
 }
 
+#[inline]
 pub fn compile_units<'a>(dwarf: &'a Dwarf<'a>) -> CompileUnits<'a> {
     CompileUnits {
         dwarf: dwarf,
@@ -26,6 +27,7 @@ pub fn compile_units<'a>(dwarf: &'a Dwarf<'a>) -> CompileUnits<'a> {
 impl<'a> Iterator for CompileUnits<'a> {
     type Item = Result<CompileUnit<'a>>;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         if self.finished { return None }
 
@@ -57,6 +59,7 @@ pub struct TypeUnits<'a> {
     finished: bool,
 }
 
+#[inline]
 pub fn type_units<'a>(dwarf: &'a Dwarf<'a>) -> TypeUnits<'a> {
     TypeUnits {
         dwarf: dwarf,
@@ -68,6 +71,7 @@ pub fn type_units<'a>(dwarf: &'a Dwarf<'a>) -> TypeUnits<'a> {
 impl<'a> Iterator for TypeUnits<'a> {
     type Item = Result<TypeUnit<'a>>;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         if self.finished { return None }
 
@@ -102,6 +106,7 @@ pub struct CompileUnit<'a> {
 }
 
 impl<'a> CompileUnit<'a> {
+    #[inline]
     fn new(dwarf: &'a Dwarf<'a>, die_offset: Dwarf_Off) -> CompileUnit<'a>
     {
         CompileUnit {
@@ -110,6 +115,7 @@ impl<'a> CompileUnit<'a> {
         }
     }
 
+    #[inline]
     pub fn get_die(&self) -> Result<Die<'a>> {
         ::die::offdie(self.dwarf, self.die_offset)
     }
@@ -125,6 +131,7 @@ pub struct TypeUnit<'a> {
 }
 
 impl<'a> TypeUnit<'a> {
+    #[inline]
     fn new(dwarf: &'a Dwarf<'a>, die_offset: Dwarf_Off,
            type_offset: Dwarf_Off, signature: u64)
         -> TypeUnit<'a>
@@ -137,14 +144,17 @@ impl<'a> TypeUnit<'a> {
         }
     }
 
+    #[inline]
     pub fn get_die(&self) -> Result<Die<'a>> {
         ::die::offdie_types(self.dwarf, self.die_offset)
     }
 
+    #[inline]
     pub fn get_type_die(&self) -> Result<Die<'a>> {
         ::die::offdie_types(self.dwarf, self.type_offset)
     }
 
+    #[inline]
     pub fn signature(&self) -> u64 {
         self.signature
     }

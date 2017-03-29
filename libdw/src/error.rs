@@ -52,12 +52,14 @@ pub struct Error {
 }
 
 impl Error {
+    #[inline]
     fn last() -> Error {
         Error {
             errno: unsafe { ffi::dwarf_errno() },
         }
     }
 
+    #[inline]
     fn to_cstr(&self) -> &'static CStr {
         // Normalize 0 to -1, which behaves the same except it always returns a legal string
         let errno = match self.errno { 0 => -1, e => e };
@@ -66,12 +68,14 @@ impl Error {
 }
 
 impl<'a> From<&'a Error> for Error {
+    #[inline]
     fn from(other: &'a Error) -> Error {
         *other
     }
 }
 
 impl error::Error for Error {
+    #[inline]
     fn description(&self) -> &str {
         self.to_cstr().to_str()
             .unwrap_or("invalid UTF-8 from dwarf_errmsg")
@@ -79,6 +83,7 @@ impl error::Error for Error {
 }
 
 impl fmt::Display for Error {
+    #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Display::fmt(&self.to_cstr().to_string_lossy(), f)
     }
