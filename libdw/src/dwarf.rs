@@ -64,6 +64,13 @@ impl<'a> Dwarf<'a> {
     }
 
     #[inline]
+    pub fn addrdie(&self, address: ffi::Dwarf_Addr) -> Result<Die> {
+        let die = Die::default();
+        ffi!(dwarf_addrdie(self.as_ptr(), address, die.as_ptr()))?;
+        Ok(die)
+    }
+
+    #[inline]
     pub fn as_ptr(&self) -> *mut ffi::Dwarf {
         self.inner
     }
