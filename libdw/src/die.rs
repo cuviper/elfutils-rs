@@ -51,11 +51,13 @@ pub fn offdie_types<'a>(dwarf: &'a Dwarf<'a>, offset: Dwarf_Off) -> Result<Die<'
 impl<'a> Die<'a> {
     #[inline]
     fn get_abbrev(&self) -> Result<*mut ffi::Dwarf_Abbrev> {
+        let die = self.as_ptr();
         unsafe {
-            if (*self.as_ptr()).abbrev.is_null() {
+            if (*die).abbrev.is_null() {
                 self.has_children()?;
+                debug_assert!(!(*die).abbrev.is_null());
             }
-            Ok((*self.as_ptr()).abbrev)
+            Ok((*die).abbrev)
         }
     }
 
