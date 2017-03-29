@@ -18,6 +18,7 @@ pub struct Die<'a> {
 }
 
 impl<'a> Default for Die<'a> {
+    #[inline]
     fn default() -> Self {
         Die {
             inner: ffi::Dwarf_Die {
