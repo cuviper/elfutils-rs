@@ -52,6 +52,7 @@ $(LIBDW): $(LIBDW_H) $(LIBDW_DEPS)
 	    --whitelist-type 'Dwarf|Dwarf_.*' \
 	    --whitelist-var '(DW|DWARF)_.*' \
 	    --constified-enum '(DW|DWARF)_.*' \
+	    --opaque-type FILE \
 	    --raw-line '#![allow(improper_ctypes)]' \
 	    --raw-line '#![allow(non_camel_case_types)]' \
 	    --raw-line '#![allow(non_snake_case)]' \
