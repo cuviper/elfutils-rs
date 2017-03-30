@@ -151,16 +151,7 @@ impl<'a> Die<'a> {
 
             // Asserted safe because we'll rethrow after the ffi returns,
             // so no one can see any possibly inconsistent state.
-            let call = panic::AssertUnwindSafe(|| {
-                match f(attr) {
-                    Ok(true) => ffi::DWARF_CB_OK,
-                    Ok(false) => ffi::DWARF_CB_ABORT,
-                    Err(e) => {
-                        result = Err(e);
-                        ffi::DWARF_CB_ABORT
-                    },
-                }
-            });
+            let call = panic::AssertUnwindSafe(|| dwarf_cb_map(f(attr), &mut result));
 
             match panic::catch_unwind(call) {
                 Ok(rc) => rc,
@@ -183,16 +174,7 @@ impl<'a> Die<'a> {
     {
         let mut result = Ok(());
 
-        self.getattrs(|attr| {
-            match f(attr) {
-                Ok(true) => ffi::DWARF_CB_OK,
-                Ok(false) => ffi::DWARF_CB_ABORT,
-                Err(e) => {
-                    result = Err(e);
-                    ffi::DWARF_CB_ABORT
-                },
-            }
-        })?;
+        self.getattrs(|attr| dwarf_cb_map(f(attr), &mut result))?;
 
         result
     }
@@ -227,16 +209,7 @@ impl<'a> Die<'a> {
 
             // Asserted safe because we'll rethrow after the ffi returns,
             // so no one can see any possibly inconsistent state.
-            let call = panic::AssertUnwindSafe(|| {
-                match f(func) {
-                    Ok(true) => ffi::DWARF_CB_OK,
-                    Ok(false) => ffi::DWARF_CB_ABORT,
-                    Err(e) => {
-                        result = Err(e);
-                        ffi::DWARF_CB_ABORT
-                    },
-                }
-            });
+            let call = panic::AssertUnwindSafe(|| dwarf_cb_map(f(func), &mut result));
 
             match panic::catch_unwind(call) {
                 Ok(rc) => rc,
@@ -259,16 +232,7 @@ impl<'a> Die<'a> {
     {
         let mut result = Ok(());
 
-        self.getfuncs(|func| {
-            match f(func) {
-                Ok(true) => ffi::DWARF_CB_OK,
-                Ok(false) => ffi::DWARF_CB_ABORT,
-                Err(e) => {
-                    result = Err(e);
-                    ffi::DWARF_CB_ABORT
-                },
-            }
-        })?;
+        self.getfuncs(|func| dwarf_cb_map(f(func), &mut result))?;
 
         result
     }
@@ -341,5 +305,18 @@ impl<'a> Iterator for DieChildren<'a> {
             Ok(_) => { self.finished = true; None },
             Err(e) => { self.finished = true; Some(Err(e)) },
         }
+    }
+}
+
+
+#[inline]
+fn dwarf_cb_map<T>(cont: Result<bool>, result: &mut Result<T>) -> raw::c_uint {
+    match cont {
+        Ok(true) => ffi::DWARF_CB_OK,
+        Ok(false) => ffi::DWARF_CB_ABORT,
+        Err(e) => {
+            *result = Err(e);
+            ffi::DWARF_CB_ABORT
+        },
     }
 }
