@@ -5,7 +5,6 @@ use std::marker::PhantomData;
 use std::os::raw;
 use std::panic;
 use std::ptr;
-use std::thread;
 
 use super::Result;
 use super::Dwarf;
@@ -138,165 +137,155 @@ impl<'a> Die<'a> {
         Ok(v)
     }
 
-    pub fn for_each_attr<F>(&self, f: F) -> Result<()>
+    pub fn for_each_attr<F>(&self, mut f: F) -> Result<()>
         where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
     {
-        type Arg<F> = thread::Result<(F, Result<()>)>;
+        let mut panic = None;
+        let mut result = Ok(());
 
-        let mut arg: Arg<F> = Ok((f, Ok(())));
-        let argp = &mut arg as *mut Arg<F> as *mut raw::c_void;
-        let ffi_result = ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<F>), argp, 0));
+        self.getattrs(|attr| {
+            if panic.is_some() {
+                // We already panicked!
+                return ffi::DWARF_CB_ABORT;
+            }
 
-        return match arg {
-            Ok((_, result)) => ffi_result.and(result),
-            Err(payload) => panic::resume_unwind(payload),
-        };
+            // Asserted safe because we'll rethrow after the ffi returns,
+            // so no one can see any possibly inconsistent state.
+            let call = panic::AssertUnwindSafe(|| {
+                match f(attr) {
+                    Ok(true) => ffi::DWARF_CB_OK,
+                    Ok(false) => ffi::DWARF_CB_ABORT,
+                    Err(e) => {
+                        result = Err(e);
+                        ffi::DWARF_CB_ABORT
+                    },
+                }
+            });
+
+            match panic::catch_unwind(call) {
+                Ok(rc) => rc,
+                Err(e) => {
+                    panic = Some(e);
+                    ffi::DWARF_CB_ABORT
+                }
+            }
+        })?;
+
+        if let Some(payload) = panic {
+            panic::resume_unwind(payload);
+        }
+
+        result
+    }
+
+    pub unsafe fn for_each_attr_unchecked<F>(&self, mut f: F) -> Result<()>
+        where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
+    {
+        let mut result = Ok(());
+
+        self.getattrs(|attr| {
+            match f(attr) {
+                Ok(true) => ffi::DWARF_CB_OK,
+                Ok(false) => ffi::DWARF_CB_ABORT,
+                Err(e) => {
+                    result = Err(e);
+                    ffi::DWARF_CB_ABORT
+                },
+            }
+        })?;
+
+        result
+    }
+
+    fn getattrs<F>(&self, mut f: F) -> Result<isize>
+        where F: FnMut(&mut ffi::Dwarf_Attribute) -> raw::c_uint
+    {
+        let argp = &mut f as *mut F as *mut raw::c_void;
+        return ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<F>), argp, 0));
 
         unsafe extern "C" fn callback<F>(attr: *mut ffi::Dwarf_Attribute,
                                          argp: *mut raw::c_void)
                                          -> raw::c_int
-            where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
+            where F: FnMut(&mut ffi::Dwarf_Attribute) -> raw::c_uint
         {
-            let argp = argp as *mut Arg<F>;
-            let rc = match *(argp) {
-                // We already panicked!
-                Err(_) => ffi::DWARF_CB_ABORT,
-
-                Ok((ref mut f, ref mut result)) => {
-                    // Asserted safe because we'll rethrow after the ffi returns,
-                    // so no one can see any possibly inconsistent state.
-                    let call = panic::AssertUnwindSafe(move || {
-                        match f(&mut *attr) {
-                            Ok(true) => ffi::DWARF_CB_OK,
-                            Ok(false) => ffi::DWARF_CB_ABORT,
-                            Err(e) => {
-                                *result = Err(e);
-                                ffi::DWARF_CB_ABORT
-                            },
-                        }
-                    });
-
-                    match panic::catch_unwind(call) {
-                        Ok(rc) => rc,
-                        Err(e) => {
-                            *argp = Err(e);
-                            ffi::DWARF_CB_ABORT
-                        },
-                    }
-                }
-            };
-            rc as raw::c_int
+            let f = &mut *(argp as *mut F);
+            f(&mut *attr) as raw::c_int
         }
     }
 
-    pub unsafe fn for_each_attr_unchecked<F>(&self, f: F) -> Result<()>
-        where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
+    pub fn for_each_func<F>(&self, mut f: F) -> Result<()>
+        where F: FnMut(&Self) -> Result<bool>
     {
-        type Arg<F> = (F, Result<()>);
+        let mut panic = None;
+        let mut result = Ok(());
 
-        let mut arg: Arg<F> = (f, Ok(()));
-        let argp = &mut arg as *mut Arg<F> as *mut raw::c_void;
-        ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<F>), argp, 0))?;
+        self.getfuncs(|func| {
+            if panic.is_some() {
+                // We already panicked!
+                return ffi::DWARF_CB_ABORT;
+            }
 
-        return arg.1;
+            // Asserted safe because we'll rethrow after the ffi returns,
+            // so no one can see any possibly inconsistent state.
+            let call = panic::AssertUnwindSafe(|| {
+                match f(func) {
+                    Ok(true) => ffi::DWARF_CB_OK,
+                    Ok(false) => ffi::DWARF_CB_ABORT,
+                    Err(e) => {
+                        result = Err(e);
+                        ffi::DWARF_CB_ABORT
+                    },
+                }
+            });
 
-        unsafe extern "C" fn callback<F>(attr: *mut ffi::Dwarf_Attribute,
-                                         argp: *mut raw::c_void)
-                                         -> raw::c_int
-            where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
-        {
-            let (ref mut f, ref mut result) = *(argp as *mut Arg<F>);
+            match panic::catch_unwind(call) {
+                Ok(rc) => rc,
+                Err(e) => {
+                    panic = Some(e);
+                    ffi::DWARF_CB_ABORT
+                }
+            }
+        })?;
 
-            let rc = match f(&mut *attr) {
+        if let Some(payload) = panic {
+            panic::resume_unwind(payload);
+        }
+
+        result
+    }
+
+    pub unsafe fn for_each_func_unchecked<F>(&self, mut f: F) -> Result<()>
+        where F: FnMut(&Self) -> Result<bool>
+    {
+        let mut result = Ok(());
+
+        self.getfuncs(|func| {
+            match f(func) {
                 Ok(true) => ffi::DWARF_CB_OK,
                 Ok(false) => ffi::DWARF_CB_ABORT,
                 Err(e) => {
-                    *result = Err(e);
+                    result = Err(e);
                     ffi::DWARF_CB_ABORT
                 },
-            };
-            rc as raw::c_int
-        }
+            }
+        })?;
+
+        result
     }
 
-    pub fn for_each_func<F>(&self, f: F) -> Result<()>
-        where F: FnMut(&Self) -> Result<bool>
+    fn getfuncs<F>(&self, mut f: F) -> Result<isize>
+        where F: FnMut(&Self) -> raw::c_uint
     {
-        type Arg<F> = thread::Result<(F, Result<()>)>;
+        let argp = &mut f as *mut F as *mut raw::c_void;
+        return ffi!(dwarf_getfuncs(self.as_ptr(), Some(callback::<'a, F>), argp, 0));
 
-        let mut arg: Arg<F> = Ok((f, Ok(())));
-        let argp = &mut arg as *mut Arg<F> as *mut raw::c_void;
-        let ffi_result = ffi!(dwarf_getfuncs(self.as_ptr(), Some(callback::<'a, F>), argp, 0));
-
-        return match arg {
-            Ok((_, result)) => ffi_result.and(result),
-            Err(payload) => panic::resume_unwind(payload),
-        };
-
-        unsafe extern "C" fn callback<'a, F>(die: *mut ffi::Dwarf_Die,
+        unsafe extern "C" fn callback<'a, F>(func: *mut ffi::Dwarf_Die,
                                              argp: *mut raw::c_void)
                                              -> raw::c_int
-            where F: FnMut(&Die<'a>) -> Result<bool>
+            where F: FnMut(&Die<'a>) -> raw::c_uint
         {
-            let argp = argp as *mut Arg<F>;
-            let rc = match *(argp) {
-                // We already panicked!
-                Err(_) => ffi::DWARF_CB_ABORT,
-
-                Ok((ref mut f, ref mut result)) => {
-                    // Asserted safe because we'll rethrow after the ffi returns,
-                    // so no one can see any possibly inconsistent state.
-                    let call = panic::AssertUnwindSafe(move || {
-                        match f(&Die::from_raw(die)) {
-                            Ok(true) => ffi::DWARF_CB_OK,
-                            Ok(false) => ffi::DWARF_CB_ABORT,
-                            Err(e) => {
-                                *result = Err(e);
-                                ffi::DWARF_CB_ABORT
-                            },
-                        }
-                    });
-
-                    match panic::catch_unwind(call) {
-                        Ok(rc) => rc,
-                        Err(e) => {
-                            *argp = Err(e);
-                            ffi::DWARF_CB_ABORT
-                        },
-                    }
-                }
-            };
-            rc as raw::c_int
-        }
-    }
-
-    pub unsafe fn for_each_func_unchecked<F>(&self, f: F) -> Result<()>
-        where F: FnMut(&Self) -> Result<bool>
-    {
-        type Arg<F> = (F, Result<()>);
-
-        let mut arg: Arg<F> = (f, Ok(()));
-        let argp = &mut arg as *mut Arg<F> as *mut raw::c_void;
-        ffi!(dwarf_getfuncs(self.as_ptr(), Some(callback::<'a, F>), argp, 0))?;
-
-        return arg.1;
-
-        unsafe extern "C" fn callback<'a, F>(die: *mut ffi::Dwarf_Die,
-                                             argp: *mut raw::c_void)
-                                             -> raw::c_int
-            where F: FnMut(&Die<'a>) -> Result<bool>
-        {
-            let (ref mut f, ref mut result) = *(argp as *mut Arg<F>);
-
-            let rc = match f(&Die::from_raw(die)) {
-                Ok(true) => ffi::DWARF_CB_OK,
-                Ok(false) => ffi::DWARF_CB_ABORT,
-                Err(e) => {
-                    *result = Err(e);
-                    ffi::DWARF_CB_ABORT
-                },
-            };
-            rc as raw::c_int
+            let f = &mut *(argp as *mut F);
+            f(&Die::from_raw(func)) as raw::c_int
         }
     }
 
