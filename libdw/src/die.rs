@@ -216,7 +216,8 @@ impl<'a> Die<'a> {
             where F: FnMut(&Die<'a>) -> raw::c_uint
         {
             let f = &mut *(argp as *mut F);
-            f(&Die::from_raw(func)) as raw::c_int
+            let func = &*(func as *const Die<'a>);
+            f(func) as raw::c_int
         }
     }
 
