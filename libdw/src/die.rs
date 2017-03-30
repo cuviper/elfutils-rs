@@ -1,5 +1,6 @@
 use ffi;
 
+use std::any::Any;
 use std::cell::UnsafeCell;
 use std::marker::PhantomData;
 use std::os::raw;
@@ -140,31 +141,12 @@ impl<'a> Die<'a> {
     pub fn for_each_attr<F>(&self, mut f: F) -> Result<()>
         where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
     {
-        let mut panic = None;
+        let mut guard = CallbackGuard::new();
         let mut result = Ok(());
 
         self.getattrs(|attr| {
-            if panic.is_some() {
-                // We already panicked!
-                return ffi::DWARF_CB_ABORT;
-            }
-
-            // Asserted safe because we'll rethrow after the ffi returns,
-            // so no one can see any possibly inconsistent state.
-            let call = panic::AssertUnwindSafe(|| dwarf_cb_map(f(attr), &mut result));
-
-            match panic::catch_unwind(call) {
-                Ok(rc) => rc,
-                Err(e) => {
-                    panic = Some(e);
-                    ffi::DWARF_CB_ABORT
-                }
-            }
+            guard.call(|| dwarf_cb_map(f(attr), &mut result))
         })?;
-
-        if let Some(payload) = panic {
-            panic::resume_unwind(payload);
-        }
 
         result
     }
@@ -198,31 +180,12 @@ impl<'a> Die<'a> {
     pub fn for_each_func<F>(&self, mut f: F) -> Result<()>
         where F: FnMut(&Self) -> Result<bool>
     {
-        let mut panic = None;
+        let mut guard = CallbackGuard::new();
         let mut result = Ok(());
 
         self.getfuncs(|func| {
-            if panic.is_some() {
-                // We already panicked!
-                return ffi::DWARF_CB_ABORT;
-            }
-
-            // Asserted safe because we'll rethrow after the ffi returns,
-            // so no one can see any possibly inconsistent state.
-            let call = panic::AssertUnwindSafe(|| dwarf_cb_map(f(func), &mut result));
-
-            match panic::catch_unwind(call) {
-                Ok(rc) => rc,
-                Err(e) => {
-                    panic = Some(e);
-                    ffi::DWARF_CB_ABORT
-                }
-            }
+            guard.call(|| dwarf_cb_map(f(func), &mut result))
         })?;
-
-        if let Some(payload) = panic {
-            panic::resume_unwind(payload);
-        }
 
         result
     }
@@ -318,5 +281,49 @@ fn dwarf_cb_map<T>(cont: Result<bool>, result: &mut Result<T>) -> raw::c_uint {
             *result = Err(e);
             ffi::DWARF_CB_ABORT
         },
+    }
+}
+
+
+struct CallbackGuard {
+    payload: Option<Box<Any + Send>>
+}
+
+impl CallbackGuard {
+    #[inline]
+    fn new() -> CallbackGuard {
+        CallbackGuard {
+            payload: None
+        }
+    }
+
+    fn call<F>(&mut self, f: F) -> raw::c_uint
+        where F: FnMut() -> raw::c_uint
+    {
+        if self.payload.is_some() {
+            // We already panicked!
+            return ffi::DWARF_CB_ABORT;
+        }
+
+        // Asserted safe because we'll rethrow after the ffi returns,
+        // so no one can see any possibly inconsistent state.
+        let call = panic::AssertUnwindSafe(f);
+
+        match panic::catch_unwind(call) {
+            Ok(rc) => rc,
+            Err(e) => {
+                self.payload = Some(e);
+                ffi::DWARF_CB_ABORT
+            }
+        }
+    }
+}
+
+impl Drop for CallbackGuard {
+    #[inline]
+    fn drop(&mut self) {
+        if let Some(payload) = self.payload.take() {
+            panic::resume_unwind(payload);
+        }
     }
 }
