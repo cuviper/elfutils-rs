@@ -34,6 +34,14 @@ impl<'a> Default for Die<'a> {
 
 impl<'a> Die<'a> {
     #[inline]
+    unsafe fn from_raw(die: *mut ffi::Dwarf_Die) -> Self {
+        Die {
+            inner: UnsafeCell::new(*die),
+            phantom: PhantomData,
+        }
+    }
+
+    #[inline]
     fn get_abbrev(&self) -> Result<*mut ffi::Dwarf_Abbrev> {
         let die = self.as_ptr();
         unsafe {
@@ -211,6 +219,87 @@ impl<'a> Die<'a> {
         }
     }
 
+    pub fn for_each_func<F>(&self, f: F) -> Result<()>
+        where F: FnMut(&Self) -> Result<bool>
+    {
+        type Arg<F> = thread::Result<(F, Result<()>)>;
+
+        let mut arg: Arg<F> = Ok((f, Ok(())));
+        let argp = &mut arg as *mut Arg<F> as *mut raw::c_void;
+        let ffi_result = ffi!(dwarf_getfuncs(self.as_ptr(), Some(callback::<'a, F>), argp, 0));
+
+        return match arg {
+            Ok((_, result)) => ffi_result.and(result),
+            Err(payload) => panic::resume_unwind(payload),
+        };
+
+        unsafe extern "C" fn callback<'a, F>(die: *mut ffi::Dwarf_Die,
+                                             argp: *mut raw::c_void)
+                                             -> raw::c_int
+            where F: FnMut(&Die<'a>) -> Result<bool>
+        {
+            let argp = argp as *mut Arg<F>;
+            let rc = match *(argp) {
+                // We already panicked!
+                Err(_) => ffi::DWARF_CB_ABORT,
+
+                Ok((ref mut f, ref mut result)) => {
+                    // Asserted safe because we'll rethrow after the ffi returns,
+                    // so no one can see any possibly inconsistent state.
+                    let call = panic::AssertUnwindSafe(move || {
+                        match f(&Die::from_raw(die)) {
+                            Ok(true) => ffi::DWARF_CB_OK,
+                            Ok(false) => ffi::DWARF_CB_ABORT,
+                            Err(e) => {
+                                *result = Err(e);
+                                ffi::DWARF_CB_ABORT
+                            },
+                        }
+                    });
+
+                    match panic::catch_unwind(call) {
+                        Ok(rc) => rc,
+                        Err(e) => {
+                            *argp = Err(e);
+                            ffi::DWARF_CB_ABORT
+                        },
+                    }
+                }
+            };
+            rc as raw::c_int
+        }
+    }
+
+    pub unsafe fn for_each_func_unchecked<F>(&self, f: F) -> Result<()>
+        where F: FnMut(&Self) -> Result<bool>
+    {
+        type Arg<F> = (F, Result<()>);
+
+        let mut arg: Arg<F> = (f, Ok(()));
+        let argp = &mut arg as *mut Arg<F> as *mut raw::c_void;
+        ffi!(dwarf_getfuncs(self.as_ptr(), Some(callback::<'a, F>), argp, 0))?;
+
+        return arg.1;
+
+        unsafe extern "C" fn callback<'a, F>(die: *mut ffi::Dwarf_Die,
+                                             argp: *mut raw::c_void)
+                                             -> raw::c_int
+            where F: FnMut(&Die<'a>) -> Result<bool>
+        {
+            let (ref mut f, ref mut result) = *(argp as *mut Arg<F>);
+
+            let rc = match f(&Die::from_raw(die)) {
+                Ok(true) => ffi::DWARF_CB_OK,
+                Ok(false) => ffi::DWARF_CB_ABORT,
+                Err(e) => {
+                    *result = Err(e);
+                    ffi::DWARF_CB_ABORT
+                },
+            };
+            rc as raw::c_int
+        }
+    }
+
     #[inline]
     pub fn tag(&self) -> Result<u32> {
         let invalid = ffi::DW_TAG_invalid as raw::c_int;
@@ -227,10 +316,7 @@ impl<'a> Die<'a> {
 impl<'a> Clone for Die<'a> {
     #[inline]
     fn clone(&self) -> Self {
-        Die {
-            inner: UnsafeCell::new(unsafe { *self.as_ptr() }),
-            phantom: PhantomData,
-        }
+        unsafe { Die::from_raw(self.as_ptr()) }
     }
 }
 
