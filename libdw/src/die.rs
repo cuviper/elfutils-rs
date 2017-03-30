@@ -133,7 +133,7 @@ impl<'a> Die<'a> {
     pub fn attrs(&self) -> Result<Vec<ffi::Dwarf_Attribute>> {
         let mut v = Vec::with_capacity(self.attr_count()?);
         unsafe {
-            self.for_each_attr_unchecked(|a| { v.push(*a); Ok(true) })?;
+            self.getattrs(|a| { v.push(*a); ffi::DWARF_CB_OK })?;
         }
         Ok(v)
     }
