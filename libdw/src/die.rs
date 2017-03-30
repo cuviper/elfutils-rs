@@ -144,9 +144,11 @@ impl<'a> Die<'a> {
         let mut guard = CallbackGuard::new();
         let mut result = Ok(());
 
-        self.getattrs(|attr| {
-            guard.call(|| dwarf_cb_map(f(attr), &mut result))
-        })?;
+        unsafe {
+            self.getattrs(|attr| {
+                guard.call(|| dwarf_cb_map(f(attr), &mut result))
+            })?;
+        }
 
         result
     }
@@ -161,7 +163,7 @@ impl<'a> Die<'a> {
         result
     }
 
-    fn getattrs<F>(&self, mut f: F) -> Result<isize>
+    unsafe fn getattrs<F>(&self, mut f: F) -> Result<isize>
         where F: FnMut(&mut ffi::Dwarf_Attribute) -> raw::c_uint
     {
         let argp = &mut f as *mut F as *mut raw::c_void;
@@ -183,9 +185,11 @@ impl<'a> Die<'a> {
         let mut guard = CallbackGuard::new();
         let mut result = Ok(());
 
-        self.getfuncs(|func| {
-            guard.call(|| dwarf_cb_map(f(func), &mut result))
-        })?;
+        unsafe {
+            self.getfuncs(|func| {
+                guard.call(|| dwarf_cb_map(f(func), &mut result))
+            })?;
+        }
 
         result
     }
@@ -200,7 +204,7 @@ impl<'a> Die<'a> {
         result
     }
 
-    fn getfuncs<F>(&self, mut f: F) -> Result<isize>
+    unsafe fn getfuncs<F>(&self, mut f: F) -> Result<isize>
         where F: FnMut(&Self) -> raw::c_uint
     {
         let argp = &mut f as *mut F as *mut raw::c_void;
