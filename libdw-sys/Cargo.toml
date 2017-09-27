@@ -1,5 +1,6 @@
 [package]
 authors = ["Josh Stone <jistone@redhat.com>"]
+links = "dw"
 build = "build.rs"
 description = "Bindings to elfutils"
 license = "MIT/Apache-2.0"
