@@ -4,9 +4,11 @@ use std::cell::UnsafeCell;
 use std::ffi::CStr;
 use std::marker::PhantomData;
 use std::ptr;
+use std::slice;
 
 use super::Result;
 use super::Dwarf;
+use super::Die;
 
 #[derive(Debug)]
 pub struct Attribute<'a> {
@@ -79,6 +81,20 @@ impl<'a> Attribute<'a> {
         let mut addr = 0;
         ffi!(dwarf_formaddr(self.as_ptr(), &mut addr))?;
         Ok(addr)
+    }
+
+    #[inline]
+    pub fn to_die(&self) -> Result<Die<'a>> {
+        let die = Die::default();
+        ffi!(dwarf_formref_die(self.as_ptr(), die.as_ptr()))?;
+        Ok(die)
+    }
+
+    #[inline]
+    pub fn to_bytes(&self) -> Result<&'a [u8]> {
+        let mut block = ffi::Dwarf_Block { length: 0, data: ptr::null_mut() };
+        ffi!(dwarf_formblock(self.as_ptr(), &mut block))?;
+        Ok(unsafe { slice::from_raw_parts(block.data, block.length as usize) })
     }
 
     #[inline]
