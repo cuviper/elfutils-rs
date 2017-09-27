@@ -1,4 +1,6 @@
 use ffi;
+
+use std::fmt;
 use std::os::raw;
 use std::ptr;
 
@@ -8,11 +10,19 @@ use std::os::unix::io::AsRawFd;
 use super::Result;
 
 
-#[derive(Debug)]
 pub struct Elf<'a> {
     inner: *mut ffi::Elf,
     owned: bool,
     phantom: PhantomData<&'a mut ffi::Elf>,
+}
+
+impl<'a> fmt::Debug for Elf<'a> {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        fmt.debug_struct("Elf")
+            .field("inner", &self.inner)
+            .field("owned", &self.owned)
+            .finish()
+    }
 }
 
 impl<'a> Elf<'a> {

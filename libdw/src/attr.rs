@@ -2,6 +2,7 @@ use ffi;
 
 use std::cell::UnsafeCell;
 use std::ffi::CStr;
+use std::fmt;
 use std::marker::PhantomData;
 use std::ptr;
 use std::slice;
@@ -10,7 +11,6 @@ use super::Result;
 use super::Dwarf;
 use super::Die;
 
-#[derive(Debug)]
 pub struct Attribute<'a> {
     inner: UnsafeCell<ffi::Dwarf_Attribute>,
     phantom: PhantomData<&'a Dwarf<'a>>,
@@ -41,6 +41,14 @@ impl<'a> Default for Attribute<'a> {
             }.into(),
             phantom: PhantomData,
         }
+    }
+}
+
+impl<'a> fmt::Debug for Attribute<'a> {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        fmt.debug_tuple("Attribute")
+            .field(unsafe { &*self.as_ptr() })
+            .finish()
     }
 }
 

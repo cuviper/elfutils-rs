@@ -2,6 +2,7 @@ use ffi;
 
 use std::any::Any;
 use std::cell::UnsafeCell;
+use std::fmt;
 use std::marker::PhantomData;
 use std::os::raw;
 use std::panic;
@@ -12,7 +13,6 @@ use super::Dwarf;
 use super::Attribute;
 
 
-#[derive(Debug)]
 pub struct Die<'a> {
     inner: UnsafeCell<ffi::Dwarf_Die>,
     phantom: PhantomData<&'a Dwarf<'a>>,
@@ -30,6 +30,14 @@ impl<'a> Default for Die<'a> {
             }.into(),
             phantom: PhantomData,
         }
+    }
+}
+
+impl<'a> fmt::Debug for Die<'a> {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        fmt.debug_tuple("Die")
+            .field(unsafe { &*self.as_ptr() })
+            .finish()
     }
 }
 

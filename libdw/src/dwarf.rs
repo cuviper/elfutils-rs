@@ -2,6 +2,7 @@ use ffi;
 use libelf;
 use std::ptr;
 
+use std::fmt;
 use std::marker::PhantomData;
 use std::os::unix::io::AsRawFd;
 
@@ -10,11 +11,19 @@ use super::{CompileUnits, TypeUnits};
 use super::Die;
 
 
-#[derive(Debug)]
 pub struct Dwarf<'a> {
     inner: *mut ffi::Dwarf,
     owned: bool,
     phantom: PhantomData<&'a mut ffi::Dwarf>,
+}
+
+impl<'a> fmt::Debug for Dwarf<'a> {
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        fmt.debug_struct("Dwarf")
+            .field("inner", &self.inner)
+            .field("owned", &self.owned)
+            .finish()
+    }
 }
 
 impl<'a> Dwarf<'a> {
