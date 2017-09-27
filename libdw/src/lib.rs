@@ -85,4 +85,32 @@ mod tests {
             die.for_each_attr(|_| panic!()).unwrap();
         }
     }
+
+    #[test]
+    fn attr_size() {
+        use std::mem::size_of;
+        assert_eq!(size_of::<::Attribute<'static>>(),
+                   size_of::<::ffi::Dwarf_Attribute>());
+    }
+
+    #[test]
+    fn attr_align() {
+        use std::mem::align_of;
+        assert_eq!(align_of::<::Attribute<'static>>(),
+                   align_of::<::ffi::Dwarf_Attribute>());
+    }
+
+    #[test]
+    fn die_size() {
+        use std::mem::size_of;
+        assert_eq!(size_of::<::Die<'static>>(),
+                   size_of::<::ffi::Dwarf_Die>());
+    }
+
+    #[test]
+    fn die_align() {
+        use std::mem::align_of;
+        assert_eq!(align_of::<::Die<'static>>(),
+                   align_of::<::ffi::Dwarf_Die>());
+    }
 }
