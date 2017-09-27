@@ -393,6 +393,7 @@ pub const NT_PPC_VMX: ::std::os::raw::c_uint = 256;
 pub const NT_PPC_SPE: ::std::os::raw::c_uint = 257;
 pub const NT_PPC_VSX: ::std::os::raw::c_uint = 258;
 pub const NT_386_TLS: ::std::os::raw::c_uint = 512;
+pub const NT_PPC_TM_SPR: ::std::os::raw::c_uint = 268;
 pub const NT_386_IOPERM: ::std::os::raw::c_uint = 513;
 pub const NT_X86_XSTATE: ::std::os::raw::c_uint = 514;
 pub const NT_S390_HIGH_GPRS: ::std::os::raw::c_uint = 768;
