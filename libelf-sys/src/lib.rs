@@ -5,30 +5,6 @@
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 
-#[repr(C)]
-pub struct __BindgenUnionField<T>(::std::marker::PhantomData<T>);
-impl <T> __BindgenUnionField<T> {
-    #[inline]
-    pub fn new() -> Self { __BindgenUnionField(::std::marker::PhantomData) }
-    #[inline]
-    pub unsafe fn as_ref(&self) -> &T { ::std::mem::transmute(self) }
-    #[inline]
-    pub unsafe fn as_mut(&mut self) -> &mut T { ::std::mem::transmute(self) }
-}
-impl <T> ::std::default::Default for __BindgenUnionField<T> {
-    #[inline]
-    fn default() -> Self { Self::new() }
-}
-impl <T> ::std::clone::Clone for __BindgenUnionField<T> {
-    #[inline]
-    fn clone(&self) -> Self { Self::new() }
-}
-impl <T> ::std::marker::Copy for __BindgenUnionField<T> { }
-impl <T> ::std::fmt::Debug for __BindgenUnionField<T> {
-    fn fmt(&self, fmt: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        fmt.write_str("__BindgenUnionField")
-    }
-}
 pub const EI_NIDENT: ::std::os::raw::c_uint = 16;
 pub const EI_MAG0: ::std::os::raw::c_uint = 0;
 pub const ELFMAG0: ::std::os::raw::c_uint = 127;
@@ -3293,17 +3269,17 @@ impl Clone for Elf64_Phdr {
     fn clone(&self) -> Self { *self }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
+#[derive(Copy)]
 pub struct Elf32_Dyn {
     pub d_tag: Elf32_Sword,
     pub d_un: Elf32_Dyn__bindgen_ty_1,
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
-pub struct Elf32_Dyn__bindgen_ty_1 {
-    pub d_val: __BindgenUnionField<Elf32_Word>,
-    pub d_ptr: __BindgenUnionField<Elf32_Addr>,
-    pub bindgen_union_field: u32,
+#[derive(Copy)]
+pub union Elf32_Dyn__bindgen_ty_1 {
+    pub d_val: Elf32_Word,
+    pub d_ptr: Elf32_Addr,
+    _bindgen_union_align: u32,
 }
 #[test]
 fn bindgen_test_layout_Elf32_Dyn__bindgen_ty_1() {
@@ -3348,17 +3324,17 @@ impl Clone for Elf32_Dyn {
     fn clone(&self) -> Self { *self }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
+#[derive(Copy)]
 pub struct Elf64_Dyn {
     pub d_tag: Elf64_Sxword,
     pub d_un: Elf64_Dyn__bindgen_ty_1,
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
-pub struct Elf64_Dyn__bindgen_ty_1 {
-    pub d_val: __BindgenUnionField<Elf64_Xword>,
-    pub d_ptr: __BindgenUnionField<Elf64_Addr>,
-    pub bindgen_union_field: u64,
+#[derive(Copy)]
+pub union Elf64_Dyn__bindgen_ty_1 {
+    pub d_val: Elf64_Xword,
+    pub d_ptr: Elf64_Addr,
+    _bindgen_union_align: u64,
 }
 #[test]
 fn bindgen_test_layout_Elf64_Dyn__bindgen_ty_1() {
@@ -3743,16 +3719,16 @@ impl Clone for Elf64_Vernaux {
     fn clone(&self) -> Self { *self }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
+#[derive(Copy)]
 pub struct Elf32_auxv_t {
     pub a_type: u32,
     pub a_un: Elf32_auxv_t__bindgen_ty_1,
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
-pub struct Elf32_auxv_t__bindgen_ty_1 {
-    pub a_val: __BindgenUnionField<u32>,
-    pub bindgen_union_field: u32,
+#[derive(Copy)]
+pub union Elf32_auxv_t__bindgen_ty_1 {
+    pub a_val: u32,
+    _bindgen_union_align: u32,
 }
 #[test]
 fn bindgen_test_layout_Elf32_auxv_t__bindgen_ty_1() {
@@ -3794,16 +3770,16 @@ impl Clone for Elf32_auxv_t {
     fn clone(&self) -> Self { *self }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
+#[derive(Copy)]
 pub struct Elf64_auxv_t {
     pub a_type: u64,
     pub a_un: Elf64_auxv_t__bindgen_ty_1,
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
-pub struct Elf64_auxv_t__bindgen_ty_1 {
-    pub a_val: __BindgenUnionField<u64>,
-    pub bindgen_union_field: u64,
+#[derive(Copy)]
+pub union Elf64_auxv_t__bindgen_ty_1 {
+    pub a_val: u64,
+    _bindgen_union_align: u64,
 }
 #[test]
 fn bindgen_test_layout_Elf64_auxv_t__bindgen_ty_1() {
@@ -3997,11 +3973,11 @@ impl Clone for Elf64_Move {
     fn clone(&self) -> Self { *self }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
-pub struct Elf32_gptab {
-    pub gt_header: __BindgenUnionField<Elf32_gptab__bindgen_ty_1>,
-    pub gt_entry: __BindgenUnionField<Elf32_gptab__bindgen_ty_2>,
-    pub bindgen_union_field: [u32; 2usize],
+#[derive(Copy)]
+pub union Elf32_gptab {
+    pub gt_header: Elf32_gptab__bindgen_ty_1,
+    pub gt_entry: Elf32_gptab__bindgen_ty_2,
+    _bindgen_union_align: [u32; 2usize],
 }
 #[repr(C)]
 #[derive(Debug, Copy)]
@@ -4565,10 +4541,14 @@ impl Clone for Elf_Arsym {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Elf([u8; 0]);
+pub struct Elf {
+    _unused: [u8; 0],
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Elf_Scn([u8; 0]);
+pub struct Elf_Scn {
+    _unused: [u8; 0],
+}
 extern "C" {
     pub fn elf_begin(__fildes: ::std::os::raw::c_int, __cmd: Elf_Cmd,
                      __ref: *mut Elf) -> *mut Elf;

@@ -1,5 +1,5 @@
 BG = bindgen
-BGFLAGS = --no-unstable-rust
+BGFLAGS = 
 CPPFLAGS = -Ielfutils/libelf \
 	   -Ielfutils/libdw \
 	   -Ielfutils/libdwfl \

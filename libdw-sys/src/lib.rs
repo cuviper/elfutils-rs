@@ -5,30 +5,6 @@
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 
-#[repr(C)]
-pub struct __BindgenUnionField<T>(::std::marker::PhantomData<T>);
-impl <T> __BindgenUnionField<T> {
-    #[inline]
-    pub fn new() -> Self { __BindgenUnionField(::std::marker::PhantomData) }
-    #[inline]
-    pub unsafe fn as_ref(&self) -> &T { ::std::mem::transmute(self) }
-    #[inline]
-    pub unsafe fn as_mut(&mut self) -> &mut T { ::std::mem::transmute(self) }
-}
-impl <T> ::std::default::Default for __BindgenUnionField<T> {
-    #[inline]
-    fn default() -> Self { Self::new() }
-}
-impl <T> ::std::clone::Clone for __BindgenUnionField<T> {
-    #[inline]
-    fn clone(&self) -> Self { Self::new() }
-}
-impl <T> ::std::marker::Copy for __BindgenUnionField<T> { }
-impl <T> ::std::fmt::Debug for __BindgenUnionField<T> {
-    fn fmt(&self, fmt: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        fmt.write_str("__BindgenUnionField")
-    }
-}
 pub const DWARF_GETMACROS_START: ::std::os::raw::c_longlong =
     -9223372036854775808;
 pub const DW_ADDR_none: ::std::os::raw::c_uint = 0;
@@ -311,10 +287,14 @@ impl Clone for Elf_Data {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Elf([u8; 0]);
+pub struct Elf {
+    _unused: [u8; 0],
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Elf_Scn([u8; 0]);
+pub struct Elf_Scn {
+    _unused: [u8; 0],
+}
 pub type GElf_Half = Elf64_Half;
 pub type GElf_Word = Elf64_Word;
 pub type GElf_Xword = Elf64_Xword;
@@ -339,33 +319,49 @@ pub type Dwarf_Sword = GElf_Sxword;
 pub type Dwarf_Half = GElf_Half;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf_Abbrev([u8; 0]);
+pub struct Dwarf_Abbrev {
+    _unused: [u8; 0],
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf_Lines_s([u8; 0]);
+pub struct Dwarf_Lines_s {
+    _unused: [u8; 0],
+}
 pub type Dwarf_Lines = Dwarf_Lines_s;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf_Line_s([u8; 0]);
+pub struct Dwarf_Line_s {
+    _unused: [u8; 0],
+}
 pub type Dwarf_Line = Dwarf_Line_s;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf_Files_s([u8; 0]);
+pub struct Dwarf_Files_s {
+    _unused: [u8; 0],
+}
 pub type Dwarf_Files = Dwarf_Files_s;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf_Arange_s([u8; 0]);
+pub struct Dwarf_Arange_s {
+    _unused: [u8; 0],
+}
 pub type Dwarf_Arange = Dwarf_Arange_s;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf_Aranges_s([u8; 0]);
+pub struct Dwarf_Aranges_s {
+    _unused: [u8; 0],
+}
 pub type Dwarf_Aranges = Dwarf_Aranges_s;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf_CU([u8; 0]);
+pub struct Dwarf_CU {
+    _unused: [u8; 0],
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf_Macro_s([u8; 0]);
+pub struct Dwarf_Macro_s {
+    _unused: [u8; 0],
+}
 pub type Dwarf_Macro = Dwarf_Macro_s;
 #[repr(C)]
 #[derive(Debug, Copy)]
@@ -647,12 +643,12 @@ impl Clone for Dwarf_FDE {
     fn clone(&self) -> Self { *self }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
-pub struct Dwarf_CFI_Entry {
-    pub CIE_id: __BindgenUnionField<Dwarf_Off>,
-    pub cie: __BindgenUnionField<Dwarf_CIE>,
-    pub fde: __BindgenUnionField<Dwarf_FDE>,
-    pub bindgen_union_field: [u64; 10usize],
+#[derive(Copy)]
+pub union Dwarf_CFI_Entry {
+    pub CIE_id: Dwarf_Off,
+    pub cie: Dwarf_CIE,
+    pub fde: Dwarf_FDE,
+    _bindgen_union_align: [u64; 10usize],
 }
 #[test]
 fn bindgen_test_layout_Dwarf_CFI_Entry() {
@@ -681,15 +677,21 @@ impl Clone for Dwarf_CFI_Entry {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf_Frame_s([u8; 0]);
+pub struct Dwarf_Frame_s {
+    _unused: [u8; 0],
+}
 pub type Dwarf_Frame = Dwarf_Frame_s;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf_CFI_s([u8; 0]);
+pub struct Dwarf_CFI_s {
+    _unused: [u8; 0],
+}
 pub type Dwarf_CFI = Dwarf_CFI_s;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwarf([u8; 0]);
+pub struct Dwarf {
+    _unused: [u8; 0],
+}
 pub type Dwarf_OOM = ::std::option::Option<unsafe extern "C" fn()>;
 extern "C" {
     pub fn dwarf_begin(fildes: ::std::os::raw::c_int, cmd: Dwarf_Cmd)
@@ -1283,19 +1285,29 @@ extern "C" {
 pub type FILE = [u64; 27usize];
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwfl([u8; 0]);
+pub struct Dwfl {
+    _unused: [u8; 0],
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwfl_Module([u8; 0]);
+pub struct Dwfl_Module {
+    _unused: [u8; 0],
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwfl_Line([u8; 0]);
+pub struct Dwfl_Line {
+    _unused: [u8; 0],
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwfl_Thread([u8; 0]);
+pub struct Dwfl_Thread {
+    _unused: [u8; 0],
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwfl_Frame([u8; 0]);
+pub struct Dwfl_Frame {
+    _unused: [u8; 0],
+}
 #[repr(C)]
 #[derive(Debug, Copy)]
 pub struct Dwfl_Callbacks {
@@ -1608,12 +1620,14 @@ extern "C" {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct argp([u8; 0]);
+pub struct argp {
+    _unused: [u8; 0],
+}
 extern "C" {
     pub fn dwfl_standard_argp() -> *const argp;
 }
 extern "C" {
-    /*** Relocation of addresses from Dwfl ***/
+    /// Relocation of addresses from Dwfl
     pub fn dwfl_module_relocations(mod_: *mut Dwfl_Module)
      -> ::std::os::raw::c_int;
 }
@@ -1634,7 +1648,7 @@ extern "C" {
      -> ::std::os::raw::c_int;
 }
 extern "C" {
-    /*** ELF access functions ***/
+    /// ELF access functions
     pub fn dwfl_module_getelf(arg1: *mut Dwfl_Module, bias: *mut GElf_Addr)
      -> *mut Elf;
 }
@@ -1682,7 +1696,7 @@ extern "C" {
                                        bias: *mut Dwarf_Addr) -> *mut Elf_Scn;
 }
 extern "C" {
-    /*** Dwarf access functions ***/
+    /// Dwarf access functions
     pub fn dwfl_module_getdwarf(arg1: *mut Dwfl_Module, bias: *mut Dwarf_Addr)
      -> *mut Dwarf;
 }
@@ -1777,7 +1791,7 @@ extern "C" {
      -> *const ::std::os::raw::c_char;
 }
 extern "C" {
-    /*** Machine backend access functions ***/
+    /// Machine backend access functions
     pub fn dwfl_module_return_value_location(mod_: *mut Dwfl_Module,
                                              functypedie: *mut Dwarf_Die,
                                              locops: *mut *const Dwarf_Op)
@@ -1995,10 +2009,14 @@ extern "C" {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwelf_Strtab([u8; 0]);
+pub struct Dwelf_Strtab {
+    _unused: [u8; 0],
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct Dwelf_Strent([u8; 0]);
+pub struct Dwelf_Strent {
+    _unused: [u8; 0],
+}
 extern "C" {
     pub fn dwelf_strtab_init(nullstr: bool) -> *mut Dwelf_Strtab;
 }
