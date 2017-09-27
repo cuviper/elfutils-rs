@@ -34,6 +34,18 @@ impl IntoResult for isize {
     }
 }
 
+impl<T> IntoResult for *const T {
+    #[inline]
+    fn into_result(self) -> Result<Self> {
+        if self.is_null() {
+            Err(Error::last())
+        } else {
+            Ok(self)
+        }
+    }
+}
+
+
 impl<T> IntoResult for *mut T {
     #[inline]
     fn into_result(self) -> Result<Self> {

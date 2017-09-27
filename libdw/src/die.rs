@@ -9,6 +9,7 @@ use std::ptr;
 
 use super::Result;
 use super::Dwarf;
+use super::Attribute;
 
 
 #[derive(Debug)]
@@ -122,6 +123,32 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
+    pub fn has_attr(&self, at: u32) -> Result<bool> {
+        let b = ffi!(dwarf_hasattr(self.as_ptr(), at))?;
+        Ok(b != 0)
+    }
+
+    #[inline]
+    pub fn has_attr_integrate(&self, at: u32) -> Result<bool> {
+        let b = ffi!(dwarf_hasattr_integrate(self.as_ptr(), at))?;
+        Ok(b != 0)
+    }
+
+    #[inline]
+    pub fn attr(&self, at: u32) -> Result<Attribute<'a>> {
+        let attr = Attribute::default();
+        ffi!(dwarf_attr(self.as_ptr(), at, attr.as_ptr()))?;
+        Ok(attr)
+    }
+
+    #[inline]
+    pub fn attr_integrate(&self, at: u32) -> Result<Attribute<'a>> {
+        let attr = Attribute::default();
+        ffi!(dwarf_attr_integrate(self.as_ptr(), at, attr.as_ptr()))?;
+        Ok(attr)
+    }
+
+    #[inline]
     pub fn attr_count(&self) -> Result<usize> {
         let mut count = 0;
         let abbrev = self.get_abbrev()?;
@@ -130,16 +157,16 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
-    pub fn attrs(&self) -> Result<Vec<ffi::Dwarf_Attribute>> {
+    pub fn attrs(&self) -> Result<Vec<Attribute<'a>>> {
         let mut v = Vec::with_capacity(self.attr_count()?);
         unsafe {
-            self.getattrs(|a| { v.push(*a); ffi::DWARF_CB_OK })?;
+            self.getattrs(|a| { v.push(a.clone()); ffi::DWARF_CB_OK })?;
         }
         Ok(v)
     }
 
     pub fn for_each_attr<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
+        where F: FnMut(&Attribute<'a>) -> Result<bool>
     {
         let mut guard = CallbackGuard::new();
         let mut result = Ok(());
@@ -154,7 +181,7 @@ impl<'a> Die<'a> {
     }
 
     pub unsafe fn for_each_attr_unchecked<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&mut ffi::Dwarf_Attribute) -> Result<bool>
+        where F: FnMut(&Attribute<'a>) -> Result<bool>
     {
         let mut result = Ok(());
 
@@ -164,18 +191,19 @@ impl<'a> Die<'a> {
     }
 
     unsafe fn getattrs<F>(&self, mut f: F) -> Result<isize>
-        where F: FnMut(&mut ffi::Dwarf_Attribute) -> raw::c_uint
+        where F: FnMut(&Attribute<'a>) -> raw::c_uint
     {
         let argp = &mut f as *mut F as *mut raw::c_void;
         return ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<F>), argp, 0));
 
-        unsafe extern "C" fn callback<F>(attr: *mut ffi::Dwarf_Attribute,
-                                         argp: *mut raw::c_void)
+        unsafe extern "C" fn callback<'a, F>(attr: *mut ffi::Dwarf_Attribute,
+                                             argp: *mut raw::c_void)
                                          -> raw::c_int
-            where F: FnMut(&mut ffi::Dwarf_Attribute) -> raw::c_uint
+            where F: FnMut(&Attribute<'a>) -> raw::c_uint
         {
             let f = &mut *(argp as *mut F);
-            f(&mut *attr) as raw::c_int
+            let attr = &*(attr as *const Attribute<'a>);
+            f(attr) as raw::c_int
         }
     }
 
