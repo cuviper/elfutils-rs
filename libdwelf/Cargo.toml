@@ -18,3 +18,8 @@ version = "0.0.2"
 optional = false
 path = "../libdw"
 version = "0.0.2"
+
+[dependencies.libelf]
+optional = false
+path = "../libelf"
+version = "0.0.2"
