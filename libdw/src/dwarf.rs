@@ -28,14 +28,14 @@ impl<'a> Dwarf<'a> {
     }
 
     #[inline]
-    pub fn from_fd<FD: AsRawFd>(fd: &FD) -> Result<Dwarf> {
+    pub fn from_fd<FD: AsRawFd>(fd: &'a FD) -> Result<Dwarf<'a>> {
         let fd = fd.as_raw_fd();
         let dwarf = ffi!(dwarf_begin(fd, ffi::Dwarf_Cmd::DWARF_C_READ))?;
         Ok(Dwarf::new(dwarf))
     }
 
     #[inline]
-    pub fn from_elf(elf: &'a libelf::Elf) -> Result<Self> {
+    pub fn from_elf(elf: &libelf::Elf<'a>) -> Result<Dwarf<'a>> {
         let elf = elf.as_ptr() as *mut _; // FIXME distinct bindgen Elf types
         let dwarf = ffi!(dwarf_begin_elf(elf, ffi::Dwarf_Cmd::DWARF_C_READ, ptr::null_mut()))?;
         Ok(Dwarf::new(dwarf))

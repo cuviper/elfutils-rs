@@ -16,7 +16,7 @@ pub struct Elf<'a> {
 
 impl<'a> Elf<'a> {
     #[inline]
-    fn new(elf: *mut ffi::Elf) -> Elf<'a> {
+    fn new(elf: *mut ffi::Elf) -> Self {
         Elf {
             inner: elf,
             phantom: PhantomData,
@@ -24,7 +24,7 @@ impl<'a> Elf<'a> {
     }
 
     #[inline]
-    pub fn from_fd<FD: AsRawFd>(fd: &FD) -> Result<Elf> {
+    pub fn from_fd<FD: AsRawFd>(fd: &'a FD) -> Result<Elf<'a>> {
         let fd = fd.as_raw_fd();
         unsafe { ffi::elf_version(ffi::EV_CURRENT); }
         ffi!(elf_begin(fd, ffi::Elf_Cmd::ELF_C_READ, ptr::null_mut()))
@@ -32,8 +32,9 @@ impl<'a> Elf<'a> {
     }
 
     #[inline]
-    pub fn from_mem(mem: &mut [u8]) -> Result<Elf> {
-        let ptr = mem.as_mut_ptr() as *mut raw::c_char;
+    pub fn from_mem(mem: &'a [u8]) -> Result<Elf<'a>> {
+        // NB: `Elf` must not expose write interfaces!
+        let ptr = mem.as_ptr() as *mut raw::c_char;
         ffi!(elf_memory(ptr, mem.len()))
             .map(Elf::new)
     }
@@ -69,6 +70,6 @@ mod tests {
     #[test]
     fn empty_mem() {
         // elfutils doesn't mind an empty ELF!
-        Elf::from_mem(&mut []).unwrap();
+        Elf::from_mem(&[]).unwrap();
     }
 }
