@@ -35,6 +35,16 @@ impl<'a> Elf<'a> {
         }
     }
 
+    /// Create an `Elf` from an open file
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use std::{fs, env};
+    /// let exe = env::current_exe().unwrap();
+    /// let f = fs::File::open(exe).unwrap();
+    /// libelf::Elf::from_fd(&f).unwrap();
+    /// ```
     #[inline]
     pub fn from_fd<FD: AsRawFd>(fd: &'a FD) -> Result<Elf<'a>> {
         let fd = fd.as_raw_fd();
@@ -43,6 +53,15 @@ impl<'a> Elf<'a> {
             .map(Elf::new)
     }
 
+    /// Create an `Elf` from a memory image
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// // elfutils doesn't mind an empty ELF!
+    /// libelf::Elf::from_mem(&[]).unwrap();
+    ///
+    /// ```
     #[inline]
     pub fn from_mem(mem: &'a [u8]) -> Result<Elf<'a>> {
         // NB: `Elf` must not expose write interfaces!
@@ -74,25 +93,5 @@ impl<'a> Drop for Elf<'a> {
                 ffi::elf_end(self.inner);
             }
         }
-    }
-}
-
-
-#[cfg(test)]
-mod tests {
-    use super::Elf;
-
-    #[test]
-    fn self_file() {
-        use std::{fs, env};
-        let exe = env::current_exe().unwrap();
-        let f = fs::File::open(exe).unwrap();
-        Elf::from_fd(&f).unwrap();
-    }
-
-    #[test]
-    fn empty_mem() {
-        // elfutils doesn't mind an empty ELF!
-        Elf::from_mem(&[]).unwrap();
     }
 }
