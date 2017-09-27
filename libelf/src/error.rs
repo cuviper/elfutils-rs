@@ -42,9 +42,19 @@ pub struct Error {
 
 impl Error {
     #[inline]
-    fn last() -> Error {
+    pub fn last() -> Error {
         Error {
             errno: unsafe { ffi::elf_errno() },
+        }
+    }
+
+    #[inline]
+    pub fn check() -> Option<Error> {
+        let error = Error::last();
+        if error.errno == 0 {
+            None
+        } else {
+            Some(error)
         }
     }
 

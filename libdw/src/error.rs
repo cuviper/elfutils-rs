@@ -72,6 +72,16 @@ impl Error {
     }
 
     #[inline]
+    pub fn check() -> Option<Error> {
+        let error = Error::last();
+        if error.errno == 0 {
+            None
+        } else {
+            Some(error)
+        }
+    }
+
+    #[inline]
     fn to_cstr(&self) -> &'static CStr {
         // Normalize 0 to -1, which behaves the same except it always returns a legal string
         let errno = match self.errno { 0 => -1, e => e };
