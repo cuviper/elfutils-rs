@@ -47,6 +47,25 @@ pub fn gnu_debugaltlink<'a>(
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
-    fn it_works() {}
+    fn self_debuglink() {
+        use std::{fs, env};
+        let exe = env::current_exe().unwrap();
+        let f = fs::File::open(exe).unwrap();
+        let elf = libelf::Elf::from_fd(&f).unwrap();
+        let link = super::gnu_debuglink(&elf).unwrap();
+        assert!(link.is_none());
+    }
+
+    #[test]
+    fn self_debugaltlink() {
+        use std::{fs, env};
+        let exe = env::current_exe().unwrap();
+        let f = fs::File::open(exe).unwrap();
+        let dwarf = libdw::Dwarf::from_fd(&f).unwrap();
+        let link = super::gnu_debugaltlink(&dwarf).unwrap();
+        assert!(link.is_none());
+    }
 }
