@@ -8,7 +8,6 @@ use std::os::unix::io::AsRawFd;
 
 use super::Result;
 use super::{CompileUnits, TypeUnits};
-use super::Die;
 
 
 pub struct Dwarf<'a> {
@@ -74,27 +73,6 @@ impl<'a> Dwarf<'a> {
     #[inline]
     pub fn type_units(&'a self) -> TypeUnits<'a> {
         ::units::type_units(self)
-    }
-
-    #[inline]
-    pub fn offdie(&'a self, offset: ffi::Dwarf_Off) -> Result<Die<'a>> {
-        let die = Die::default();
-        ffi!(dwarf_offdie(self.as_ptr(), offset, die.as_ptr()))?;
-        Ok(die)
-    }
-
-    #[inline]
-    pub fn offdie_types(&'a self, offset: ffi::Dwarf_Off) -> Result<Die<'a>> {
-        let die = Die::default();
-        ffi!(dwarf_offdie_types(self.as_ptr(), offset, die.as_ptr()))?;
-        Ok(die)
-    }
-
-    #[inline]
-    pub fn addrdie(&'a self, address: ffi::Dwarf_Addr) -> Result<Die<'a>> {
-        let die = Die::default();
-        ffi!(dwarf_addrdie(self.as_ptr(), address, die.as_ptr()))?;
-        Ok(die)
     }
 
     #[inline]

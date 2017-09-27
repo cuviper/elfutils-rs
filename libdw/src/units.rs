@@ -117,7 +117,7 @@ impl<'a> CompileUnit<'a> {
 
     #[inline]
     pub fn get_die(&self) -> Result<Die<'a>> {
-        self.dwarf.offdie(self.die_offset)
+        Die::from_offset(self.dwarf, self.die_offset)
     }
 }
 
@@ -146,12 +146,12 @@ impl<'a> TypeUnit<'a> {
 
     #[inline]
     pub fn get_die(&self) -> Result<Die<'a>> {
-        self.dwarf.offdie_types(self.die_offset)
+        Die::from_type_offset(self.dwarf, self.die_offset)
     }
 
     #[inline]
     pub fn get_type_die(&self) -> Result<Die<'a>> {
-        self.dwarf.offdie_types(self.type_offset)
+        Die::from_type_offset(self.dwarf, self.type_offset)
     }
 
     #[inline]

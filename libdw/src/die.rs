@@ -43,6 +43,27 @@ impl<'a> fmt::Debug for Die<'a> {
 
 impl<'a> Die<'a> {
     #[inline]
+    pub fn from_offset(dwarf: &'a Dwarf, offset: u64) -> Result<Die<'a>> {
+        let die = Die::default();
+        ffi!(dwarf_offdie(dwarf.as_ptr(), offset, die.as_ptr()))?;
+        Ok(die)
+    }
+
+    #[inline]
+    pub fn from_type_offset(dwarf: &'a Dwarf, offset: u64) -> Result<Die<'a>> {
+        let die = Die::default();
+        ffi!(dwarf_offdie_types(dwarf.as_ptr(), offset, die.as_ptr()))?;
+        Ok(die)
+    }
+
+    #[inline]
+    pub fn from_address(dwarf: &'a Dwarf, address: u64) -> Result<Die<'a>> {
+        let die = Die::default();
+        ffi!(dwarf_addrdie(dwarf.as_ptr(), address, die.as_ptr()))?;
+        Ok(die)
+    }
+
+    #[inline]
     unsafe fn from_raw(die: *mut ffi::Dwarf_Die) -> Self {
         Die {
             inner: UnsafeCell::new(*die),
