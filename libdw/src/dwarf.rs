@@ -44,7 +44,7 @@ impl<'a> Dwarf<'a> {
     }
 
     #[inline]
-    pub fn from_elf(elf: &libelf::Elf<'a>) -> Result<Dwarf<'a>> {
+    pub fn from_elf(elf: &'a libelf::Elf) -> Result<Dwarf<'a>> {
         let elf = elf.as_ptr() as *mut _; // FIXME distinct bindgen Elf types
         let dwarf = ffi!(dwarf_begin_elf(elf, ffi::Dwarf_Cmd::DWARF_C_READ, ptr::null_mut()))?;
         Ok(Dwarf::new(dwarf))
@@ -67,31 +67,31 @@ impl<'a> Dwarf<'a> {
     }
 
     #[inline]
-    pub fn compile_units(&self) -> CompileUnits {
+    pub fn compile_units(&'a self) -> CompileUnits<'a> {
         ::units::compile_units(self)
     }
 
     #[inline]
-    pub fn type_units(&self) -> TypeUnits {
+    pub fn type_units(&'a self) -> TypeUnits<'a> {
         ::units::type_units(self)
     }
 
     #[inline]
-    pub fn offdie(&self, offset: ffi::Dwarf_Off) -> Result<Die> {
+    pub fn offdie(&'a self, offset: ffi::Dwarf_Off) -> Result<Die<'a>> {
         let die = Die::default();
         ffi!(dwarf_offdie(self.as_ptr(), offset, die.as_ptr()))?;
         Ok(die)
     }
 
     #[inline]
-    pub fn offdie_types(&self, offset: ffi::Dwarf_Off) -> Result<Die> {
+    pub fn offdie_types(&'a self, offset: ffi::Dwarf_Off) -> Result<Die<'a>> {
         let die = Die::default();
         ffi!(dwarf_offdie_types(self.as_ptr(), offset, die.as_ptr()))?;
         Ok(die)
     }
 
     #[inline]
-    pub fn addrdie(&self, address: ffi::Dwarf_Addr) -> Result<Die> {
+    pub fn addrdie(&'a self, address: ffi::Dwarf_Addr) -> Result<Die<'a>> {
         let die = Die::default();
         ffi!(dwarf_addrdie(self.as_ptr(), address, die.as_ptr()))?;
         Ok(die)
