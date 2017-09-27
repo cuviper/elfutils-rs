@@ -11,6 +11,7 @@ use super::Result;
 #[derive(Debug)]
 pub struct Elf<'a> {
     inner: *mut ffi::Elf,
+    owned: bool,
     phantom: PhantomData<&'a mut ffi::Elf>,
 }
 
@@ -19,6 +20,7 @@ impl<'a> Elf<'a> {
     fn new(elf: *mut ffi::Elf) -> Self {
         Elf {
             inner: elf,
+            owned: true,
             phantom: PhantomData,
         }
     }
@@ -40,6 +42,15 @@ impl<'a> Elf<'a> {
     }
 
     #[inline]
+    pub unsafe fn from_raw(elf: *mut ffi::Elf) -> Self {
+        Elf {
+            inner: elf,
+            owned: false,
+            phantom: PhantomData,
+        }
+    }
+
+    #[inline]
     pub fn as_ptr(&self) -> *mut ffi::Elf {
         self.inner
     }
@@ -48,8 +59,10 @@ impl<'a> Elf<'a> {
 impl<'a> Drop for Elf<'a> {
     #[inline]
     fn drop(&mut self) {
-        unsafe {
-            ffi::elf_end(self.inner);
+        if self.owned {
+            unsafe {
+                ffi::elf_end(self.inner);
+            }
         }
     }
 }

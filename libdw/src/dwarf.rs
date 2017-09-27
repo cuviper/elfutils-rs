@@ -51,6 +51,13 @@ impl<'a> Dwarf<'a> {
     }
 
     #[inline]
+    pub fn get_elf(&'a self) -> Result<libelf::Elf<'a>> {
+        let elf = ffi!(dwarf_getelf(self.as_ptr()))?;
+        let elf = elf as *mut _; // FIXME distinct bindgen Elf types
+        Ok(unsafe { libelf::Elf::from_raw(elf) })
+    }
+
+    #[inline]
     pub fn compile_units(&self) -> CompileUnits {
         ::units::compile_units(self)
     }
