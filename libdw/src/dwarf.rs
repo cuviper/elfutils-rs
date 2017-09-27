@@ -1,9 +1,7 @@
 use ffi;
 use libelf;
 use std::ptr;
-use std::slice;
 
-use std::ffi::CStr;
 use std::marker::PhantomData;
 use std::os::unix::io::AsRawFd;
 
@@ -81,23 +79,6 @@ impl<'a> Dwarf<'a> {
         let die = Die::default();
         ffi!(dwarf_addrdie(self.as_ptr(), address, die.as_ptr()))?;
         Ok(die)
-    }
-
-    #[inline]
-    pub fn gnu_debugaltlink(&self) -> Result<Option<(&CStr, &[u8])>> {
-        let mut namep = ptr::null();
-        let mut build_idp = ptr::null();
-        let build_id_len = ffi!(
-            dwelf_dwarf_gnu_debugaltlink(self.as_ptr(), &mut namep, &mut build_idp)
-        )?;
-        if build_id_len > 0 {
-            Ok(Some(unsafe {
-                (CStr::from_ptr(namep),
-                 slice::from_raw_parts(build_idp as *const u8, build_id_len as usize))
-            }))
-        } else {
-            Ok(None)
-        }
     }
 
     #[inline]
