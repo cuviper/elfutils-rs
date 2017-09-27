@@ -8,7 +8,7 @@ version = "0.0.2"
 include = ["Cargo.toml", "src/**/*.rs"]
 
 [workspace]
-members = ["libelf-sys", "libelf", "libdw-sys", "libdw", "libdwfl", "libdwfl"]
+members = ["libelf-sys", "libelf", "libdw-sys", "libdw", "libdwfl", "libdwelf"]
 
 [dependencies]
 
