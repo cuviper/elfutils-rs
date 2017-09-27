@@ -1,4 +1,4 @@
-/// Reimplementation of elfutils/tests/allfcts.c
+//! Reimplementation of elfutils/tests/allfcts.c
 
 extern crate libdw;
 

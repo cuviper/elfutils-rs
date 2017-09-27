@@ -1,4 +1,4 @@
-/// Print all `DW_AT_producer` strings
+//! Print all `DW_AT_producer` strings
 
 extern crate libdw;
 

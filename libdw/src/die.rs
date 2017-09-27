@@ -194,7 +194,7 @@ impl<'a> Die<'a> {
         where F: FnMut(&Attribute<'a>) -> raw::c_uint
     {
         let argp = &mut f as *mut F as *mut raw::c_void;
-        return ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<F>), argp, 0));
+        return ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<'a, F>), argp, 0));
 
         unsafe extern "C" fn callback<'a, F>(attr: *mut ffi::Dwarf_Attribute,
                                              argp: *mut raw::c_void)
