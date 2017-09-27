@@ -16,6 +16,19 @@ pub struct Attribute<'a> {
     phantom: PhantomData<&'a Dwarf<'a>>,
 }
 
+#[derive(Debug)]
+pub enum AttributeValue<'a> {
+    String(&'a CStr),
+    Unsigned(u64),
+    Signed(i64),
+    Address(u64),
+    Die(Die<'a>),
+    Bytes(&'a [u8]),
+    Bool(bool),
+    #[doc(hidden)] // non-exhaustive
+    UnknownForm(u32),
+}
+
 impl<'a> Default for Attribute<'a> {
     #[inline]
     fn default() -> Self {
@@ -77,7 +90,7 @@ impl<'a> Attribute<'a> {
     }
 
     #[inline]
-    pub fn to_addr(&self) -> Result<u64> {
+    pub fn to_address(&self) -> Result<u64> {
         let mut addr = 0;
         ffi!(dwarf_formaddr(self.as_ptr(), &mut addr))?;
         Ok(addr)
@@ -102,6 +115,48 @@ impl<'a> Attribute<'a> {
         let mut flag = false;
         ffi!(dwarf_formflag(self.as_ptr(), &mut flag))?;
         Ok(flag)
+    }
+
+    pub fn to_value(&self) -> Result<AttributeValue<'a>> {
+        use self::AttributeValue as V;
+        let value = match self.form() {
+            ffi::DW_FORM_addr => V::Address(self.to_address()?),
+
+            ffi::DW_FORM_indirect |
+            ffi::DW_FORM_strp |
+            ffi::DW_FORM_string |
+            ffi::DW_FORM_GNU_strp_alt => V::String(self.to_cstr()?),
+
+            ffi::DW_FORM_ref_addr |
+            ffi::DW_FORM_ref_udata |
+            ffi::DW_FORM_ref8 |
+            ffi::DW_FORM_ref4 |
+            ffi::DW_FORM_ref2 |
+            ffi::DW_FORM_ref1 |
+            ffi::DW_FORM_ref_sig8 |
+            ffi::DW_FORM_GNU_ref_alt => V::Die(self.to_die()?),
+
+            ffi::DW_FORM_sec_offset |
+            ffi::DW_FORM_udata |
+            ffi::DW_FORM_data8 |
+            ffi::DW_FORM_data4 |
+            ffi::DW_FORM_data2 |
+            ffi::DW_FORM_data1 => V::Unsigned(self.to_unsigned()?),
+
+            ffi::DW_FORM_sdata => V::Signed(self.to_signed()?),
+
+            ffi::DW_FORM_flag_present |
+            ffi::DW_FORM_flag => V::Bool(self.to_bool()?),
+
+            ffi::DW_FORM_exprloc |
+            ffi::DW_FORM_block4 |
+            ffi::DW_FORM_block2 |
+            ffi::DW_FORM_block1 |
+            ffi::DW_FORM_block => V::Bytes(self.to_bytes()?),
+
+            form => V::UnknownForm(form),
+        };
+        Ok(value)
     }
 
     #[inline]
