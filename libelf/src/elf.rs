@@ -39,7 +39,7 @@ impl<'a> Elf<'a> {
     pub fn from_fd<FD: AsRawFd>(fd: &'a FD) -> Result<Elf<'a>> {
         let fd = fd.as_raw_fd();
         unsafe { ffi::elf_version(ffi::EV_CURRENT); }
-        ffi!(elf_begin(fd, ffi::Elf_Cmd::ELF_C_READ, ptr::null_mut()))
+        ffi!(elf_begin(fd, ffi::Elf_Cmd::ELF_C_READ_MMAP, ptr::null_mut()))
             .map(Elf::new)
     }
 
