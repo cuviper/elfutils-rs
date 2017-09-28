@@ -20,7 +20,7 @@ fn try_main() -> Result<(), Box<Error>> {
             let die = cu?.get_die()?;
 
             if let Ok(attr) = die.attr(libdw::raw::DW_AT_producer) {
-                if let Ok(s) = attr.get_cstr() {
+                if let Ok(s) = attr.get_string() {
                     println!("{:?}", s);
                 }
             }

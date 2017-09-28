@@ -77,7 +77,7 @@ impl<'dw> Attribute<'dw> {
     }
 
     #[inline]
-    pub fn get_cstr(&self) -> Result<&'dw CStr> {
+    pub fn get_string(&self) -> Result<&'dw CStr> {
         let s = ffi!(dwarf_formstring(self.as_ptr()))?;
         Ok(unsafe { CStr::from_ptr(s) })
     }
@@ -132,7 +132,7 @@ impl<'dw> Attribute<'dw> {
             ffi::DW_FORM_indirect |
             ffi::DW_FORM_strp |
             ffi::DW_FORM_string |
-            ffi::DW_FORM_GNU_strp_alt => V::String(self.get_cstr()?),
+            ffi::DW_FORM_GNU_strp_alt => V::String(self.get_string()?),
 
             ffi::DW_FORM_ref_addr |
             ffi::DW_FORM_ref_udata |
