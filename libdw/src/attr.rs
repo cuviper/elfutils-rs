@@ -72,9 +72,8 @@ impl<'dw> Attribute<'dw> {
     }
 
     #[inline]
-    pub fn has_form(&self, form: u32) -> Result<bool> {
-        let b = ffi!(dwarf_hasform(self.as_ptr(), form))?;
-        Ok(b != 0)
+    pub fn has_form(&self, form: u32) -> bool {
+        raw_ffi!(dwarf_hasform(self.as_ptr(), form)) != 0
     }
 
     #[inline]
