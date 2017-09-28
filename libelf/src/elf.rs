@@ -1,7 +1,9 @@
 use ffi;
 
 use std::fmt;
+use std::fs;
 use std::os::raw;
+use std::path::Path;
 use std::ptr;
 
 use std::marker::PhantomData;
@@ -14,6 +16,7 @@ use super::Result;
 pub struct Elf<'a> {
     inner: *mut ffi::Elf,
     owned: bool,
+    file: Option<fs::File>,
     phantom: PhantomData<&'a mut ffi::Elf>,
 }
 
@@ -22,18 +25,36 @@ impl<'a> fmt::Debug for Elf<'a> {
         fmt.debug_struct("Elf")
             .field("inner", &self.inner)
             .field("owned", &self.owned)
+            .field("file", &self.file)
             .finish()
     }
 }
 
 impl<'a> Elf<'a> {
     #[inline]
-    fn new(elf: *mut ffi::Elf) -> Self {
+    fn new(elf: *mut ffi::Elf, owned: bool, file: Option<fs::File>) -> Self {
         Elf {
             inner: elf,
-            owned: true,
+            owned: owned,
+            file: file,
             phantom: PhantomData,
         }
+    }
+
+    /// Open an `Elf` from a path.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let exe = std::env::current_exe().unwrap();
+    /// let elf = libelf::Elf::open(exe).unwrap();
+    /// ```
+    pub fn open<P: AsRef<Path>>(path: P) -> Result<Elf<'static>> {
+        let file = fs::File::open(path)?;
+        let fd = file.as_raw_fd();
+        raw_ffi!(elf_version(ffi::EV_CURRENT));
+        let elf = ffi!(elf_begin(fd, ffi::Elf_Cmd::ELF_C_READ_MMAP, ptr::null_mut()))?;
+        Ok(Elf::new(elf, true, Some(file)))
     }
 
     /// Create an `Elf` from an open file.
@@ -48,9 +69,9 @@ impl<'a> Elf<'a> {
     #[inline]
     pub fn from_fd<FD: AsRawFd>(fd: &'a FD) -> Result<Elf<'a>> {
         let fd = fd.as_raw_fd();
-        unsafe { ffi::elf_version(ffi::EV_CURRENT); }
-        ffi!(elf_begin(fd, ffi::Elf_Cmd::ELF_C_READ_MMAP, ptr::null_mut()))
-            .map(Elf::new)
+        raw_ffi!(elf_version(ffi::EV_CURRENT));
+        let elf = ffi!(elf_begin(fd, ffi::Elf_Cmd::ELF_C_READ_MMAP, ptr::null_mut()))?;
+        Ok(Elf::new(elf, true, None))
     }
 
     /// Create an `Elf` from a memory image.
@@ -76,8 +97,8 @@ impl<'a> Elf<'a> {
     pub fn from_mem(mem: &'a [u8]) -> Result<Elf<'a>> {
         // NB: `Elf` must not expose write interfaces!
         let ptr = mem.as_ptr() as *mut raw::c_char;
-        ffi!(elf_memory(ptr, mem.len()))
-            .map(Elf::new)
+        let elf = ffi!(elf_memory(ptr, mem.len()))?;
+        Ok(Elf::new(elf, true, None))
     }
 
     /// Create an `Elf` from a raw FFI pointer.
@@ -90,11 +111,7 @@ impl<'a> Elf<'a> {
     /// so the caller must ensure it outlives the returned `Elf` wrapper.
     #[inline]
     pub unsafe fn from_raw(elf: *mut ffi::Elf) -> Elf<'a> {
-        Elf {
-            inner: elf,
-            owned: false,
-            phantom: PhantomData,
-        }
+        Elf::new(elf, false, None)
     }
 
     /// Get a raw FFI pointer
@@ -103,8 +120,7 @@ impl<'a> Elf<'a> {
     ///
     /// ```
     /// # let exe = std::env::current_exe().unwrap();
-    /// # let f = std::fs::File::open(exe).unwrap();
-    /// # let elf = libelf::Elf::from_fd(&f).unwrap();
+    /// # let elf = libelf::Elf::open(exe).unwrap();
     /// let ptr = elf.as_ptr();
     /// assert!(!ptr.is_null());
     /// let base = unsafe { libelf::raw::elf_getbase(ptr) };
@@ -120,9 +136,8 @@ impl<'a> Drop for Elf<'a> {
     #[inline]
     fn drop(&mut self) {
         if self.owned {
-            unsafe {
-                ffi::elf_end(self.inner);
-            }
+            raw_ffi!(elf_end(self.inner));
         }
+        self.file.take();
     }
 }
