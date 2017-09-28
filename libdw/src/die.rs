@@ -2,6 +2,7 @@ use ffi;
 
 use std::any::Any;
 use std::cell::UnsafeCell;
+use std::ffi::CStr;
 use std::fmt;
 use std::marker::PhantomData;
 use std::os::raw;
@@ -81,6 +82,12 @@ impl<'dw> Die<'dw> {
             }
             Ok((*die).abbrev)
         }
+    }
+
+    #[inline]
+    pub fn name(&self) -> Result<&'dw CStr> {
+        let s = ffi!(dwarf_diename(self.as_ptr()))?;
+        Ok(unsafe { CStr::from_ptr(s) })
     }
 
     #[inline]
