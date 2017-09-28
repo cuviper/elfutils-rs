@@ -62,7 +62,7 @@ impl<'dw> Attribute<'dw> {
     }
 
     #[inline]
-    pub fn attr(&self) -> u32 {
+    pub fn name(&self) -> u32 {
         raw_ffi!(dwarf_whatattr(self.as_ptr()))
     }
 

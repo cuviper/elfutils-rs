@@ -152,28 +152,28 @@ impl<'dw> Die<'dw> {
     }
 
     #[inline]
-    pub fn has_attr(&self, at: u32) -> Result<bool> {
-        let b = ffi!(dwarf_hasattr(self.as_ptr(), at))?;
+    pub fn has_attr(&self, name: u32) -> Result<bool> {
+        let b = ffi!(dwarf_hasattr(self.as_ptr(), name))?;
         Ok(b != 0)
     }
 
     #[inline]
-    pub fn has_attr_integrate(&self, at: u32) -> Result<bool> {
-        let b = ffi!(dwarf_hasattr_integrate(self.as_ptr(), at))?;
+    pub fn has_attr_integrate(&self, name: u32) -> Result<bool> {
+        let b = ffi!(dwarf_hasattr_integrate(self.as_ptr(), name))?;
         Ok(b != 0)
     }
 
     #[inline]
-    pub fn attr(&self, at: u32) -> Result<Attribute<'dw>> {
+    pub fn attr(&self, name: u32) -> Result<Attribute<'dw>> {
         let attr = Attribute::default();
-        ffi!(dwarf_attr(self.as_ptr(), at, attr.as_ptr()))?;
+        ffi!(dwarf_attr(self.as_ptr(), name, attr.as_ptr()))?;
         Ok(attr)
     }
 
     #[inline]
-    pub fn attr_integrate(&self, at: u32) -> Result<Attribute<'dw>> {
+    pub fn attr_integrate(&self, name: u32) -> Result<Attribute<'dw>> {
         let attr = Attribute::default();
-        ffi!(dwarf_attr_integrate(self.as_ptr(), at, attr.as_ptr()))?;
+        ffi!(dwarf_attr_integrate(self.as_ptr(), name, attr.as_ptr()))?;
         Ok(attr)
     }
 
