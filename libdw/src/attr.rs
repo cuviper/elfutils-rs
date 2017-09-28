@@ -77,62 +77,62 @@ impl<'dw> Attribute<'dw> {
     }
 
     #[inline]
-    pub fn to_cstr(&self) -> Result<&'dw CStr> {
+    pub fn get_cstr(&self) -> Result<&'dw CStr> {
         let s = ffi!(dwarf_formstring(self.as_ptr()))?;
         Ok(unsafe { CStr::from_ptr(s) })
     }
 
     #[inline]
-    pub fn to_unsigned(&self) -> Result<u64> {
+    pub fn get_unsigned(&self) -> Result<u64> {
         let mut data = 0;
         ffi!(dwarf_formudata(self.as_ptr(), &mut data))?;
         Ok(data)
     }
 
     #[inline]
-    pub fn to_signed(&self) -> Result<i64> {
+    pub fn get_signed(&self) -> Result<i64> {
         let mut data = 0;
         ffi!(dwarf_formsdata(self.as_ptr(), &mut data))?;
         Ok(data)
     }
 
     #[inline]
-    pub fn to_address(&self) -> Result<u64> {
+    pub fn get_address(&self) -> Result<u64> {
         let mut addr = 0;
         ffi!(dwarf_formaddr(self.as_ptr(), &mut addr))?;
         Ok(addr)
     }
 
     #[inline]
-    pub fn to_die(&self) -> Result<Die<'dw>> {
+    pub fn get_die(&self) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_formref_die(self.as_ptr(), die.as_ptr()))?;
         Ok(die)
     }
 
     #[inline]
-    pub fn to_bytes(&self) -> Result<&'dw [u8]> {
+    pub fn get_bytes(&self) -> Result<&'dw [u8]> {
         let mut block = ffi::Dwarf_Block { length: 0, data: ptr::null_mut() };
         ffi!(dwarf_formblock(self.as_ptr(), &mut block))?;
         Ok(unsafe { slice::from_raw_parts(block.data, block.length as usize) })
     }
 
     #[inline]
-    pub fn to_bool(&self) -> Result<bool> {
+    pub fn get_bool(&self) -> Result<bool> {
         let mut flag = false;
         ffi!(dwarf_formflag(self.as_ptr(), &mut flag))?;
         Ok(flag)
     }
 
-    pub fn to_value(&self) -> Result<AttributeValue<'dw>> {
+    pub fn get_value(&self) -> Result<AttributeValue<'dw>> {
         use self::AttributeValue as V;
         let value = match self.form() {
-            ffi::DW_FORM_addr => V::Address(self.to_address()?),
+            ffi::DW_FORM_addr => V::Address(self.get_address()?),
 
             ffi::DW_FORM_indirect |
             ffi::DW_FORM_strp |
             ffi::DW_FORM_string |
-            ffi::DW_FORM_GNU_strp_alt => V::String(self.to_cstr()?),
+            ffi::DW_FORM_GNU_strp_alt => V::String(self.get_cstr()?),
 
             ffi::DW_FORM_ref_addr |
             ffi::DW_FORM_ref_udata |
@@ -141,25 +141,25 @@ impl<'dw> Attribute<'dw> {
             ffi::DW_FORM_ref2 |
             ffi::DW_FORM_ref1 |
             ffi::DW_FORM_ref_sig8 |
-            ffi::DW_FORM_GNU_ref_alt => V::Die(self.to_die()?),
+            ffi::DW_FORM_GNU_ref_alt => V::Die(self.get_die()?),
 
             ffi::DW_FORM_sec_offset |
             ffi::DW_FORM_udata |
             ffi::DW_FORM_data8 |
             ffi::DW_FORM_data4 |
             ffi::DW_FORM_data2 |
-            ffi::DW_FORM_data1 => V::Unsigned(self.to_unsigned()?),
+            ffi::DW_FORM_data1 => V::Unsigned(self.get_unsigned()?),
 
-            ffi::DW_FORM_sdata => V::Signed(self.to_signed()?),
+            ffi::DW_FORM_sdata => V::Signed(self.get_signed()?),
 
             ffi::DW_FORM_flag_present |
-            ffi::DW_FORM_flag => V::Bool(self.to_bool()?),
+            ffi::DW_FORM_flag => V::Bool(self.get_bool()?),
 
             ffi::DW_FORM_exprloc |
             ffi::DW_FORM_block4 |
             ffi::DW_FORM_block2 |
             ffi::DW_FORM_block1 |
-            ffi::DW_FORM_block => V::Bytes(self.to_bytes()?),
+            ffi::DW_FORM_block => V::Bytes(self.get_bytes()?),
 
             form => V::UnknownForm(form),
         };
