@@ -15,12 +15,14 @@ pub struct CompileUnits<'dw> {
     finished: bool,
 }
 
-#[inline]
-pub fn compile_units<'dw>(dwarf: &'dw Dwarf<'dw>) -> CompileUnits<'dw> {
-    CompileUnits {
-        dwarf: dwarf,
-        offset: 0,
-        finished: false,
+impl<'dw> CompileUnits<'dw> {
+    #[inline]
+    pub(crate) fn new(dwarf: &'dw Dwarf<'dw>) -> CompileUnits<'dw> {
+        CompileUnits {
+            dwarf: dwarf,
+            offset: 0,
+            finished: false,
+        }
     }
 }
 
@@ -59,12 +61,14 @@ pub struct TypeUnits<'dw> {
     finished: bool,
 }
 
-#[inline]
-pub fn type_units<'dw>(dwarf: &'dw Dwarf<'dw>) -> TypeUnits<'dw> {
-    TypeUnits {
-        dwarf: dwarf,
-        offset: 0,
-        finished: false,
+impl<'dw> TypeUnits<'dw> {
+    #[inline]
+    pub(crate) fn new(dwarf: &'dw Dwarf<'dw>) -> TypeUnits<'dw> {
+        TypeUnits {
+            dwarf: dwarf,
+            offset: 0,
+            finished: false,
+        }
     }
 }
 

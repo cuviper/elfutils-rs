@@ -8,7 +8,7 @@ use std::ffi::CStr;
 
 pub type Result<T> = result::Result<T, Error>;
 
-pub trait IntoResult: Sized {
+pub(crate) trait IntoResult: Sized {
     fn into_result(self) -> Result<Self>;
 }
 

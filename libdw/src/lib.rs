@@ -16,10 +16,10 @@ mod units;
 pub use units::{CompileUnits, CompileUnit, TypeUnits, TypeUnit};
 
 mod die;
-pub use die::Die;
+pub use die::{Die, DieChildren};
 
 mod attr;
-pub use attr::Attribute;
+pub use attr::{Attribute, AttributeValue};
 
 
 #[cfg(test)]

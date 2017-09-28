@@ -67,12 +67,12 @@ impl<'dw> Dwarf<'dw> {
 
     #[inline]
     pub fn compile_units(&'dw self) -> CompileUnits<'dw> {
-        ::units::compile_units(self)
+        CompileUnits::new(self)
     }
 
     #[inline]
     pub fn type_units(&'dw self) -> TypeUnits<'dw> {
-        ::units::type_units(self)
+        TypeUnits::new(self)
     }
 
     #[inline]
