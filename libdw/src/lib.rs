@@ -37,10 +37,9 @@ mod tests {
     #[test]
     fn self_elf() {
         use libelf::Elf;
-        use std::{fs, env};
+        use std::env;
         let exe = env::current_exe().unwrap();
-        let f = fs::File::open(exe).unwrap();
-        let elf = Elf::from_fd(&f).unwrap();
+        let elf = Elf::open(exe).unwrap();
         Dwarf::from_elf(&elf).unwrap();
     }
 
