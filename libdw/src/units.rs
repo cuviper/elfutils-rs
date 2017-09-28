@@ -9,14 +9,14 @@ use super::Die;
 
 
 #[derive(Debug)]
-pub struct CompileUnits<'a> {
-    dwarf: &'a Dwarf<'a>,
+pub struct CompileUnits<'dw> {
+    dwarf: &'dw Dwarf<'dw>,
     offset: Dwarf_Off,
     finished: bool,
 }
 
 #[inline]
-pub fn compile_units<'a>(dwarf: &'a Dwarf<'a>) -> CompileUnits<'a> {
+pub fn compile_units<'dw>(dwarf: &'dw Dwarf<'dw>) -> CompileUnits<'dw> {
     CompileUnits {
         dwarf: dwarf,
         offset: 0,
@@ -24,8 +24,8 @@ pub fn compile_units<'a>(dwarf: &'a Dwarf<'a>) -> CompileUnits<'a> {
     }
 }
 
-impl<'a> Iterator for CompileUnits<'a> {
-    type Item = Result<CompileUnit<'a>>;
+impl<'dw> Iterator for CompileUnits<'dw> {
+    type Item = Result<CompileUnit<'dw>>;
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
@@ -53,14 +53,14 @@ impl<'a> Iterator for CompileUnits<'a> {
 
 
 #[derive(Debug)]
-pub struct TypeUnits<'a> {
-    dwarf: &'a Dwarf<'a>,
+pub struct TypeUnits<'dw> {
+    dwarf: &'dw Dwarf<'dw>,
     offset: Dwarf_Off,
     finished: bool,
 }
 
 #[inline]
-pub fn type_units<'a>(dwarf: &'a Dwarf<'a>) -> TypeUnits<'a> {
+pub fn type_units<'dw>(dwarf: &'dw Dwarf<'dw>) -> TypeUnits<'dw> {
     TypeUnits {
         dwarf: dwarf,
         offset: 0,
@@ -68,8 +68,8 @@ pub fn type_units<'a>(dwarf: &'a Dwarf<'a>) -> TypeUnits<'a> {
     }
 }
 
-impl<'a> Iterator for TypeUnits<'a> {
-    type Item = Result<TypeUnit<'a>>;
+impl<'dw> Iterator for TypeUnits<'dw> {
+    type Item = Result<TypeUnit<'dw>>;
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
@@ -100,14 +100,14 @@ impl<'a> Iterator for TypeUnits<'a> {
 
 
 #[derive(Debug)]
-pub struct CompileUnit<'a> {
-    dwarf: &'a Dwarf<'a>,
+pub struct CompileUnit<'dw> {
+    dwarf: &'dw Dwarf<'dw>,
     die_offset: Dwarf_Off,
 }
 
-impl<'a> CompileUnit<'a> {
+impl<'dw> CompileUnit<'dw> {
     #[inline]
-    fn new(dwarf: &'a Dwarf<'a>, die_offset: Dwarf_Off) -> CompileUnit<'a>
+    fn new(dwarf: &'dw Dwarf<'dw>, die_offset: Dwarf_Off) -> CompileUnit<'dw>
     {
         CompileUnit {
             dwarf: dwarf,
@@ -116,25 +116,25 @@ impl<'a> CompileUnit<'a> {
     }
 
     #[inline]
-    pub fn get_die(&self) -> Result<Die<'a>> {
+    pub fn get_die(&self) -> Result<Die<'dw>> {
         Die::from_offset(self.dwarf, self.die_offset)
     }
 }
 
 
 #[derive(Debug)]
-pub struct TypeUnit<'a> {
-    dwarf: &'a Dwarf<'a>,
+pub struct TypeUnit<'dw> {
+    dwarf: &'dw Dwarf<'dw>,
     die_offset: Dwarf_Off,
     type_offset: Dwarf_Off,
     signature: u64,
 }
 
-impl<'a> TypeUnit<'a> {
+impl<'dw> TypeUnit<'dw> {
     #[inline]
-    fn new(dwarf: &'a Dwarf<'a>, die_offset: Dwarf_Off,
+    fn new(dwarf: &'dw Dwarf<'dw>, die_offset: Dwarf_Off,
            type_offset: Dwarf_Off, signature: u64)
-        -> TypeUnit<'a>
+        -> TypeUnit<'dw>
     {
         TypeUnit {
             dwarf: dwarf,
@@ -145,12 +145,12 @@ impl<'a> TypeUnit<'a> {
     }
 
     #[inline]
-    pub fn get_die(&self) -> Result<Die<'a>> {
+    pub fn get_die(&self) -> Result<Die<'dw>> {
         Die::from_type_offset(self.dwarf, self.die_offset)
     }
 
     #[inline]
-    pub fn get_type_die(&self) -> Result<Die<'a>> {
+    pub fn get_type_die(&self) -> Result<Die<'dw>> {
         Die::from_type_offset(self.dwarf, self.type_offset)
     }
 

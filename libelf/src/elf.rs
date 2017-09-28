@@ -13,14 +13,14 @@ use super::Result;
 
 
 /// A handle to an ELF file.
-pub struct Elf<'a> {
+pub struct Elf<'elf> {
     inner: *mut ffi::Elf,
     owned: bool,
     file: Option<fs::File>,
-    phantom: PhantomData<&'a mut ffi::Elf>,
+    phantom: PhantomData<&'elf mut ffi::Elf>,
 }
 
-impl<'a> fmt::Debug for Elf<'a> {
+impl<'elf> fmt::Debug for Elf<'elf> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         fmt.debug_struct("Elf")
             .field("inner", &self.inner)
@@ -30,7 +30,7 @@ impl<'a> fmt::Debug for Elf<'a> {
     }
 }
 
-impl<'a> Elf<'a> {
+impl<'elf> Elf<'elf> {
     #[inline]
     fn new(elf: *mut ffi::Elf, owned: bool, file: Option<fs::File>) -> Self {
         Elf {
@@ -67,7 +67,7 @@ impl<'a> Elf<'a> {
     /// let elf = libelf::Elf::from_fd(&f).unwrap();
     /// ```
     #[inline]
-    pub fn from_fd<FD: AsRawFd>(fd: &'a FD) -> Result<Elf<'a>> {
+    pub fn from_fd<FD: AsRawFd>(fd: &'elf FD) -> Result<Elf<'elf>> {
         let fd = fd.as_raw_fd();
         raw_ffi!(elf_version(ffi::EV_CURRENT));
         let elf = ffi!(elf_begin(fd, ffi::Elf_Cmd::ELF_C_READ_MMAP, ptr::null_mut()))?;
@@ -94,7 +94,7 @@ impl<'a> Elf<'a> {
     ///
     /// ```
     #[inline]
-    pub fn from_mem(mem: &'a [u8]) -> Result<Elf<'a>> {
+    pub fn from_mem(mem: &'elf [u8]) -> Result<Elf<'elf>> {
         // NB: `Elf` must not expose write interfaces!
         let ptr = mem.as_ptr() as *mut raw::c_char;
         let elf = ffi!(elf_memory(ptr, mem.len()))?;
@@ -110,7 +110,7 @@ impl<'a> Elf<'a> {
     /// is appropriate.  This does not take ownership of the underlying object,
     /// so the caller must ensure it outlives the returned `Elf` wrapper.
     #[inline]
-    pub unsafe fn from_raw(elf: *mut ffi::Elf) -> Elf<'a> {
+    pub unsafe fn from_raw(elf: *mut ffi::Elf) -> Elf<'elf> {
         Elf::new(elf, false, None)
     }
 
@@ -132,7 +132,7 @@ impl<'a> Elf<'a> {
     }
 }
 
-impl<'a> Drop for Elf<'a> {
+impl<'elf> Drop for Elf<'elf> {
     #[inline]
     fn drop(&mut self) {
         if self.owned {

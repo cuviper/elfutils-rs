@@ -11,25 +11,25 @@ use super::Result;
 use super::Dwarf;
 use super::Die;
 
-pub struct Attribute<'a> {
+pub struct Attribute<'dw> {
     inner: UnsafeCell<ffi::Dwarf_Attribute>,
-    phantom: PhantomData<&'a Dwarf<'a>>,
+    phantom: PhantomData<&'dw Dwarf<'dw>>,
 }
 
 #[derive(Debug)]
-pub enum AttributeValue<'a> {
-    String(&'a CStr),
+pub enum AttributeValue<'dw> {
+    String(&'dw CStr),
     Unsigned(u64),
     Signed(i64),
     Address(u64),
-    Die(Die<'a>),
-    Bytes(&'a [u8]),
+    Die(Die<'dw>),
+    Bytes(&'dw [u8]),
     Bool(bool),
     #[doc(hidden)] // non-exhaustive
     UnknownForm(u32),
 }
 
-impl<'a> Default for Attribute<'a> {
+impl<'dw> Default for Attribute<'dw> {
     #[inline]
     fn default() -> Self {
         Attribute {
@@ -44,7 +44,7 @@ impl<'a> Default for Attribute<'a> {
     }
 }
 
-impl<'a> fmt::Debug for Attribute<'a> {
+impl<'dw> fmt::Debug for Attribute<'dw> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         fmt.debug_tuple("Attribute")
             .field(unsafe { &*self.as_ptr() })
@@ -52,7 +52,7 @@ impl<'a> fmt::Debug for Attribute<'a> {
     }
 }
 
-impl<'a> Attribute<'a> {
+impl<'dw> Attribute<'dw> {
     #[inline]
     unsafe fn from_raw(attr: *mut ffi::Dwarf_Attribute) -> Self {
         Attribute {
@@ -78,7 +78,7 @@ impl<'a> Attribute<'a> {
     }
 
     #[inline]
-    pub fn to_cstr(&self) -> Result<&'a CStr> {
+    pub fn to_cstr(&self) -> Result<&'dw CStr> {
         let s = ffi!(dwarf_formstring(self.as_ptr()))?;
         Ok(unsafe { CStr::from_ptr(s) })
     }
@@ -105,14 +105,14 @@ impl<'a> Attribute<'a> {
     }
 
     #[inline]
-    pub fn to_die(&self) -> Result<Die<'a>> {
+    pub fn to_die(&self) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_formref_die(self.as_ptr(), die.as_ptr()))?;
         Ok(die)
     }
 
     #[inline]
-    pub fn to_bytes(&self) -> Result<&'a [u8]> {
+    pub fn to_bytes(&self) -> Result<&'dw [u8]> {
         let mut block = ffi::Dwarf_Block { length: 0, data: ptr::null_mut() };
         ffi!(dwarf_formblock(self.as_ptr(), &mut block))?;
         Ok(unsafe { slice::from_raw_parts(block.data, block.length as usize) })
@@ -125,7 +125,7 @@ impl<'a> Attribute<'a> {
         Ok(flag)
     }
 
-    pub fn to_value(&self) -> Result<AttributeValue<'a>> {
+    pub fn to_value(&self) -> Result<AttributeValue<'dw>> {
         use self::AttributeValue as V;
         let value = match self.form() {
             ffi::DW_FORM_addr => V::Address(self.to_address()?),
@@ -173,7 +173,7 @@ impl<'a> Attribute<'a> {
     }
 }
 
-impl<'a> Clone for Attribute<'a> {
+impl<'dw> Clone for Attribute<'dw> {
     #[inline]
     fn clone(&self) -> Self {
         unsafe { Attribute::from_raw(self.as_ptr()) }

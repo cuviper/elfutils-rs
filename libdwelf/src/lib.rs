@@ -7,7 +7,7 @@ use std::ptr;
 use std::slice;
 
 #[inline]
-pub fn gnu_debuglink<'a>(elf: &libelf::Elf<'a>) -> libelf::Result<Option<(&'a CStr, u32)>> {
+pub fn gnu_debuglink<'elf>(elf: &'elf libelf::Elf) -> libelf::Result<Option<(&'elf CStr, u32)>> {
     let mut crc = 0;
     let namep = unsafe {
         let elf = elf.as_ptr() as *mut _; // FIXME distinct bindgen Elf types
@@ -24,9 +24,9 @@ pub fn gnu_debuglink<'a>(elf: &libelf::Elf<'a>) -> libelf::Result<Option<(&'a CS
 }
 
 #[inline]
-pub fn gnu_debugaltlink<'a>(
-    dwarf: &libdw::Dwarf<'a>,
-) -> libdw::Result<Option<(&'a CStr, &'a [u8])>> {
+pub fn gnu_debugaltlink<'dw>(
+    dwarf: &'dw libdw::Dwarf,
+) -> libdw::Result<Option<(&'dw CStr, &'dw [u8])>> {
     let mut namep = ptr::null();
     let mut build_idp = ptr::null();
     let build_id_len =

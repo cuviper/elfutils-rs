@@ -13,12 +13,12 @@ use super::Dwarf;
 use super::Attribute;
 
 
-pub struct Die<'a> {
+pub struct Die<'dw> {
     inner: UnsafeCell<ffi::Dwarf_Die>,
-    phantom: PhantomData<&'a Dwarf<'a>>,
+    phantom: PhantomData<&'dw Dwarf<'dw>>,
 }
 
-impl<'a> Default for Die<'a> {
+impl<'dw> Default for Die<'dw> {
     #[inline]
     fn default() -> Self {
         Die {
@@ -33,7 +33,7 @@ impl<'a> Default for Die<'a> {
     }
 }
 
-impl<'a> fmt::Debug for Die<'a> {
+impl<'dw> fmt::Debug for Die<'dw> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         fmt.debug_tuple("Die")
             .field(unsafe { &*self.as_ptr() })
@@ -41,30 +41,30 @@ impl<'a> fmt::Debug for Die<'a> {
     }
 }
 
-impl<'a> Die<'a> {
+impl<'dw> Die<'dw> {
     #[inline]
-    pub fn from_offset(dwarf: &'a Dwarf, offset: u64) -> Result<Die<'a>> {
+    pub fn from_offset(dwarf: &'dw Dwarf, offset: u64) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_offdie(dwarf.as_ptr(), offset, die.as_ptr()))?;
         Ok(die)
     }
 
     #[inline]
-    pub fn from_type_offset(dwarf: &'a Dwarf, offset: u64) -> Result<Die<'a>> {
+    pub fn from_type_offset(dwarf: &'dw Dwarf, offset: u64) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_offdie_types(dwarf.as_ptr(), offset, die.as_ptr()))?;
         Ok(die)
     }
 
     #[inline]
-    pub fn from_address(dwarf: &'a Dwarf, address: u64) -> Result<Die<'a>> {
+    pub fn from_address(dwarf: &'dw Dwarf, address: u64) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_addrdie(dwarf.as_ptr(), address, die.as_ptr()))?;
         Ok(die)
     }
 
     #[inline]
-    unsafe fn from_raw(die: *mut ffi::Dwarf_Die) -> Self {
+    unsafe fn from_raw(die: *mut ffi::Dwarf_Die) -> Die<'dw> {
         Die {
             inner: UnsafeCell::new(*die),
             phantom: PhantomData,
@@ -84,7 +84,7 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
-    pub fn unit(&self) -> Result<Self> {
+    pub fn unit(&self) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_diecu(self.as_ptr(), die.as_ptr(), ptr::null_mut(), ptr::null_mut()))?;
         Ok(die)
@@ -101,7 +101,7 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
-    pub fn child(&self) -> Result<Option<Self>> {
+    pub fn child(&self) -> Result<Option<Die<'dw>>> {
         let die = Die::default();
         let rc = ffi!(dwarf_child(self.as_ptr(), die.as_ptr()))?;
         if rc == 0 {
@@ -112,7 +112,7 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
-    pub fn siblingof(&self) -> Result<Option<Self>> {
+    pub fn siblingof(&self) -> Result<Option<Die<'dw>>> {
         let die = Die::default();
         let rc = ffi!(dwarf_siblingof(self.as_ptr(), die.as_ptr()))?;
         if rc == 0 {
@@ -129,7 +129,7 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
-    pub fn iter_children(&self) -> DieChildren<'a> {
+    pub fn iter_children(&self) -> DieChildren<'dw> {
         DieChildren {
             first: true,
             finished: false,
@@ -138,7 +138,7 @@ impl<'a> Die<'a> {
     }
 
     pub fn for_each_child<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&Self) -> Result<bool>
+        where F: FnMut(&Die<'dw>) -> Result<bool>
     {
         let child = Die::default();
 
@@ -164,14 +164,14 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
-    pub fn attr(&self, at: u32) -> Result<Attribute<'a>> {
+    pub fn attr(&self, at: u32) -> Result<Attribute<'dw>> {
         let attr = Attribute::default();
         ffi!(dwarf_attr(self.as_ptr(), at, attr.as_ptr()))?;
         Ok(attr)
     }
 
     #[inline]
-    pub fn attr_integrate(&self, at: u32) -> Result<Attribute<'a>> {
+    pub fn attr_integrate(&self, at: u32) -> Result<Attribute<'dw>> {
         let attr = Attribute::default();
         ffi!(dwarf_attr_integrate(self.as_ptr(), at, attr.as_ptr()))?;
         Ok(attr)
@@ -186,7 +186,7 @@ impl<'a> Die<'a> {
     }
 
     #[inline]
-    pub fn attrs(&self) -> Result<Vec<Attribute<'a>>> {
+    pub fn attrs(&self) -> Result<Vec<Attribute<'dw>>> {
         let mut v = Vec::with_capacity(self.attr_count()?);
         unsafe {
             self.getattrs(|a| { v.push(a.clone()); ffi::DWARF_CB_OK })?;
@@ -195,7 +195,7 @@ impl<'a> Die<'a> {
     }
 
     pub fn for_each_attr<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&Attribute<'a>) -> Result<bool>
+        where F: FnMut(&Attribute<'dw>) -> Result<bool>
     {
         let mut guard = CallbackGuard::new();
         let mut result = Ok(());
@@ -210,7 +210,7 @@ impl<'a> Die<'a> {
     }
 
     pub unsafe fn for_each_attr_unchecked<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&Attribute<'a>) -> Result<bool>
+        where F: FnMut(&Attribute<'dw>) -> Result<bool>
     {
         let mut result = Ok(());
 
@@ -220,10 +220,10 @@ impl<'a> Die<'a> {
     }
 
     unsafe fn getattrs<F>(&self, mut f: F) -> Result<isize>
-        where F: FnMut(&Attribute<'a>) -> raw::c_uint
+        where F: FnMut(&Attribute<'dw>) -> raw::c_uint
     {
         let argp = &mut f as *mut F as *mut raw::c_void;
-        return ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<'a, F>), argp, 0));
+        return ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<'dw, F>), argp, 0));
 
         unsafe extern "C" fn callback<'a, F>(attr: *mut ffi::Dwarf_Attribute,
                                              argp: *mut raw::c_void)
@@ -237,7 +237,7 @@ impl<'a> Die<'a> {
     }
 
     pub fn for_each_func<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&Self) -> Result<bool>
+        where F: FnMut(&Die<'dw>) -> Result<bool>
     {
         let mut guard = CallbackGuard::new();
         let mut result = Ok(());
@@ -252,7 +252,7 @@ impl<'a> Die<'a> {
     }
 
     pub unsafe fn for_each_func_unchecked<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&Self) -> Result<bool>
+        where F: FnMut(&Die<'dw>) -> Result<bool>
     {
         let mut result = Ok(());
 
@@ -262,10 +262,10 @@ impl<'a> Die<'a> {
     }
 
     unsafe fn getfuncs<F>(&self, mut f: F) -> Result<isize>
-        where F: FnMut(&Self) -> raw::c_uint
+        where F: FnMut(&Die<'dw>) -> raw::c_uint
     {
         let argp = &mut f as *mut F as *mut raw::c_void;
-        return ffi!(dwarf_getfuncs(self.as_ptr(), Some(callback::<'a, F>), argp, 0));
+        return ffi!(dwarf_getfuncs(self.as_ptr(), Some(callback::<'dw, F>), argp, 0));
 
         unsafe extern "C" fn callback<'a, F>(func: *mut ffi::Dwarf_Die,
                                              argp: *mut raw::c_void)
@@ -291,7 +291,7 @@ impl<'a> Die<'a> {
     }
 }
 
-impl<'a> Clone for Die<'a> {
+impl<'dw> Clone for Die<'dw> {
     #[inline]
     fn clone(&self) -> Self {
         unsafe { Die::from_raw(self.as_ptr()) }
@@ -300,14 +300,14 @@ impl<'a> Clone for Die<'a> {
 
 
 #[derive(Debug)]
-pub struct DieChildren<'a> {
+pub struct DieChildren<'dw> {
     first: bool,
     finished: bool,
-    die: Die<'a>,
+    die: Die<'dw>,
 }
 
-impl<'a> Iterator for DieChildren<'a> {
-    type Item = Result<Die<'a>>;
+impl<'dw> Iterator for DieChildren<'dw> {
+    type Item = Result<Die<'dw>>;
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
