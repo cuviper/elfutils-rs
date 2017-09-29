@@ -51,20 +51,18 @@ mod tests {
 
     #[test]
     fn self_debuglink() {
-        use std::{fs, env};
+        use std::env;
         let exe = env::current_exe().unwrap();
-        let f = fs::File::open(exe).unwrap();
-        let elf = libelf::Elf::from_fd(&f).unwrap();
+        let elf = libelf::Elf::open(exe).unwrap();
         let link = super::gnu_debuglink(&elf).unwrap();
         assert!(link.is_none());
     }
 
     #[test]
     fn self_debugaltlink() {
-        use std::{fs, env};
+        use std::env;
         let exe = env::current_exe().unwrap();
-        let f = fs::File::open(exe).unwrap();
-        let dwarf = libdw::Dwarf::from_fd(&f).unwrap();
+        let dwarf = libdw::Dwarf::open(exe).unwrap();
         let link = super::gnu_debugaltlink(&dwarf).unwrap();
         assert!(link.is_none());
     }

@@ -3,8 +3,6 @@
 extern crate libdw;
 
 use std::env;
-use std::fs;
-
 use std::error::Error;
 
 fn main() {
@@ -13,8 +11,7 @@ fn main() {
 
 fn try_main() -> Result<(), Box<Error>> {
     for arg in env::args_os().skip(1) {
-        let f = fs::File::open(arg)?;
-        let dw = libdw::Dwarf::from_fd(&f)?;
+        let dw = libdw::Dwarf::open(arg)?;
         // TODO setup_alt
 
         for cu in dw.compile_units() {

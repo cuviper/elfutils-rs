@@ -24,8 +24,7 @@ fn test_path() -> path::PathBuf {
 #[bench]
 fn info_cus(b: &mut test::Bencher) {
     b.iter(|| -> Result<()> {
-        let f = fs::File::open(test_path()).unwrap();
-        let dw = Dwarf::from_fd(&f)?;
+        let dw = Dwarf::open(test_path())?;
 
         for cu in dw.compile_units() {
             let die = cu?.get_die()?;
@@ -42,8 +41,7 @@ fn info_cus(b: &mut test::Bencher) {
 #[bench]
 fn info_dies(b: &mut test::Bencher) {
     b.iter(|| -> Result<()> {
-        let f = fs::File::open(test_path()).unwrap();
-        let dw = Dwarf::from_fd(&f)?;
+        let dw = Dwarf::open(test_path())?;
 
         for cu in dw.compile_units() {
             recurse_die(&cu?.get_die()?)?;
@@ -69,8 +67,7 @@ fn info_dies(b: &mut test::Bencher) {
 #[bench]
 fn info_iter(b: &mut test::Bencher) {
     b.iter(|| -> Result<()> {
-        let f = fs::File::open(test_path()).unwrap();
-        let dw = Dwarf::from_fd(&f)?;
+        let dw = Dwarf::open(test_path())?;
 
         for cu in dw.compile_units() {
             recurse_die(&cu?.get_die()?)?;
@@ -98,8 +95,7 @@ fn info_iter(b: &mut test::Bencher) {
 #[bench]
 fn info_nested(b: &mut test::Bencher) {
     b.iter(|| -> Result<()> {
-        let f = fs::File::open(test_path()).unwrap();
-        let dw = Dwarf::from_fd(&f)?;
+        let dw = Dwarf::open(test_path())?;
 
         for cu in dw.compile_units() {
             recurse_die(&cu?.get_die()?)?;
@@ -127,8 +123,7 @@ fn info_nested(b: &mut test::Bencher) {
 #[bench]
 fn info_nest_unchecked(b: &mut test::Bencher) {
     b.iter(|| -> Result<()> {
-        let f = fs::File::open(test_path()).unwrap();
-        let dw = Dwarf::from_fd(&f)?;
+        let dw = Dwarf::open(test_path())?;
 
         for cu in dw.compile_units() {
             recurse_die(&cu?.get_die()?)?;
