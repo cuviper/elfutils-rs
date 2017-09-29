@@ -396,3 +396,56 @@ impl Drop for CallbackGuard {
         }
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::Dwarf;
+
+    #[test]
+    fn die_size() {
+        use std::mem::size_of;
+        assert_eq!(size_of::<::Die<'static>>(),
+                   size_of::<::ffi::Dwarf_Die>());
+    }
+
+    #[test]
+    fn die_align() {
+        use std::mem::align_of;
+        assert_eq!(align_of::<::Die<'static>>(),
+                   align_of::<::ffi::Dwarf_Die>());
+    }
+
+    fn current() -> Dwarf<'static> {
+        use std::env;
+        let exe = env::current_exe().unwrap();
+        Dwarf::open(exe).unwrap()
+    }
+
+    #[test]
+    fn attr_callback() {
+        for cu in current().compile_units() {
+            let die = cu.unwrap().get_die().unwrap();
+            die.for_each_attr(|_| Ok(true)).unwrap();
+        }
+    }
+
+    #[test]
+    fn attr_callback_unchecked() {
+        for cu in current().compile_units() {
+            let die = cu.unwrap().get_die().unwrap();
+            unsafe {
+                die.for_each_attr_unchecked(|_| Ok(true)).unwrap();
+            }
+        }
+    }
+
+    #[test]
+    #[should_panic]
+    fn attr_callback_panic() {
+        for cu in current().compile_units() {
+            let die = cu.unwrap().get_die().unwrap();
+            die.for_each_attr(|_| panic!()).unwrap();
+        }
+    }
+}

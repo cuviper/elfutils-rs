@@ -178,3 +178,21 @@ impl<'dw> Clone for Attribute<'dw> {
         unsafe { Attribute::from_raw(self.as_ptr()) }
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn attr_size() {
+        use std::mem::size_of;
+        assert_eq!(size_of::<::Attribute<'static>>(),
+                   size_of::<::ffi::Dwarf_Attribute>());
+    }
+
+    #[test]
+    fn attr_align() {
+        use std::mem::align_of;
+        assert_eq!(align_of::<::Attribute<'static>>(),
+                   align_of::<::ffi::Dwarf_Attribute>());
+    }
+}
