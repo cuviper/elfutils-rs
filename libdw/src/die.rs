@@ -95,6 +95,32 @@ impl<'dw> Die<'dw> {
     }
 
     #[inline]
+    pub fn high_pc(&self) -> Result<u64> {
+        let mut pc = 0;
+        ffi!(dwarf_highpc(self.as_ptr(), &mut pc))?;
+        Ok(pc)
+    }
+
+    #[inline]
+    pub fn low_pc(&self) -> Result<u64> {
+        let mut pc = 0;
+        ffi!(dwarf_lowpc(self.as_ptr(), &mut pc))?;
+        Ok(pc)
+    }
+
+    #[inline]
+    pub fn entry_pc(&self) -> Result<u64> {
+        let mut pc = 0;
+        ffi!(dwarf_entrypc(self.as_ptr(), &mut pc))?;
+        Ok(pc)
+    }
+
+    #[inline]
+    pub fn has_pc(&self, pc: u64) -> Result<bool> {
+        Ok(ffi!(dwarf_haspc(self.as_ptr(), pc))? != 0)
+    }
+
+    #[inline]
     pub fn unit(&self) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_diecu(self.as_ptr(), die.as_ptr(), ptr::null_mut(), ptr::null_mut()))?;
