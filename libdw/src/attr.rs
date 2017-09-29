@@ -54,11 +54,8 @@ impl<'dw> fmt::Debug for Attribute<'dw> {
 
 impl<'dw> Attribute<'dw> {
     #[inline]
-    unsafe fn from_raw(attr: *mut ffi::Dwarf_Attribute) -> Self {
-        Attribute {
-            inner: UnsafeCell::new(*attr),
-            phantom: PhantomData,
-        }
+    pub(crate) unsafe fn from_ptr<'a>(attr: *mut ffi::Dwarf_Attribute) -> &'a Attribute<'dw> {
+        &*(attr as *const Attribute<'dw>)
     }
 
     #[inline]
@@ -175,7 +172,12 @@ impl<'dw> Attribute<'dw> {
 impl<'dw> Clone for Attribute<'dw> {
     #[inline]
     fn clone(&self) -> Self {
-        unsafe { Attribute::from_raw(self.as_ptr()) }
+        unsafe {
+            Attribute {
+                inner: (*self.as_ptr()).into(),
+                phantom: PhantomData,
+            }
+        }
     }
 }
 

@@ -44,6 +44,11 @@ impl<'dw> fmt::Debug for Die<'dw> {
 
 impl<'dw> Die<'dw> {
     #[inline]
+    pub(crate) unsafe fn from_ptr<'a>(die: *mut ffi::Dwarf_Die) -> &'a Die<'dw> {
+        &*(die as *const Die<'dw>)
+    }
+
+    #[inline]
     pub fn from_offset(dwarf: &'dw Dwarf, offset: u64) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_offdie(dwarf.as_ptr(), offset, die.as_ptr()))?;
@@ -62,14 +67,6 @@ impl<'dw> Die<'dw> {
         let die = Die::default();
         ffi!(dwarf_addrdie(dwarf.as_ptr(), address, die.as_ptr()))?;
         Ok(die)
-    }
-
-    #[inline]
-    unsafe fn from_raw(die: *mut ffi::Dwarf_Die) -> Die<'dw> {
-        Die {
-            inner: UnsafeCell::new(*die),
-            phantom: PhantomData,
-        }
     }
 
     #[inline]
@@ -238,8 +235,7 @@ impl<'dw> Die<'dw> {
             where F: FnMut(&Attribute<'a>) -> raw::c_uint
         {
             let f = &mut *(argp as *mut F);
-            let attr = &*(attr as *const Attribute<'a>);
-            f(attr) as raw::c_int
+            f(Attribute::from_ptr(attr)) as raw::c_int
         }
     }
 
@@ -280,8 +276,7 @@ impl<'dw> Die<'dw> {
             where F: FnMut(&Die<'a>) -> raw::c_uint
         {
             let f = &mut *(argp as *mut F);
-            let func = &*(func as *const Die<'a>);
-            f(func) as raw::c_int
+            f(Die::from_ptr(func)) as raw::c_int
         }
     }
 
@@ -301,7 +296,12 @@ impl<'dw> Die<'dw> {
 impl<'dw> Clone for Die<'dw> {
     #[inline]
     fn clone(&self) -> Self {
-        unsafe { Die::from_raw(self.as_ptr()) }
+        unsafe {
+            Die {
+                inner: (*self.as_ptr()).into(),
+                phantom: PhantomData,
+            }
+        }
     }
 }
 
