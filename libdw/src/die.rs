@@ -5,6 +5,7 @@ use std::cell::UnsafeCell;
 use std::ffi::CStr;
 use std::fmt;
 use std::marker::PhantomData;
+use std::ops::Range;
 use std::os::raw;
 use std::panic;
 use std::ptr;
@@ -118,6 +119,15 @@ impl<'dw> Die<'dw> {
     #[inline]
     pub fn has_pc(&self, pc: u64) -> Result<bool> {
         Ok(ffi!(dwarf_haspc(self.as_ptr(), pc))? != 0)
+    }
+
+    #[inline]
+    pub fn ranges(&self) -> DieRanges<'dw> {
+        DieRanges {
+            offset: 0,
+            base: 0,
+            die: self.clone(),
+        }
     }
 
     #[inline]
@@ -362,6 +372,47 @@ impl<'dw> Iterator for DieChildren<'dw> {
             },
             Ok(_) => { self.finished = true; None },
             Err(e) => { self.finished = true; Some(Err(e)) },
+        }
+    }
+}
+
+
+#[derive(Debug)]
+pub struct DieRanges<'dw> {
+    offset: isize,
+    base: u64,
+    die: Die<'dw>,
+}
+
+impl<'dw> Iterator for DieRanges<'dw> {
+    type Item = Result<Range<u64>>;
+
+    #[inline]
+    fn next(&mut self) -> Option<Self::Item> {
+        let mut start = 0;
+        let mut end = 0;
+
+        let rc = ffi!(dwarf_ranges(
+            self.die.as_ptr(),
+            self.offset,
+            &mut self.base,
+            &mut start,
+            &mut end
+        ));
+
+        match rc {
+            Ok(0) => {
+                self.offset = 0;
+                None
+            }
+            Ok(offset) => {
+                self.offset = offset;
+                Some(Ok(start..end))
+            }
+            Err(e) => {
+                self.offset = 0;
+                Some(Err(e))
+            }
         }
     }
 }
