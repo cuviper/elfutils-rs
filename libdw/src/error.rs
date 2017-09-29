@@ -1,9 +1,36 @@
 use ffi;
 use std::error;
 use std::fmt;
+use std::io;
 use std::os::raw;
 use std::result;
 use std::ffi::CStr;
+
+
+macro_rules! raw_ffi {
+    ($func:ident ($($arg:expr),*)) => ({
+        #[allow(unused_unsafe)]
+        unsafe { ffi::$func($($arg),*) }
+    })
+}
+
+macro_rules! ffi {
+    ($func:ident ($($arg:expr),*)) => ({
+        let result = raw_ffi!($func($($arg),*));
+        ::error::IntoResult::into_result(result)
+    })
+}
+
+macro_rules! ffi_check {
+    ($func:ident ($($arg:expr),*) != $error:expr) => ({
+        let result = raw_ffi!($func($($arg),*));
+        if result != $error {
+            Ok(result)
+        } else {
+            Err(::Error::last())
+        }
+    })
+}
 
 
 pub type Result<T> = result::Result<T, Error>;
@@ -58,81 +85,75 @@ impl<T> IntoResult for *mut T {
 }
 
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug)]
 pub struct Error {
-    errno: raw::c_int,
+    kind: ErrorKind,
+}
+
+#[derive(Debug)]
+enum ErrorKind {
+    Dw(raw::c_int),
+    Io(io::Error),
+}
+
+impl From<io::Error> for Error {
+    fn from(error: io::Error) -> Error {
+        Error {
+            kind: ErrorKind::Io(error),
+        }
+    }
 }
 
 impl Error {
     #[inline]
     pub fn last() -> Error {
+        let errno = raw_ffi!(dwarf_errno());
         Error {
-            errno: unsafe { ffi::dwarf_errno() },
+            kind: ErrorKind::Dw(errno),
         }
     }
 
     #[inline]
     pub fn check() -> Option<Error> {
         let error = Error::last();
-        if error.errno == 0 {
+        if let ErrorKind::Dw(0) = error.kind {
             None
         } else {
             Some(error)
         }
     }
-
-    #[inline]
-    fn to_cstr(&self) -> &'static CStr {
-        // Normalize 0 to -1, which behaves the same except it always returns a legal string
-        let errno = match self.errno { 0 => -1, e => e };
-        unsafe { CStr::from_ptr(ffi::dwarf_errmsg(errno)) }
-    }
 }
 
-impl<'a> From<&'a Error> for Error {
-    #[inline]
-    fn from(other: &'a Error) -> Error {
-        *other
-    }
+#[inline]
+fn errmsg(errno: raw::c_int) -> &'static CStr {
+    // Normalize 0 to -1, which behaves the same except it always returns a legal string
+    let errno = match errno { 0 => -1, e => e };
+    let msg = raw_ffi!(dwarf_errmsg(errno));
+    unsafe { CStr::from_ptr(msg) }
 }
 
 impl error::Error for Error {
     #[inline]
     fn description(&self) -> &str {
-        self.to_cstr().to_str()
-            .unwrap_or("invalid UTF-8 from dwarf_errmsg")
+        match self.kind {
+            ErrorKind::Dw(errno) => errmsg(errno).to_str().unwrap_or("libdw error"),
+            ErrorKind::Io(ref error) => error.description(),
+        }
     }
 }
 
 impl fmt::Display for Error {
     #[inline]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.to_cstr().to_string_lossy(), f)
-    }
-}
-
-
-macro_rules! raw_ffi {
-    ($func:ident ($($arg:expr),*)) => ({
-        #[allow(unused_unsafe)]
-        unsafe { ffi::$func($($arg),*) }
-    })
-}
-
-macro_rules! ffi {
-    ($func:ident ($($arg:expr),*)) => ({
-        let result = raw_ffi!($func($($arg),*));
-        ::error::IntoResult::into_result(result)
-    })
-}
-
-macro_rules! ffi_check {
-    ($func:ident ($($arg:expr),*) != $error:expr) => ({
-        let result = raw_ffi!($func($($arg),*));
-        if result != $error {
-            Ok(result)
-        } else {
-            Err(::Error::last())
+        match self.kind {
+            ErrorKind::Dw(errno) => {
+                let msg = errmsg(errno);
+                match msg.to_str() {
+                    Ok(s) => fmt::Display::fmt(s, f),
+                    Err(_) => fmt::Debug::fmt(msg, f),
+                }
+            },
+            ErrorKind::Io(ref error) => fmt::Display::fmt(&error, f),
         }
-    })
+    }
 }

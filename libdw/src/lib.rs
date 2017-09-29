@@ -27,23 +27,6 @@ mod tests {
     use super::Dwarf;
 
     #[test]
-    fn self_file() {
-        use std::{fs, env};
-        let exe = env::current_exe().unwrap();
-        let f = fs::File::open(exe).unwrap();
-        Dwarf::from_fd(&f).unwrap();
-    }
-
-    #[test]
-    fn self_elf() {
-        use libelf::Elf;
-        use std::env;
-        let exe = env::current_exe().unwrap();
-        let elf = Elf::open(exe).unwrap();
-        Dwarf::from_elf(&elf).unwrap();
-    }
-
-    #[test]
     fn attr_callback() {
         use std::{fs, env};
         let exe = env::current_exe().unwrap();
