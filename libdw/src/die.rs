@@ -118,7 +118,8 @@ impl<'dw> Die<'dw> {
 
     #[inline]
     pub fn has_pc(&self, pc: u64) -> Result<bool> {
-        Ok(ffi!(dwarf_haspc(self.as_ptr(), pc))? != 0)
+        let has = ffi!(dwarf_haspc(self.as_ptr(), pc))?;
+        Ok(has != 0)
     }
 
     #[inline]
@@ -128,6 +129,36 @@ impl<'dw> Die<'dw> {
             base: 0,
             die: self.clone(),
         }
+    }
+
+    #[inline]
+    pub fn byte_size(&self) -> Result<u32> {
+        let size = ffi!(dwarf_bytesize(self.as_ptr()))?;
+        Ok(size as u32)
+    }
+
+    #[inline]
+    pub fn bit_size(&self) -> Result<u32> {
+        let size = ffi!(dwarf_bitsize(self.as_ptr()))?;
+        Ok(size as u32)
+    }
+
+    #[inline]
+    pub fn bit_offset(&self) -> Result<u32> {
+        let offset = ffi!(dwarf_bitoffset(self.as_ptr()))?;
+        Ok(offset as u32)
+    }
+
+    #[inline]
+    pub fn array_order(&self) -> Result<u32> {
+        let order = ffi!(dwarf_arrayorder(self.as_ptr()))?;
+        Ok(order as u32)
+    }
+
+    #[inline]
+    pub fn source_language(&self) -> Result<u32> {
+        let lang = ffi!(dwarf_srclang(self.as_ptr()))?;
+        Ok(lang as u32)
     }
 
     #[inline]
