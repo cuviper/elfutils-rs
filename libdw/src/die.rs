@@ -82,6 +82,13 @@ impl<'dw> Die<'dw> {
     }
 
     #[inline]
+    pub fn tag(&self) -> Result<u32> {
+        let invalid = ffi::DW_TAG_invalid as raw::c_int;
+        let tag = ffi_check!(dwarf_tag(self.as_ptr()) != invalid)?;
+        Ok(tag as u32)
+    }
+
+    #[inline]
     pub fn name(&self) -> Result<&'dw CStr> {
         let s = ffi!(dwarf_diename(self.as_ptr()))?;
         Ok(unsafe { CStr::from_ptr(s) })
@@ -278,13 +285,6 @@ impl<'dw> Die<'dw> {
             let f = &mut *(argp as *mut F);
             f(Die::from_ptr(func)) as raw::c_int
         }
-    }
-
-    #[inline]
-    pub fn tag(&self) -> Result<u32> {
-        let invalid = ffi::DW_TAG_invalid as raw::c_int;
-        let tag = ffi_check!(dwarf_tag(self.as_ptr()) != invalid)?;
-        Ok(tag as u32)
     }
 
     #[inline]
