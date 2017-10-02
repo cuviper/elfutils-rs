@@ -96,6 +96,26 @@ impl<'dw> Die<'dw> {
     }
 
     #[inline]
+    pub fn decl_file(&self) -> Result<&'dw CStr> {
+        let s = ffi!(dwarf_decl_file(self.as_ptr()))?;
+        Ok(unsafe { CStr::from_ptr(s) })
+    }
+
+    #[inline]
+    pub fn decl_line(&self) -> Result<u32> {
+        let mut line = 0;
+        ffi!(dwarf_decl_line(self.as_ptr(), &mut line))?;
+        Ok(line as u32)
+    }
+
+    #[inline]
+    pub fn decl_column(&self) -> Result<u32> {
+        let mut column = 0;
+        ffi!(dwarf_decl_column(self.as_ptr(), &mut column))?;
+        Ok(column as u32)
+    }
+
+    #[inline]
     pub fn high_pc(&self) -> Result<u64> {
         let mut pc = 0;
         ffi!(dwarf_highpc(self.as_ptr(), &mut pc))?;
