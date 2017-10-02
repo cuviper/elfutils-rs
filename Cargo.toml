@@ -1,16 +1,14 @@
 [package]
 authors = ["Josh Stone <jistone@redhat.com>"]
 description = "Bindings to elfutils"
+include = [
+    "Cargo.toml",
+    "src/**/*.rs",
+]
 license = "MIT/Apache-2.0"
 name = "elfutils"
 repository = "https://github.com/cuviper/elfutils-rs"
 version = "0.0.2"
-include = ["Cargo.toml", "src/**/*.rs"]
-
-[workspace]
-members = ["libelf-sys", "libelf", "libdw-sys", "libdw", "libdwfl", "libdwelf"]
-
-[dependencies]
 
 [dependencies.libdw]
 optional = false
@@ -36,3 +34,16 @@ version = "0.0.2"
 optional = false
 path = "libelf"
 version = "0.0.2"
+
+[dev-dependencies]
+cpp_demangle = "0.2.5"
+
+[workspace]
+members = [
+    "libelf-sys",
+    "libelf",
+    "libdw-sys",
+    "libdw",
+    "libdwfl",
+    "libdwelf",
+]

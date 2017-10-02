@@ -2,12 +2,14 @@
 //!
 //! [1]: https://github.com/cuviper/nontrivial-param
 
+extern crate cpp_demangle;
 extern crate libdw;
 
+use cpp_demangle::Symbol;
 use libdw::{raw, Dwarf, Die};
 
 use std::borrow::Cow;
-use std::ffi::CStr;
+use std::ffi::{CStr, CString};
 use std::env;
 use std::error::Error;
 
@@ -77,14 +79,22 @@ fn has_nontrivial_type(die: &Die) -> bool {
 }
 
 fn function_name<'dw>(function: &'dw Die) -> Cow<'dw, CStr> {
-    if let Ok(name) = function.attr_integrate(raw::DW_AT_linkage_name)
+    let linkage_name = function.attr_integrate(raw::DW_AT_linkage_name)
         .or_else(|_| function.attr_integrate(raw::DW_AT_MIPS_linkage_name))
-        .and_then(|attr| attr.get_string()) {
-        // TODO demangle
+        .and_then(|attr| attr.get_string());
+
+    if let Ok(name) = linkage_name {
+        demangle(name).map(Cow::Owned)
+            .unwrap_or(Cow::Borrowed(name))
+    } else if let Ok(name) = function.name() {
         Cow::Borrowed(name)
     } else {
-        let name = function.name()
-            .unwrap_or_else(|_| CStr::from_bytes_with_nul(b"(null)\0").unwrap());
-        Cow::Borrowed(name)
+        Cow::Borrowed(CStr::from_bytes_with_nul(b"(null)\0").unwrap())
     }
+}
+
+fn demangle(name: &CStr) -> Option<CString> {
+    Symbol::new(name.to_bytes()).ok()
+        .and_then(|symbol| symbol.demangle(&Default::default()).ok())
+        .and_then(|demangled| CString::new(demangled).ok())
 }
