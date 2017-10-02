@@ -39,6 +39,29 @@ impl IntoResult for raw::c_int {
     }
 }
 
+impl IntoResult for isize {
+    #[inline]
+    fn into_result(self) -> Result<Self> {
+        if self < 0 {
+            Err(Error::last())
+        } else {
+            Ok(self)
+        }
+    }
+}
+
+impl<T> IntoResult for *const T {
+    #[inline]
+    fn into_result(self) -> Result<Self> {
+        if self.is_null() {
+            Err(Error::last())
+        } else {
+            Ok(self)
+        }
+    }
+}
+
+
 impl<T> IntoResult for *mut T {
     #[inline]
     fn into_result(self) -> Result<Self> {
