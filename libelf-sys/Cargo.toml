@@ -6,7 +6,7 @@ description = "Bindings to elfutils"
 license = "MIT/Apache-2.0"
 name = "libelf-sys"
 repository = "https://github.com/cuviper/elfutils-rs"
-version = "0.0.3"
+version = "0.0.4"
 include = ["Cargo.toml", "build.rs", "src/**/*.rs"]
 
 [build-dependencies]
