@@ -11,8 +11,7 @@ use libdw::Dwarf;
 
 use super::Result;
 
-const DWFL_STANDARD_CALLBACKS: ffi::Dwfl_Callbacks
-= ffi::Dwfl_Callbacks {
+const STANDARD_CALLBACKS: &'static ffi::Dwfl_Callbacks = &ffi::Dwfl_Callbacks {
     find_elf: Some(ffi::dwfl_build_id_find_elf),
     find_debuginfo: Some(ffi::dwfl_standard_find_debuginfo),
     section_address: Some(ffi::dwfl_offline_section_address),
@@ -43,7 +42,7 @@ impl Dwfl {
     pub fn open<P: AsRef<Path>>(path: P) -> Result<Dwfl> {
         let name = CString::new(path.as_ref().as_os_str().as_bytes()).unwrap();
 
-        let dwfl = Dwfl::new(ffi!(dwfl_begin(&DWFL_STANDARD_CALLBACKS))?);
+        let dwfl = Dwfl::new(ffi!(dwfl_begin(STANDARD_CALLBACKS))?);
         ffi!(dwfl_report_offline(dwfl.as_ptr(), name.as_ptr(), name.as_ptr(), -1))?;
         ffi!(dwfl_report_end(dwfl.as_ptr(), None, ptr::null_mut()))?;
         Ok(dwfl)
