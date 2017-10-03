@@ -4,7 +4,6 @@ use std::ptr;
 
 use std::fmt;
 use std::fs;
-use std::marker::PhantomData;
 use std::os::unix::io::AsRawFd;
 use std::path::Path;
 
@@ -12,31 +11,36 @@ use super::Result;
 use super::{CompileUnits, TypeUnits};
 
 
+#[derive(Debug)]
 pub struct Dwarf<'dw> {
     inner: *mut ffi::Dwarf,
-    owned: bool,
-    file: Option<fs::File>,
-    phantom: PhantomData<&'dw mut ffi::Dwarf>,
+    kind: DwarfKind<'dw>,
 }
 
-impl<'dw> fmt::Debug for Dwarf<'dw> {
+enum DwarfKind<'dw> {
+    Raw,
+    File(fs::File),
+    Fd(&'dw AsRawFd),
+    Elf(&'dw libelf::Elf<'dw>),
+}
+
+impl<'elf> fmt::Debug for DwarfKind<'elf> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        fmt.debug_struct("Dwarf")
-            .field("inner", &self.inner)
-            .field("owned", &self.owned)
-            .field("file", &self.file)
-            .finish()
+        match *self {
+            DwarfKind::Raw => fmt.debug_tuple("Raw").finish(),
+            DwarfKind::File(ref f) => fmt.debug_tuple("File").field(f).finish(),
+            DwarfKind::Fd(f) => fmt.debug_tuple("Fd").field(&f.as_raw_fd()).finish(),
+            DwarfKind::Elf(e) => fmt.debug_tuple("Elf").field(&e).finish(),
+        }
     }
 }
 
 impl<'dw> Dwarf<'dw> {
     #[inline]
-    fn new(dwarf: *mut ffi::Dwarf, owned: bool, file: Option<fs::File>) -> Self {
+    fn new(dwarf: *mut ffi::Dwarf, kind: DwarfKind<'dw>) -> Dwarf<'dw> {
         Dwarf {
             inner: dwarf,
-            owned: owned,
-            file: file,
-            phantom: PhantomData,
+            kind: kind,
         }
     }
 
@@ -50,9 +54,9 @@ impl<'dw> Dwarf<'dw> {
     /// ```
     pub fn open<P: AsRef<Path>>(path: P) -> Result<Dwarf<'static>> {
         let file = fs::File::open(path)?;
-        let fd = file.as_raw_fd();
-        let dwarf = ffi!(dwarf_begin(fd, ffi::Dwarf_Cmd::DWARF_C_READ))?;
-        Ok(Dwarf::new(dwarf, true, Some(file)))
+        let raw_fd = file.as_raw_fd();
+        let dwarf = ffi!(dwarf_begin(raw_fd, ffi::Dwarf_Cmd::DWARF_C_READ))?;
+        Ok(Dwarf::new(dwarf, DwarfKind::File(file)))
     }
 
     /// Create a `Dwarf` from an open file.
@@ -66,9 +70,9 @@ impl<'dw> Dwarf<'dw> {
     /// ```
     #[inline]
     pub fn from_fd<FD: AsRawFd>(fd: &'dw FD) -> Result<Dwarf<'dw>> {
-        let fd = fd.as_raw_fd();
-        let dwarf = ffi!(dwarf_begin(fd, ffi::Dwarf_Cmd::DWARF_C_READ))?;
-        Ok(Dwarf::new(dwarf, true, None))
+        let raw_fd = fd.as_raw_fd();
+        let dwarf = ffi!(dwarf_begin(raw_fd, ffi::Dwarf_Cmd::DWARF_C_READ))?;
+        Ok(Dwarf::new(dwarf, DwarfKind::Fd(fd)))
     }
 
     /// Create a `Dwarf` from an existing `Elf`.
@@ -84,9 +88,9 @@ impl<'dw> Dwarf<'dw> {
     /// ```
     #[inline]
     pub fn from_elf(elf: &'dw libelf::Elf) -> Result<Dwarf<'dw>> {
-        let elf = elf.as_ptr() as *mut _; // FIXME distinct bindgen Elf types
-        let dwarf = ffi!(dwarf_begin_elf(elf, ffi::Dwarf_Cmd::DWARF_C_READ, ptr::null_mut()))?;
-        Ok(Dwarf::new(dwarf, true, None))
+        let ptr = elf.as_ptr() as *mut _; // FIXME distinct bindgen Elf types
+        let dwarf = ffi!(dwarf_begin_elf(ptr, ffi::Dwarf_Cmd::DWARF_C_READ, ptr::null_mut()))?;
+        Ok(Dwarf::new(dwarf, DwarfKind::Elf(elf)))
     }
 
     /// Create a `Dwarf` from a raw FFI pointer.
@@ -99,7 +103,7 @@ impl<'dw> Dwarf<'dw> {
     /// so the caller must ensure it outlives the returned `Dwarf` wrapper.
     #[inline]
     pub unsafe fn from_raw(dwarf: *mut ffi::Dwarf) -> Dwarf<'dw> {
-        Dwarf::new(dwarf, false, None)
+        Dwarf::new(dwarf, DwarfKind::Raw)
     }
 
     #[inline]
@@ -128,10 +132,9 @@ impl<'dw> Dwarf<'dw> {
 impl<'dw> Drop for Dwarf<'dw> {
     #[inline]
     fn drop(&mut self) {
-        if self.owned {
-            unsafe {
-                ffi::dwarf_end(self.inner);
-            }
+        match self.kind {
+            DwarfKind::Raw => (),
+            _ => { raw_ffi!(dwarf_end(self.as_ptr())); },
         }
     }
 }

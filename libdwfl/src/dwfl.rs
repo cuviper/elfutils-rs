@@ -87,9 +87,7 @@ impl Dwfl {
 impl Drop for Dwfl {
     #[inline]
     fn drop(&mut self) {
-        unsafe {
-            ffi::dwfl_end(self.as_ptr());
-        }
+        raw_ffi!(dwfl_end(self.as_ptr()));
     }
 }
 
