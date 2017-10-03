@@ -4,7 +4,7 @@ description = "Bindings to elfutils"
 license = "MIT/Apache-2.0"
 name = "libdw"
 repository = "https://github.com/cuviper/elfutils-rs"
-version = "0.0.2"
+version = "0.0.4"
 include = ["Cargo.toml", "src/**/*.rs"]
 
 [dependencies]
@@ -12,9 +12,9 @@ include = ["Cargo.toml", "src/**/*.rs"]
 [dependencies.libdw-sys]
 optional = false
 path = "../libdw-sys"
-version = "0.0.2"
+version = "0.0.4"
 
 [dependencies.libelf]
 optional = false
 path = "../libelf"
-version = "0.0.2"
+version = "0.0.4"
