@@ -4,9 +4,11 @@
 
 extern crate cpp_demangle;
 extern crate libdw;
+extern crate libdwfl;
 
 use cpp_demangle::Symbol;
-use libdw::{raw, Dwarf, Die};
+use libdw::{raw, Die};
+use libdwfl::Dwfl;
 
 use std::borrow::Cow;
 use std::ffi::{CStr, CString};
@@ -19,12 +21,13 @@ fn main() {
 
 fn try_main() -> Result<(), Box<Error>> {
     for arg in env::args_os().skip(1) {
-        let dw = Dwarf::open(arg)?;
-
-        for cu in dw.compile_units() {
-            let die = cu?.get_die()?;
-            if let Ok(raw::DW_TAG_compile_unit) = die.tag() {
-                die.for_each_func(process_function)?;
+        let dwfl = Dwfl::open(arg)?;
+        for dw in dwfl.dwarfs() {
+            for cu in dw?.compile_units() {
+                let die = cu?.get_die()?;
+                if let Ok(raw::DW_TAG_compile_unit) = die.tag() {
+                    die.for_each_func(process_function)?;
+                }
             }
         }
     }

@@ -13,3 +13,8 @@ include = ["Cargo.toml", "src/**/*.rs"]
 optional = false
 path = "../libdw-sys"
 version = "0.0.2"
+
+[dependencies.libdw]
+optional = false
+path = "../libdw"
+version = "0.0.2"
