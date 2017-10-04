@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Die` struct in crate `libdw`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Die">
+
+    <title>libdw::Die - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'>Struct Die</p><div class="block items"><ul><li><a href="#methods">Methods</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='index.html'>libdw</a></p><script>window.sidebarCurrent = {name: 'Die', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>libdw</a>::<wbr><a class="struct" href=''>Die</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/libdw/die.rs.html#18-21' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Die&lt;'dw&gt; { /* fields omitted */ }</pre><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'dw&gt; <a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libdw/die.rs.html#46-381' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from_offset' class="method"><span id='from_offset.v' class='invisible'><code>fn <a href='#method.from_offset' class='fnname'>from_offset</a>(dwarf: &amp;'dw <a class="struct" href="../libdw/struct.Dwarf.html" title="struct libdw::Dwarf">Dwarf</a>, offset: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;&gt;</code></span></h4>
+<h4 id='method.from_type_offset' class="method"><span id='from_type_offset.v' class='invisible'><code>fn <a href='#method.from_type_offset' class='fnname'>from_type_offset</a>(dwarf: &amp;'dw <a class="struct" href="../libdw/struct.Dwarf.html" title="struct libdw::Dwarf">Dwarf</a>, offset: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;&gt;</code></span></h4>
+<h4 id='method.from_address' class="method"><span id='from_address.v' class='invisible'><code>fn <a href='#method.from_address' class='fnname'>from_address</a>(dwarf: &amp;'dw <a class="struct" href="../libdw/struct.Dwarf.html" title="struct libdw::Dwarf">Dwarf</a>, address: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;&gt;</code></span></h4>
+<h4 id='method.tag' class="method"><span id='tag.v' class='invisible'><code>fn <a href='#method.tag' class='fnname'>tag</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</code></span></h4>
+<h4 id='method.name' class="method"><span id='name.v' class='invisible'><code>fn <a href='#method.name' class='fnname'>name</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;&amp;'dw <a class="struct" href="https://doc.rust-lang.org/nightly/std/ffi/c_str/struct.CStr.html" title="struct std::ffi::c_str::CStr">CStr</a>&gt;</code></span></h4>
+<h4 id='method.decl_file' class="method"><span id='decl_file.v' class='invisible'><code>fn <a href='#method.decl_file' class='fnname'>decl_file</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;&amp;'dw <a class="struct" href="https://doc.rust-lang.org/nightly/std/ffi/c_str/struct.CStr.html" title="struct std::ffi::c_str::CStr">CStr</a>&gt;</code></span></h4>
+<h4 id='method.decl_line' class="method"><span id='decl_line.v' class='invisible'><code>fn <a href='#method.decl_line' class='fnname'>decl_line</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</code></span></h4>
+<h4 id='method.decl_column' class="method"><span id='decl_column.v' class='invisible'><code>fn <a href='#method.decl_column' class='fnname'>decl_column</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</code></span></h4>
+<h4 id='method.high_pc' class="method"><span id='high_pc.v' class='invisible'><code>fn <a href='#method.high_pc' class='fnname'>high_pc</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt;</code></span></h4>
+<h4 id='method.low_pc' class="method"><span id='low_pc.v' class='invisible'><code>fn <a href='#method.low_pc' class='fnname'>low_pc</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt;</code></span></h4>
+<h4 id='method.entry_pc' class="method"><span id='entry_pc.v' class='invisible'><code>fn <a href='#method.entry_pc' class='fnname'>entry_pc</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>&gt;</code></span></h4>
+<h4 id='method.has_pc' class="method"><span id='has_pc.v' class='invisible'><code>fn <a href='#method.has_pc' class='fnname'>has_pc</a>(&amp;self, pc: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u64.html">u64</a>) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>&gt;</code></span></h4>
+<h4 id='method.ranges' class="method"><span id='ranges.v' class='invisible'><code>fn <a href='#method.ranges' class='fnname'>ranges</a>(&amp;self) -&gt; DieRanges&lt;'dw&gt;</code></span></h4>
+<h4 id='method.byte_size' class="method"><span id='byte_size.v' class='invisible'><code>fn <a href='#method.byte_size' class='fnname'>byte_size</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</code></span></h4>
+<h4 id='method.bit_size' class="method"><span id='bit_size.v' class='invisible'><code>fn <a href='#method.bit_size' class='fnname'>bit_size</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</code></span></h4>
+<h4 id='method.bit_offset' class="method"><span id='bit_offset.v' class='invisible'><code>fn <a href='#method.bit_offset' class='fnname'>bit_offset</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</code></span></h4>
+<h4 id='method.array_order' class="method"><span id='array_order.v' class='invisible'><code>fn <a href='#method.array_order' class='fnname'>array_order</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</code></span></h4>
+<h4 id='method.source_language' class="method"><span id='source_language.v' class='invisible'><code>fn <a href='#method.source_language' class='fnname'>source_language</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</code></span></h4>
+<h4 id='method.unit' class="method"><span id='unit.v' class='invisible'><code>fn <a href='#method.unit' class='fnname'>unit</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;&gt;</code></span></h4>
+<h4 id='method.offset' class="method"><span id='offset.v' class='invisible'><code>fn <a href='#method.offset' class='fnname'>offset</a>(&amp;self) -&gt; <a class="type" href="../libdw_sys/bindgen/type.Dwarf_Off.html" title="type libdw_sys::bindgen::Dwarf_Off">Dwarf_Off</a></code></span></h4>
+<h4 id='method.unit_offset' class="method"><span id='unit_offset.v' class='invisible'><code>fn <a href='#method.unit_offset' class='fnname'>unit_offset</a>(&amp;self) -&gt; <a class="type" href="../libdw_sys/bindgen/type.Dwarf_Off.html" title="type libdw_sys::bindgen::Dwarf_Off">Dwarf_Off</a></code></span></h4>
+<h4 id='method.child' class="method"><span id='child.v' class='invisible'><code>fn <a href='#method.child' class='fnname'>child</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;&gt;&gt;</code></span></h4>
+<h4 id='method.siblingof' class="method"><span id='siblingof.v' class='invisible'><code>fn <a href='#method.siblingof' class='fnname'>siblingof</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;&gt;&gt;</code></span></h4>
+<h4 id='method.has_children' class="method"><span id='has_children.v' class='invisible'><code>fn <a href='#method.has_children' class='fnname'>has_children</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>&gt;</code></span></h4>
+<h4 id='method.iter_children' class="method"><span id='iter_children.v' class='invisible'><code>fn <a href='#method.iter_children' class='fnname'>iter_children</a>(&amp;self) -&gt; <a class="struct" href="../libdw/struct.DieChildren.html" title="struct libdw::DieChildren">DieChildren</a>&lt;'dw&gt;</code></span></h4>
+<h4 id='method.for_each_child' class="method"><span id='for_each_child.v' class='invisible'><code>fn <a href='#method.for_each_child' class='fnname'>for_each_child</a>&lt;F&gt;(&amp;self, f: F) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut">FnMut</a>(&amp;<a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>&gt;,&nbsp;</span></code></span></h4>
+<h4 id='method.has_attr' class="method"><span id='has_attr.v' class='invisible'><code>fn <a href='#method.has_attr' class='fnname'>has_attr</a>(&amp;self, name: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>&gt;</code></span></h4>
+<h4 id='method.has_attr_integrate' class="method"><span id='has_attr_integrate.v' class='invisible'><code>fn <a href='#method.has_attr_integrate' class='fnname'>has_attr_integrate</a>(&amp;self, name: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>&gt;</code></span></h4>
+<h4 id='method.attr' class="method"><span id='attr.v' class='invisible'><code>fn <a href='#method.attr' class='fnname'>attr</a>(&amp;self, name: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="struct" href="../libdw/struct.Attribute.html" title="struct libdw::Attribute">Attribute</a>&lt;'dw&gt;&gt;</code></span></h4>
+<h4 id='method.attr_integrate' class="method"><span id='attr_integrate.v' class='invisible'><code>fn <a href='#method.attr_integrate' class='fnname'>attr_integrate</a>(&amp;self, name: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="struct" href="../libdw/struct.Attribute.html" title="struct libdw::Attribute">Attribute</a>&lt;'dw&gt;&gt;</code></span></h4>
+<h4 id='method.attr_count' class="method"><span id='attr_count.v' class='invisible'><code>fn <a href='#method.attr_count' class='fnname'>attr_count</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>&gt;</code></span></h4>
+<h4 id='method.attrs' class="method"><span id='attrs.v' class='invisible'><code>fn <a href='#method.attrs' class='fnname'>attrs</a>(&amp;self) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="struct" href="../libdw/struct.Attribute.html" title="struct libdw::Attribute">Attribute</a>&lt;'dw&gt;&gt;&gt;</code></span></h4>
+<h4 id='method.for_each_attr' class="method"><span id='for_each_attr.v' class='invisible'><code>fn <a href='#method.for_each_attr' class='fnname'>for_each_attr</a>&lt;F&gt;(&amp;self, f: F) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut">FnMut</a>(&amp;<a class="struct" href="../libdw/struct.Attribute.html" title="struct libdw::Attribute">Attribute</a>&lt;'dw&gt;) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>&gt;,&nbsp;</span></code></span></h4>
+<h4 id='method.for_each_attr_unchecked' class="method"><span id='for_each_attr_unchecked.v' class='invisible'><code>unsafe fn <a href='#method.for_each_attr_unchecked' class='fnname'>for_each_attr_unchecked</a>&lt;F&gt;(&amp;self, f: F) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut">FnMut</a>(&amp;<a class="struct" href="../libdw/struct.Attribute.html" title="struct libdw::Attribute">Attribute</a>&lt;'dw&gt;) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>&gt;,&nbsp;</span></code></span></h4>
+<h4 id='method.for_each_func' class="method"><span id='for_each_func.v' class='invisible'><code>fn <a href='#method.for_each_func' class='fnname'>for_each_func</a>&lt;F&gt;(&amp;self, f: F) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut">FnMut</a>(&amp;<a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>&gt;,&nbsp;</span></code></span></h4>
+<h4 id='method.for_each_func_unchecked' class="method"><span id='for_each_func_unchecked.v' class='invisible'><code>unsafe fn <a href='#method.for_each_func_unchecked' class='fnname'>for_each_func_unchecked</a>&lt;F&gt;(&amp;self, f: F) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnMut.html" title="trait core::ops::function::FnMut">FnMut</a>(&amp;<a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;) -&gt; <a class="type" href="../libdw/type.Result.html" title="type libdw::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>&gt;,&nbsp;</span></code></span></h4>
+<h4 id='method.as_ptr' class="method"><span id='as_ptr.v' class='invisible'><code>fn <a href='#method.as_ptr' class='fnname'>as_ptr</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="struct" href="../libdw_sys/bindgen/struct.Dwarf_Die.html" title="struct libdw_sys::bindgen::Dwarf_Die">Dwarf_Die</a></code></span></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl&lt;'dw&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html" title="trait core::default::Default">Default</a> for <a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libdw/die.rs.html#23-36' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.default' class="method"><span id='default.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default' class='fnname'>default</a>() -&gt; Self</code></span></h4>
+<div class='docblock'><p>Returns the &quot;default value&quot; for a type. <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html#tymethod.default">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'dw&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libdw/die.rs.html#38-44' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class="method"><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, fmt: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl&lt;'dw&gt; <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="struct" href="../libdw/struct.Die.html" title="struct libdw::Die">Die</a>&lt;'dw&gt;</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libdw/die.rs.html#383-393' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; Self</code></span></h4>
+<div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+<div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "libdw";
+    </script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
