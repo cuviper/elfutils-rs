@@ -88,7 +88,7 @@ impl<'dw> Dwarf<'dw> {
     /// ```
     #[inline]
     pub fn from_elf(elf: &'dw libelf::Elf) -> Result<Dwarf<'dw>> {
-        let ptr = elf.as_ptr() as *mut _; // FIXME distinct bindgen Elf types
+        let ptr = elf.as_ptr();
         let dwarf = ffi!(dwarf_begin_elf(ptr, ffi::Dwarf_Cmd::DWARF_C_READ, ptr::null_mut()))?;
         Ok(Dwarf::new(dwarf, DwarfKind::Elf(elf)))
     }
@@ -109,7 +109,6 @@ impl<'dw> Dwarf<'dw> {
     #[inline]
     pub fn get_elf(&'dw self) -> libelf::Elf<'dw> {
         let elf = raw_ffi!(dwarf_getelf(self.as_ptr()));
-        let elf = elf as *mut _; // FIXME distinct bindgen Elf types
         unsafe { libelf::Elf::from_raw(elf) }
     }
 

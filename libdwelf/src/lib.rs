@@ -10,8 +10,7 @@ use std::slice;
 pub fn gnu_debuglink<'elf>(elf: &'elf libelf::Elf) -> libelf::Result<Option<(&'elf CStr, u32)>> {
     let mut crc = 0;
     let namep = unsafe {
-        let elf = elf.as_ptr() as *mut _; // FIXME distinct bindgen Elf types
-        ffi::dwelf_elf_gnu_debuglink(elf, &mut crc)
+        ffi::dwelf_elf_gnu_debuglink(elf.as_ptr(), &mut crc)
     };
     if namep.is_null() {
         match libelf::Error::check() {
