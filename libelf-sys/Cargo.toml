@@ -11,7 +11,10 @@ license = "MIT/Apache-2.0"
 links = "elf"
 name = "libelf-sys"
 repository = "https://github.com/cuviper/elfutils-rs"
-version = "0.0.4"
+version = "0.0.5"
+
+[package.metadata.docs.rs]
+dependencies = [ "libelf-dev" ]
 
 [build-dependencies]
 pkg-config = "0.3.8"
