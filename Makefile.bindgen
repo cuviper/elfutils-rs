@@ -5,8 +5,13 @@ CPPFLAGS = -Ielfutils/libelf \
 	   -Ielfutils/libdwfl \
 	   -Ielfutils/libdwelf
 
-LIBELF = libelf-sys/src/lib.rs
-LIBDW = libdw-sys/src/lib.rs
+LIBELF32 = libelf-sys/src/lib32.rs
+LIBELF64 = libelf-sys/src/lib64.rs
+LIBELF = $(LIBELF32) $(LIBELF64)
+
+LIBDW32 = libdw-sys/src/lib32.rs
+LIBDW64 = libdw-sys/src/lib64.rs
+LIBDW = $(LIBDW32) $(LIBDW64)
 
 all: $(LIBELF) $(LIBDW)
 
@@ -19,6 +24,8 @@ LIBELF_DEPS = elfutils/libelf/libelf.h \
 	      elfutils/libelf/gelf.h \
 	      elfutils/libelf/elf.h
 
+$(LIBELF32): CPPFLAGS+=-m32
+$(LIBELF64): CPPFLAGS+=-m64
 $(LIBELF): $(LIBELF_H) $(LIBELF_DEPS)
 	$(BG) $(BGFLAGS) $< \
 	    --no-recursive-whitelist \
@@ -41,7 +48,6 @@ $(LIBELF): $(LIBELF_H) $(LIBELF_DEPS)
 	    --whitelist-var 'VER_.*' \
 	    --raw-line '#![allow(bad_style)]' \
 	    --ctypes-prefix=::libc \
-	    --raw-line 'extern crate libc;' \
 	    --raw-line 'use libc::{time_t, uid_t, gid_t, mode_t};' \
 	    --output $@ -- $(CPPFLAGS)
 
@@ -52,6 +58,8 @@ LIBDW_DEPS = elfutils/libdw/libdw.h \
 	     elfutils/libdw/dwarf.h \
 	     $(LIBELF_DEPS)
 
+$(LIBDW32): CPPFLAGS+=-m32
+$(LIBDW64): CPPFLAGS+=-m64
 $(LIBDW): $(LIBDW_H) $(LIBDW_DEPS)
 	$(BG) $(BGFLAGS) $< \
 	    --no-recursive-whitelist \
@@ -63,8 +71,6 @@ $(LIBDW): $(LIBDW_H) $(LIBDW_DEPS)
 	    --constified-enum '(DW|DWARF)_.*' \
 	    --raw-line '#![allow(bad_style)]' \
 	    --ctypes-prefix=::libc \
-	    --raw-line 'extern crate libc;' \
-	    --raw-line 'extern crate libelf_sys;' \
 	    --raw-line 'use libc::{FILE, pid_t};' \
 	    --raw-line 'use libelf_sys::*;' \
 	    --output $@ -- $(CPPFLAGS)
