@@ -1,8 +1,8 @@
 use ffi;
+use libc;
 use std::error;
 use std::fmt;
 use std::io;
-use std::os::raw;
 use std::result;
 use std::ffi::CStr;
 
@@ -28,7 +28,7 @@ pub(crate) trait IntoResult: Sized {
     fn into_result(self) -> Result<Self>;
 }
 
-impl IntoResult for raw::c_int {
+impl IntoResult for libc::c_int {
     #[inline]
     fn into_result(self) -> Result<Self> {
         if self < 0 {
@@ -81,7 +81,7 @@ pub struct Error {
 
 #[derive(Debug)]
 enum ErrorKind {
-    Dwfl(raw::c_int),
+    Dwfl(libc::c_int),
     Io(io::Error),
 }
 
@@ -114,7 +114,7 @@ impl Error {
 }
 
 #[inline]
-fn errmsg(errno: raw::c_int) -> &'static CStr {
+fn errmsg(errno: libc::c_int) -> &'static CStr {
     // Normalize 0 to -1, which behaves the same except it always returns a legal string
     let errno = match errno { 0 => -1, e => e };
     let msg = raw_ffi!(dwfl_errmsg(errno));

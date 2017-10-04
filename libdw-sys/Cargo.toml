@@ -1,18 +1,23 @@
 [package]
 authors = ["Josh Stone <jistone@redhat.com>"]
-links = "dw"
 build = "build.rs"
 description = "Bindings to elfutils"
+include = [
+    "Cargo.toml",
+    "build.rs",
+    "src/**/*.rs",
+]
 license = "MIT/Apache-2.0"
+links = "dw"
 name = "libdw-sys"
 repository = "https://github.com/cuviper/elfutils-rs"
 version = "0.0.4"
-include = ["Cargo.toml", "build.rs", "src/**/*.rs"]
 
 [build-dependencies]
 pkg-config = "0.3.8"
 
 [dependencies]
+libc = "0.2"
 
 [dependencies.libelf-sys]
 optional = false

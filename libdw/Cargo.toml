@@ -1,13 +1,17 @@
 [package]
 authors = ["Josh Stone <jistone@redhat.com>"]
 description = "Bindings to elfutils"
+include = [
+    "Cargo.toml",
+    "src/**/*.rs",
+]
 license = "MIT/Apache-2.0"
 name = "libdw"
 repository = "https://github.com/cuviper/elfutils-rs"
 version = "0.0.4"
-include = ["Cargo.toml", "src/**/*.rs"]
 
 [dependencies]
+libc = "0.2"
 
 [dependencies.libdw-sys]
 optional = false

@@ -1,12 +1,12 @@
 use ffi;
 
+use libc;
 use std::any::Any;
 use std::cell::UnsafeCell;
 use std::ffi::CStr;
 use std::fmt;
 use std::marker::PhantomData;
 use std::ops::Range;
-use std::os::raw;
 use std::panic;
 use std::ptr;
 
@@ -84,7 +84,7 @@ impl<'dw> Die<'dw> {
 
     #[inline]
     pub fn tag(&self) -> Result<u32> {
-        let invalid = ffi::DW_TAG_invalid as raw::c_int;
+        let invalid = ffi::DW_TAG_invalid as libc::c_int;
         let tag = ffi_check!(dwarf_tag(self.as_ptr()) != invalid)?;
         Ok(tag as u32)
     }
@@ -318,18 +318,18 @@ impl<'dw> Die<'dw> {
     }
 
     unsafe fn getattrs<F>(&self, mut f: F) -> Result<isize>
-        where F: FnMut(&Attribute<'dw>) -> raw::c_uint
+        where F: FnMut(&Attribute<'dw>) -> libc::c_uint
     {
-        let argp = &mut f as *mut F as *mut raw::c_void;
+        let argp = &mut f as *mut F as *mut libc::c_void;
         return ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<'dw, F>), argp, 0));
 
         unsafe extern "C" fn callback<'a, F>(attr: *mut ffi::Dwarf_Attribute,
-                                             argp: *mut raw::c_void)
-                                         -> raw::c_int
-            where F: FnMut(&Attribute<'a>) -> raw::c_uint
+                                             argp: *mut libc::c_void)
+                                         -> libc::c_int
+            where F: FnMut(&Attribute<'a>) -> libc::c_uint
         {
             let f = &mut *(argp as *mut F);
-            f(Attribute::from_ptr(attr)) as raw::c_int
+            f(Attribute::from_ptr(attr)) as libc::c_int
         }
     }
 
@@ -359,18 +359,18 @@ impl<'dw> Die<'dw> {
     }
 
     unsafe fn getfuncs<F>(&self, mut f: F) -> Result<isize>
-        where F: FnMut(&Die<'dw>) -> raw::c_uint
+        where F: FnMut(&Die<'dw>) -> libc::c_uint
     {
-        let argp = &mut f as *mut F as *mut raw::c_void;
+        let argp = &mut f as *mut F as *mut libc::c_void;
         return ffi!(dwarf_getfuncs(self.as_ptr(), Some(callback::<'dw, F>), argp, 0));
 
         unsafe extern "C" fn callback<'a, F>(func: *mut ffi::Dwarf_Die,
-                                             argp: *mut raw::c_void)
-                                             -> raw::c_int
-            where F: FnMut(&Die<'a>) -> raw::c_uint
+                                             argp: *mut libc::c_void)
+                                             -> libc::c_int
+            where F: FnMut(&Die<'a>) -> libc::c_uint
         {
             let f = &mut *(argp as *mut F);
-            f(Die::from_ptr(func)) as raw::c_int
+            f(Die::from_ptr(func)) as libc::c_int
         }
     }
 
@@ -470,7 +470,7 @@ impl<'dw> Iterator for DieRanges<'dw> {
 
 
 #[inline]
-fn dwarf_cb_map<T>(cont: Result<bool>, result: &mut Result<T>) -> raw::c_uint {
+fn dwarf_cb_map<T>(cont: Result<bool>, result: &mut Result<T>) -> libc::c_uint {
     match cont {
         Ok(true) => ffi::DWARF_CB_OK,
         Ok(false) => ffi::DWARF_CB_ABORT,
@@ -494,8 +494,8 @@ impl CallbackGuard {
         }
     }
 
-    fn call<F>(&mut self, f: F) -> raw::c_uint
-        where F: FnMut() -> raw::c_uint
+    fn call<F>(&mut self, f: F) -> libc::c_uint
+        where F: FnMut() -> libc::c_uint
     {
         if self.payload.is_some() {
             // We already panicked!

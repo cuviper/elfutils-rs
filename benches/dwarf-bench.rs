@@ -3,12 +3,12 @@
 
 #![feature(test)]
 
+extern crate libc;
 extern crate libdw;
 extern crate libdw_sys;
 extern crate test;
 
 use std::env;
-use std::fs;
 use std::path;
 
 use libdw::{Result, Dwarf, Die};
@@ -152,11 +152,11 @@ fn info_nest_unchecked(b: &mut test::Bencher) {
 
 
 mod orig {
+    use libc;
     use libdw_sys as libdw;
     use std;
     use test;
 
-    use std::os::raw;
     use std::os::unix::io::AsRawFd;
 
     use super::test_path;
@@ -164,7 +164,7 @@ mod orig {
     #[bench]
     fn info_elfutils(b: &mut test::Bencher) {
         b.iter(|| {
-            let null = std::ptr::null_mut::<raw::c_void>();
+            let null = std::ptr::null_mut::<libc::c_void>();
             let file = std::fs::File::open(test_path()).unwrap();
             let fd = file.as_raw_fd();
             let dwarf = unsafe {
@@ -253,7 +253,7 @@ mod orig {
         });
     }
 
-    unsafe extern "C" fn info_elfutils_attr(_: *mut libdw::Dwarf_Attribute, _: *mut raw::c_void) -> i32{
+    unsafe extern "C" fn info_elfutils_attr(_: *mut libdw::Dwarf_Attribute, _: *mut libc::c_void) -> i32{
         0
     }
 }

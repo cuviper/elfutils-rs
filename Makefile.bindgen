@@ -54,15 +54,19 @@ LIBDW_DEPS = elfutils/libdw/libdw.h \
 
 $(LIBDW): $(LIBDW_H) $(LIBDW_DEPS)
 	$(BG) $(BGFLAGS) $< \
+	    --no-recursive-whitelist \
 	    --whitelist-function '(dwarf|dwfl|dwelf)_.*' \
 	    --whitelist-type 'Dwarf|Dwarf_.*' \
+	    --whitelist-type 'Dwfl|Dwfl_.*|argp' \
+	    --whitelist-type 'Dwelf_.*' \
 	    --whitelist-var '(DW|DWARF)_.*' \
 	    --constified-enum '(DW|DWARF)_.*' \
-	    --opaque-type FILE \
-	    --raw-line '#![allow(improper_ctypes)]' \
-	    --raw-line '#![allow(non_camel_case_types)]' \
-	    --raw-line '#![allow(non_snake_case)]' \
-	    --raw-line '#![allow(non_upper_case_globals)]' \
+	    --raw-line '#![allow(bad_style)]' \
+	    --ctypes-prefix=::libc \
+	    --raw-line 'extern crate libc;' \
+	    --raw-line 'extern crate libelf_sys;' \
+	    --raw-line 'use libc::{FILE, pid_t};' \
+	    --raw-line 'use libelf_sys::*;' \
 	    --output $@ -- $(CPPFLAGS)
 
 

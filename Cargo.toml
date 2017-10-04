@@ -37,6 +37,7 @@ version = "0.0.4"
 
 [dev-dependencies]
 cpp_demangle = "0.2.5"
+libc = "0.2"
 
 [workspace]
 members = [

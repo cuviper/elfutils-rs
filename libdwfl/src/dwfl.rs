@@ -1,7 +1,7 @@
 use ffi;
 
+use libc;
 use std::ffi::CString;
-use std::os::raw;
 use std::os::unix::ffi::OsStrExt;
 use std::path::Path;
 use std::ptr;
@@ -57,23 +57,23 @@ impl Dwfl {
     }
 
     unsafe fn getdwarf<'dwfl, F>(&'dwfl self, offset: isize, mut f: F) -> Result<isize>
-        where F: FnMut(Dwarf<'dwfl>) -> raw::c_uint
+        where F: FnMut(Dwarf<'dwfl>) -> libc::c_uint
     {
-        let argp = &mut f as *mut F as *mut raw::c_void;
+        let argp = &mut f as *mut F as *mut libc::c_void;
         return ffi!(dwfl_getdwarf(self.as_ptr(), Some(callback::<'dwfl, F>), argp, offset));
 
         unsafe extern "C" fn callback<'dwfl, F>(_module: *mut ffi::Dwfl_Module,
-                                                _userdata: *mut *mut raw::c_void,
-                                                _name: *const raw::c_char,
+                                                _userdata: *mut *mut libc::c_void,
+                                                _name: *const libc::c_char,
                                                 _start: u64,
                                                 dwarf: *mut ffi::Dwarf,
                                                 _bias: u64,
-                                                argp: *mut raw::c_void)
-                                                -> raw::c_int
-            where F: FnMut(Dwarf<'dwfl>) -> raw::c_uint
+                                                argp: *mut libc::c_void)
+                                                -> libc::c_int
+            where F: FnMut(Dwarf<'dwfl>) -> libc::c_uint
         {
             let f = &mut *(argp as *mut F);
-            f(Dwarf::from_raw(dwarf)) as raw::c_int
+            f(Dwarf::from_raw(dwarf)) as libc::c_int
         }
     }
 
