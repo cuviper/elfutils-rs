@@ -1,3 +1,4 @@
+extern crate libc;
 extern crate libelf_sys as ffi;
 
 pub mod raw {

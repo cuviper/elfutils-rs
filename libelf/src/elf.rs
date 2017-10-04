@@ -1,8 +1,8 @@
 use ffi;
 
+use libc;
 use std::fmt;
 use std::fs;
-use std::os::raw;
 use std::path::Path;
 use std::ptr;
 
@@ -99,7 +99,7 @@ impl<'elf> Elf<'elf> {
     #[inline]
     pub fn from_bytes(bytes: &'elf [u8]) -> Result<Elf<'elf>> {
         // NB: `Elf` must not expose write interfaces!
-        let ptr = bytes.as_ptr() as *mut raw::c_char;
+        let ptr = bytes.as_ptr() as *mut libc::c_char;
         let elf = ffi!(elf_memory(ptr, bytes.len()))?;
         Ok(Elf::new(elf, ElfKind::Bytes(bytes)))
     }

@@ -21,6 +21,7 @@ LIBELF_DEPS = elfutils/libelf/libelf.h \
 
 $(LIBELF): $(LIBELF_H) $(LIBELF_DEPS)
 	$(BG) $(BGFLAGS) $< \
+	    --no-recursive-whitelist \
 	    --whitelist-function '(elf|elf32|elf64|gelf)_.*' \
 	    --whitelist-type 'Elf|(Elf|Elf32|Elf64|GElf)_.*' \
 	    --whitelist-var 'ELF.*' \
@@ -38,10 +39,10 @@ $(LIBELF): $(LIBELF_H) $(LIBELF_DEPS)
 	    --whitelist-var '(STB|STN|STO|STT|STV)_.*' \
 	    --whitelist-var 'SYMINFO_.*' \
 	    --whitelist-var 'VER_.*' \
-	    --raw-line '#![allow(improper_ctypes)]' \
-	    --raw-line '#![allow(non_camel_case_types)]' \
-	    --raw-line '#![allow(non_snake_case)]' \
-	    --raw-line '#![allow(non_upper_case_globals)]' \
+	    --raw-line '#![allow(bad_style)]' \
+	    --ctypes-prefix=::libc \
+	    --raw-line 'extern crate libc;' \
+	    --raw-line 'use libc::{time_t, uid_t, gid_t, mode_t};' \
 	    --output $@ -- $(CPPFLAGS)
 
 LIBDW_H = libdw-sys/src/lib.h
