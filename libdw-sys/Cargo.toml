@@ -11,7 +11,10 @@ license = "MIT/Apache-2.0"
 links = "dw"
 name = "libdw-sys"
 repository = "https://github.com/cuviper/elfutils-rs"
-version = "0.0.4"
+version = "0.0.5"
+
+[package.metadata.docs.rs]
+dependencies = [ "libdw-dev" ]
 
 [build-dependencies]
 pkg-config = "0.3.8"
@@ -22,4 +25,4 @@ libc = "0.2"
 [dependencies.libelf-sys]
 optional = false
 path = "../libelf-sys"
-version = "0.0.4"
+version = "0.0.5"
