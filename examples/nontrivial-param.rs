@@ -89,7 +89,13 @@ fn function_name<'dw>(function: &'dw Die<'_>) -> Cow<'dw, CStr> {
 }
 
 fn demangle(name: &CStr) -> Option<CString> {
-    Symbol::new(name.to_bytes()).ok()
-        .and_then(|symbol| symbol.demangle(&Default::default()).ok())
-        .and_then(|demangled| CString::new(demangled).ok())
+    if let Ok(s) = name.to_str() {
+        if let Ok(demangled) = rustc_demangle::try_demangle(s) {
+            return CString::new(demangled.to_string()).ok();
+        }
+    }
+    if let Ok(demangled) = Symbol::new(name.to_bytes()) {
+        return CString::new(demangled.to_string()).ok();
+    }
+    None
 }

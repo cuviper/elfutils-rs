@@ -42,6 +42,7 @@ version = "0.0.5"
 [dev-dependencies]
 cpp_demangle = "0.2.5"
 libc = "0.2"
+rustc-demangle = "0.1.15"
 
 [workspace]
 members = [
