@@ -1,10 +1,9 @@
 use crate::ffi;
 use std::error;
+use std::ffi::CStr;
 use std::fmt;
 use std::io;
 use std::result;
-use std::ffi::CStr;
-
 
 macro_rules! raw_ffi {
     ($func:ident ($($arg:expr),*)) => ({
@@ -19,7 +18,6 @@ macro_rules! ffi {
         crate::error::IntoResult::into_result(result)
     })
 }
-
 
 pub type Result<T> = result::Result<T, Error>;
 
@@ -60,7 +58,6 @@ impl<T> IntoResult for *const T {
     }
 }
 
-
 impl<T> IntoResult for *mut T {
     #[inline]
     fn into_result(self) -> Result<Self> {
@@ -71,7 +68,6 @@ impl<T> IntoResult for *mut T {
         }
     }
 }
-
 
 #[derive(Debug)]
 pub struct Error {
@@ -115,7 +111,10 @@ impl Error {
 #[inline]
 fn errmsg(errno: libc::c_int) -> &'static CStr {
     // Normalize 0 to -1, which behaves the same except it always returns a legal string
-    let errno = match errno { 0 => -1, e => e };
+    let errno = match errno {
+        0 => -1,
+        e => e,
+    };
     let msg = raw_ffi!(elf_errmsg(errno));
     unsafe { CStr::from_ptr(msg) }
 }
@@ -140,7 +139,7 @@ impl fmt::Display for Error {
                     Ok(s) => fmt::Display::fmt(s, f),
                     Err(_) => fmt::Debug::fmt(msg, f),
                 }
-            },
+            }
             ErrorKind::Io(ref error) => fmt::Display::fmt(&error, f),
         }
     }

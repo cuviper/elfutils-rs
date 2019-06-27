@@ -9,10 +9,9 @@ use std::ops::Range;
 use std::panic;
 use std::ptr;
 
-use super::Result;
-use super::Dwarf;
 use super::Attribute;
-
+use super::Dwarf;
+use super::Result;
 
 pub struct Die<'dw> {
     inner: UnsafeCell<ffi::Dwarf_Die>,
@@ -28,7 +27,8 @@ impl<'dw> Default for Die<'dw> {
                 cu: ptr::null_mut(),
                 abbrev: ptr::null_mut(),
                 padding__: 0,
-            }.into(),
+            }
+            .into(),
             phantom: PhantomData,
         }
     }
@@ -183,7 +183,12 @@ impl<'dw> Die<'dw> {
     #[inline]
     pub fn unit(&self) -> Result<Die<'dw>> {
         let die = Die::default();
-        ffi!(dwarf_diecu(self.as_ptr(), die.as_ptr(), ptr::null_mut(), ptr::null_mut()))?;
+        ffi!(dwarf_diecu(
+            self.as_ptr(),
+            die.as_ptr(),
+            ptr::null_mut(),
+            ptr::null_mut()
+        ))?;
         Ok(die)
     }
 
@@ -235,7 +240,8 @@ impl<'dw> Die<'dw> {
     }
 
     pub fn for_each_child<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&Die<'dw>) -> Result<bool>
+    where
+        F: FnMut(&Die<'dw>) -> Result<bool>,
     {
         let child = Die::default();
 
@@ -286,28 +292,31 @@ impl<'dw> Die<'dw> {
     pub fn attrs(&self) -> Result<Vec<Attribute<'dw>>> {
         let mut v = Vec::with_capacity(self.attr_count()?);
         unsafe {
-            self.getattrs(|a| { v.push(a.clone()); ffi::DWARF_CB_OK })?;
+            self.getattrs(|a| {
+                v.push(a.clone());
+                ffi::DWARF_CB_OK
+            })?;
         }
         Ok(v)
     }
 
     pub fn for_each_attr<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&Attribute<'dw>) -> Result<bool>
+    where
+        F: FnMut(&Attribute<'dw>) -> Result<bool>,
     {
         let mut guard = CallbackGuard::new();
         let mut result = Ok(());
 
         unsafe {
-            self.getattrs(|attr| {
-                guard.call(|| dwarf_cb_map(f(attr), &mut result))
-            })?;
+            self.getattrs(|attr| guard.call(|| dwarf_cb_map(f(attr), &mut result)))?;
         }
 
         result
     }
 
     pub unsafe fn for_each_attr_unchecked<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&Attribute<'dw>) -> Result<bool>
+    where
+        F: FnMut(&Attribute<'dw>) -> Result<bool>,
     {
         let mut result = Ok(());
 
@@ -317,15 +326,23 @@ impl<'dw> Die<'dw> {
     }
 
     unsafe fn getattrs<F>(&self, mut f: F) -> Result<isize>
-        where F: FnMut(&Attribute<'dw>) -> libc::c_uint
+    where
+        F: FnMut(&Attribute<'dw>) -> libc::c_uint,
     {
         let argp = &mut f as *mut F as *mut libc::c_void;
-        return ffi!(dwarf_getattrs(self.as_ptr(), Some(callback::<'dw, F>), argp, 0));
+        return ffi!(dwarf_getattrs(
+            self.as_ptr(),
+            Some(callback::<'dw, F>),
+            argp,
+            0
+        ));
 
-        unsafe extern "C" fn callback<'a, F>(attr: *mut ffi::Dwarf_Attribute,
-                                             argp: *mut libc::c_void)
-                                         -> libc::c_int
-            where F: FnMut(&Attribute<'a>) -> libc::c_uint
+        unsafe extern "C" fn callback<'a, F>(
+            attr: *mut ffi::Dwarf_Attribute,
+            argp: *mut libc::c_void,
+        ) -> libc::c_int
+        where
+            F: FnMut(&Attribute<'a>) -> libc::c_uint,
         {
             let f = &mut *(argp as *mut F);
             f(Attribute::from_ptr(attr)) as libc::c_int
@@ -333,22 +350,22 @@ impl<'dw> Die<'dw> {
     }
 
     pub fn for_each_func<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&Die<'dw>) -> Result<bool>
+    where
+        F: FnMut(&Die<'dw>) -> Result<bool>,
     {
         let mut guard = CallbackGuard::new();
         let mut result = Ok(());
 
         unsafe {
-            self.getfuncs(|func| {
-                guard.call(|| dwarf_cb_map(f(func), &mut result))
-            })?;
+            self.getfuncs(|func| guard.call(|| dwarf_cb_map(f(func), &mut result)))?;
         }
 
         result
     }
 
     pub unsafe fn for_each_func_unchecked<F>(&self, mut f: F) -> Result<()>
-        where F: FnMut(&Die<'dw>) -> Result<bool>
+    where
+        F: FnMut(&Die<'dw>) -> Result<bool>,
     {
         let mut result = Ok(());
 
@@ -358,15 +375,23 @@ impl<'dw> Die<'dw> {
     }
 
     unsafe fn getfuncs<F>(&self, mut f: F) -> Result<isize>
-        where F: FnMut(&Die<'dw>) -> libc::c_uint
+    where
+        F: FnMut(&Die<'dw>) -> libc::c_uint,
     {
         let argp = &mut f as *mut F as *mut libc::c_void;
-        return ffi!(dwarf_getfuncs(self.as_ptr(), Some(callback::<'dw, F>), argp, 0));
+        return ffi!(dwarf_getfuncs(
+            self.as_ptr(),
+            Some(callback::<'dw, F>),
+            argp,
+            0
+        ));
 
-        unsafe extern "C" fn callback<'a, F>(func: *mut ffi::Dwarf_Die,
-                                             argp: *mut libc::c_void)
-                                             -> libc::c_int
-            where F: FnMut(&Die<'a>) -> libc::c_uint
+        unsafe extern "C" fn callback<'a, F>(
+            func: *mut ffi::Dwarf_Die,
+            argp: *mut libc::c_void,
+        ) -> libc::c_int
+        where
+            F: FnMut(&Die<'a>) -> libc::c_uint,
         {
             let f = &mut *(argp as *mut F);
             f(Die::from_ptr(func)) as libc::c_int
@@ -391,7 +416,6 @@ impl<'dw> Clone for Die<'dw> {
     }
 }
 
-
 #[derive(Debug)]
 pub struct DieChildren<'dw> {
     first: bool,
@@ -404,7 +428,9 @@ impl<'dw> Iterator for DieChildren<'dw> {
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        if self.finished { return None }
+        if self.finished {
+            return None;
+        }
 
         let die = self.die.as_ptr();
         let rc = if self.first {
@@ -419,13 +445,18 @@ impl<'dw> Iterator for DieChildren<'dw> {
                 // prime the die->abbrev before we Clone
                 self.die.get_abbrev().ok();
                 Some(Ok(self.die.clone()))
-            },
-            Ok(_) => { self.finished = true; None },
-            Err(e) => { self.finished = true; Some(Err(e)) },
+            }
+            Ok(_) => {
+                self.finished = true;
+                None
+            }
+            Err(e) => {
+                self.finished = true;
+                Some(Err(e))
+            }
         }
     }
 }
-
 
 #[derive(Debug)]
 pub struct DieRanges<'dw> {
@@ -467,7 +498,6 @@ impl<'dw> Iterator for DieRanges<'dw> {
     }
 }
 
-
 #[inline]
 fn dwarf_cb_map<T>(cont: Result<bool>, result: &mut Result<T>) -> libc::c_uint {
     match cont {
@@ -476,25 +506,23 @@ fn dwarf_cb_map<T>(cont: Result<bool>, result: &mut Result<T>) -> libc::c_uint {
         Err(e) => {
             *result = Err(e);
             ffi::DWARF_CB_ABORT
-        },
+        }
     }
 }
 
-
 struct CallbackGuard {
-    payload: Option<Box<dyn Any + Send>>
+    payload: Option<Box<dyn Any + Send>>,
 }
 
 impl CallbackGuard {
     #[inline]
     fn new() -> CallbackGuard {
-        CallbackGuard {
-            payload: None
-        }
+        CallbackGuard { payload: None }
     }
 
     fn call<F>(&mut self, f: F) -> libc::c_uint
-        where F: FnMut() -> libc::c_uint
+    where
+        F: FnMut() -> libc::c_uint,
     {
         if self.payload.is_some() {
             // We already panicked!
@@ -524,7 +552,6 @@ impl Drop for CallbackGuard {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::Dwarf;
@@ -532,15 +559,19 @@ mod tests {
     #[test]
     fn die_size() {
         use std::mem::size_of;
-        assert_eq!(size_of::<crate::Die<'static>>(),
-                   size_of::<crate::ffi::Dwarf_Die>());
+        assert_eq!(
+            size_of::<crate::Die<'static>>(),
+            size_of::<crate::ffi::Dwarf_Die>()
+        );
     }
 
     #[test]
     fn die_align() {
         use std::mem::align_of;
-        assert_eq!(align_of::<crate::Die<'static>>(),
-                   align_of::<crate::ffi::Dwarf_Die>());
+        assert_eq!(
+            align_of::<crate::Die<'static>>(),
+            align_of::<crate::ffi::Dwarf_Die>()
+        );
     }
 
     fn current() -> Dwarf<'static> {

@@ -9,7 +9,6 @@ use std::os::unix::io::AsRawFd;
 
 use super::Result;
 
-
 /// A handle to an ELF file.
 #[derive(Debug)]
 pub struct Elf<'elf> {
@@ -30,7 +29,11 @@ impl<'elf> fmt::Debug for ElfKind<'elf> {
             ElfKind::Raw => fmt.debug_tuple("Raw").finish(),
             ElfKind::File(ref f) => fmt.debug_tuple("File").field(f).finish(),
             ElfKind::Fd(f) => fmt.debug_tuple("Fd").field(&f.as_raw_fd()).finish(),
-            ElfKind::Bytes(b) => fmt.debug_tuple("Bytes").field(&b.as_ptr()).field(&b.len()).finish(),
+            ElfKind::Bytes(b) => fmt
+                .debug_tuple("Bytes")
+                .field(&b.as_ptr())
+                .field(&b.len())
+                .finish(),
         }
     }
 }
@@ -56,7 +59,11 @@ impl<'elf> Elf<'elf> {
         let file = fs::File::open(path)?;
         let fd = file.as_raw_fd();
         raw_ffi!(elf_version(ffi::EV_CURRENT));
-        let elf = ffi!(elf_begin(fd, ffi::Elf_Cmd::ELF_C_READ_MMAP, ptr::null_mut()))?;
+        let elf = ffi!(elf_begin(
+            fd,
+            ffi::Elf_Cmd::ELF_C_READ_MMAP,
+            ptr::null_mut()
+        ))?;
         Ok(Elf::new(elf, ElfKind::File(file)))
     }
 
@@ -73,7 +80,11 @@ impl<'elf> Elf<'elf> {
     pub fn from_fd<FD: AsRawFd>(fd: &'elf FD) -> Result<Elf<'elf>> {
         let raw_fd = fd.as_raw_fd();
         raw_ffi!(elf_version(ffi::EV_CURRENT));
-        let elf = ffi!(elf_begin(raw_fd, ffi::Elf_Cmd::ELF_C_READ_MMAP, ptr::null_mut()))?;
+        let elf = ffi!(elf_begin(
+            raw_fd,
+            ffi::Elf_Cmd::ELF_C_READ_MMAP,
+            ptr::null_mut()
+        ))?;
         Ok(Elf::new(elf, ElfKind::Fd(fd)))
     }
 
@@ -139,7 +150,9 @@ impl<'elf> Drop for Elf<'elf> {
     fn drop(&mut self) {
         match self.kind {
             ElfKind::Raw => (),
-            _ => { raw_ffi!(elf_end(self.as_ptr())); },
+            _ => {
+                raw_ffi!(elf_end(self.as_ptr()));
+            }
         }
     }
 }

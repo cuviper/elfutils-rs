@@ -12,7 +12,7 @@ mod dwarf;
 pub use crate::dwarf::Dwarf;
 
 mod units;
-pub use crate::units::{CompileUnits, CompileUnit, TypeUnits, TypeUnit};
+pub use crate::units::{CompileUnit, CompileUnits, TypeUnit, TypeUnits};
 
 mod die;
 pub use crate::die::{Die, DieChildren};

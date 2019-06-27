@@ -16,7 +16,6 @@ const STANDARD_CALLBACKS: &'static ffi::Dwfl_Callbacks = &ffi::Dwfl_Callbacks {
     debuginfo_path: 0 as *mut _, //ptr::null_mut(),
 };
 
-
 pub struct Dwfl {
     inner: *mut ffi::Dwfl,
 }
@@ -24,9 +23,7 @@ pub struct Dwfl {
 impl Dwfl {
     #[inline]
     fn new(dwfl: *mut ffi::Dwfl) -> Self {
-        Dwfl {
-            inner: dwfl,
-        }
+        Dwfl { inner: dwfl }
     }
 
     /// Open a `Dwfl` from a path.
@@ -41,7 +38,12 @@ impl Dwfl {
         let name = CString::new(path.as_ref().as_os_str().as_bytes()).unwrap();
 
         let dwfl = Dwfl::new(ffi!(dwfl_begin(STANDARD_CALLBACKS))?);
-        ffi!(dwfl_report_offline(dwfl.as_ptr(), name.as_ptr(), name.as_ptr(), -1))?;
+        ffi!(dwfl_report_offline(
+            dwfl.as_ptr(),
+            name.as_ptr(),
+            name.as_ptr(),
+            -1
+        ))?;
         ffi!(dwfl_report_end(dwfl.as_ptr(), None, ptr::null_mut()))?;
         Ok(dwfl)
     }
@@ -55,20 +57,28 @@ impl Dwfl {
     }
 
     unsafe fn getdwarf<'dwfl, F>(&'dwfl self, offset: isize, mut f: F) -> Result<isize>
-        where F: FnMut(Dwarf<'dwfl>) -> libc::c_uint
+    where
+        F: FnMut(Dwarf<'dwfl>) -> libc::c_uint,
     {
         let argp = &mut f as *mut F as *mut libc::c_void;
-        return ffi!(dwfl_getdwarf(self.as_ptr(), Some(callback::<'dwfl, F>), argp, offset));
+        return ffi!(dwfl_getdwarf(
+            self.as_ptr(),
+            Some(callback::<'dwfl, F>),
+            argp,
+            offset
+        ));
 
-        unsafe extern "C" fn callback<'dwfl, F>(_module: *mut ffi::Dwfl_Module,
-                                                _userdata: *mut *mut libc::c_void,
-                                                _name: *const libc::c_char,
-                                                _start: u64,
-                                                dwarf: *mut ffi::Dwarf,
-                                                _bias: u64,
-                                                argp: *mut libc::c_void)
-                                                -> libc::c_int
-            where F: FnMut(Dwarf<'dwfl>) -> libc::c_uint
+        unsafe extern "C" fn callback<'dwfl, F>(
+            _module: *mut ffi::Dwfl_Module,
+            _userdata: *mut *mut libc::c_void,
+            _name: *const libc::c_char,
+            _start: u64,
+            dwarf: *mut ffi::Dwarf,
+            _bias: u64,
+            argp: *mut libc::c_void,
+        ) -> libc::c_int
+        where
+            F: FnMut(Dwarf<'dwfl>) -> libc::c_uint,
         {
             let f = &mut *(argp as *mut F);
             f(Dwarf::from_raw(dwarf)) as libc::c_int
@@ -88,7 +98,6 @@ impl Drop for Dwfl {
     }
 }
 
-
 pub struct Dwarfs<'dwfl> {
     dwfl: &'dwfl Dwfl,
     offset: isize,
@@ -107,7 +116,10 @@ impl<'dwfl> Iterator for Dwarfs<'dwfl> {
         };
 
         match rc {
-            Ok(offset) => { self.offset = offset; dwarf.map(Ok) },
+            Ok(offset) => {
+                self.offset = offset;
+                dwarf.map(Ok)
+            }
             Err(e) => Some(Err(e)),
         }
     }

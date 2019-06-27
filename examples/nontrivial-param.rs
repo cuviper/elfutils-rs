@@ -7,9 +7,9 @@ use libdw::{raw, Die};
 use libdwfl::Dwfl;
 
 use std::borrow::Cow;
-use std::ffi::{CStr, CString};
 use std::env;
 use std::error::Error;
+use std::ffi::{CStr, CString};
 
 fn main() -> Result<(), Box<dyn Error>> {
     for arg in env::args_os().skip(1) {
@@ -38,16 +38,17 @@ fn process_function(function: &Die<'_>) -> libdw::Result<bool> {
         if let Ok(raw::DW_TAG_formal_parameter) = child.tag() {
             if has_nontrivial_type(&child) {
                 if !printed_function_name {
-                    eprintln!("{:?}: In function {:?}:",
-                              file, function_name(function));
+                    eprintln!("{:?}: In function {:?}:", file, function_name(function));
                     printed_function_name = true;
                 }
 
                 // TODO dwarf_decl_line
                 let line = child.decl_line().map(|i| i as i32).unwrap_or(-1);
                 let name = child.name().unwrap_or_default();
-                eprintln!("{:?}:{}: note: parameter {:?} type is not trivial",
-                         file, line, name);
+                eprintln!(
+                    "{:?}:{}: note: parameter {:?} type is not trivial",
+                    file, line, name
+                );
             }
         }
     }
@@ -63,23 +64,24 @@ fn has_nontrivial_type(die: &Die<'_>) -> bool {
     die.attr(raw::DW_AT_type)
         .and_then(|attr| attr.get_die())
         .map(|ty| match ty.tag() {
-            Ok(raw::DW_TAG_class_type) |
-            Ok(raw::DW_TAG_structure_type) => true,
-            Ok(raw::DW_TAG_const_type) |
-            Ok(raw::DW_TAG_volatile_type) |
-            Ok(raw::DW_TAG_typedef) => has_nontrivial_type(&ty),
+            Ok(raw::DW_TAG_class_type) | Ok(raw::DW_TAG_structure_type) => true,
+            Ok(raw::DW_TAG_const_type)
+            | Ok(raw::DW_TAG_volatile_type)
+            | Ok(raw::DW_TAG_typedef) => has_nontrivial_type(&ty),
             _ => false,
         })
         .unwrap_or(false)
 }
 
 fn function_name<'dw>(function: &'dw Die<'_>) -> Cow<'dw, CStr> {
-    let linkage_name = function.attr_integrate(raw::DW_AT_linkage_name)
+    let linkage_name = function
+        .attr_integrate(raw::DW_AT_linkage_name)
         .or_else(|_| function.attr_integrate(raw::DW_AT_MIPS_linkage_name))
         .and_then(|attr| attr.get_string());
 
     if let Ok(name) = linkage_name {
-        demangle(name).map(Cow::Owned)
+        demangle(name)
+            .map(Cow::Owned)
             .unwrap_or(Cow::Borrowed(name))
     } else if let Ok(name) = function.name() {
         Cow::Borrowed(name)

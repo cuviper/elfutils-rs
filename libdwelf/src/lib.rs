@@ -5,11 +5,11 @@ use std::ptr;
 use std::slice;
 
 #[inline]
-pub fn gnu_debuglink<'elf>(elf: &'elf libelf::Elf<'_>) -> libelf::Result<Option<(&'elf CStr, u32)>> {
+pub fn gnu_debuglink<'elf>(
+    elf: &'elf libelf::Elf<'_>,
+) -> libelf::Result<Option<(&'elf CStr, u32)>> {
     let mut crc = 0;
-    let namep = unsafe {
-        ffi::dwelf_elf_gnu_debuglink(elf.as_ptr(), &mut crc)
-    };
+    let namep = unsafe { ffi::dwelf_elf_gnu_debuglink(elf.as_ptr(), &mut crc) };
     if namep.is_null() {
         match libelf::Error::check() {
             Some(error) => Err(error),

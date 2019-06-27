@@ -9,7 +9,6 @@ use std::path::Path;
 use super::Result;
 use super::{CompileUnits, TypeUnits};
 
-
 #[derive(Debug)]
 pub struct Dwarf<'dw> {
     inner: *mut ffi::Dwarf,
@@ -88,7 +87,11 @@ impl<'dw> Dwarf<'dw> {
     #[inline]
     pub fn from_elf(elf: &'dw libelf::Elf<'_>) -> Result<Dwarf<'dw>> {
         let ptr = elf.as_ptr();
-        let dwarf = ffi!(dwarf_begin_elf(ptr, ffi::Dwarf_Cmd::DWARF_C_READ, ptr::null_mut()))?;
+        let dwarf = ffi!(dwarf_begin_elf(
+            ptr,
+            ffi::Dwarf_Cmd::DWARF_C_READ,
+            ptr::null_mut()
+        ))?;
         Ok(Dwarf::new(dwarf, DwarfKind::Elf(elf)))
     }
 
@@ -132,7 +135,9 @@ impl<'dw> Drop for Dwarf<'dw> {
     fn drop(&mut self) {
         match self.kind {
             DwarfKind::Raw => (),
-            _ => { raw_ffi!(dwarf_end(self.as_ptr())); },
+            _ => {
+                raw_ffi!(dwarf_end(self.as_ptr()));
+            }
         }
     }
 }

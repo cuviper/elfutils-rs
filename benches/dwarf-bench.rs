@@ -8,7 +8,7 @@ extern crate test;
 use std::env;
 use std::path;
 
-use libdw::{Result, Dwarf, Die};
+use libdw::{Die, Dwarf, Result};
 
 fn test_path() -> path::PathBuf {
     match env::var_os("BENCH_FILE") {
@@ -16,7 +16,6 @@ fn test_path() -> path::PathBuf {
         None => env::current_exe().unwrap(),
     }
 }
-
 
 #[bench]
 fn info_cus(b: &mut test::Bencher) {
@@ -33,7 +32,6 @@ fn info_cus(b: &mut test::Bencher) {
         Ok(())
     });
 }
-
 
 #[bench]
 fn info_dies(b: &mut test::Bencher) {
@@ -59,7 +57,6 @@ fn info_dies(b: &mut test::Bencher) {
         Ok(())
     }
 }
-
 
 #[bench]
 fn info_iter(b: &mut test::Bencher) {
@@ -88,7 +85,6 @@ fn info_iter(b: &mut test::Bencher) {
     }
 }
 
-
 #[bench]
 fn info_nested(b: &mut test::Bencher) {
     b.iter(|| -> Result<()> {
@@ -115,7 +111,6 @@ fn info_nested(b: &mut test::Bencher) {
         Ok(())
     }
 }
-
 
 #[bench]
 fn info_nest_unchecked(b: &mut test::Bencher) {
@@ -146,8 +141,6 @@ fn info_nest_unchecked(b: &mut test::Bencher) {
     }
 }
 
-
-
 mod orig {
     use libdw_sys as libdw;
 
@@ -161,9 +154,7 @@ mod orig {
             let null = std::ptr::null_mut::<libc::c_void>();
             let file = std::fs::File::open(test_path()).unwrap();
             let fd = file.as_raw_fd();
-            let dwarf = unsafe {
-                libdw::dwarf_begin(fd, libdw::Dwarf_Cmd::DWARF_C_READ)
-            };
+            let dwarf = unsafe { libdw::dwarf_begin(fd, libdw::Dwarf_Cmd::DWARF_C_READ) };
             assert!(dwarf != null as *mut libdw::Dwarf);
 
             let mut offset = 0;
@@ -181,7 +172,8 @@ mod orig {
                         &mut header_size,
                         &mut abbrev_offset,
                         &mut address_size,
-                        &mut offset_size)
+                        &mut offset_size,
+                    )
                 };
                 if res > 0 {
                     break;
@@ -247,7 +239,10 @@ mod orig {
         });
     }
 
-    unsafe extern "C" fn info_elfutils_attr(_: *mut libdw::Dwarf_Attribute, _: *mut libc::c_void) -> i32{
+    unsafe extern "C" fn info_elfutils_attr(
+        _: *mut libdw::Dwarf_Attribute,
+        _: *mut libc::c_void,
+    ) -> i32 {
         0
     }
 }
