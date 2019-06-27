@@ -385,7 +385,7 @@ impl<'dw> Clone for Die<'dw> {
     fn clone(&self) -> Self {
         unsafe {
             Die {
-                inner: (*self.as_ptr()).into(),
+                inner: ffi::Dwarf_Die { ..*self.as_ptr() }.into(),
                 phantom: PhantomData,
             }
         }

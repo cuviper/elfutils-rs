@@ -3,2437 +3,2480 @@
 #![allow(bad_style)]
 use libc::{time_t, uid_t, gid_t, mode_t};
 
-pub const EI_NIDENT: ::libc::c_uint = 16;
-pub const EI_MAG0: ::libc::c_uint = 0;
-pub const ELFMAG0: ::libc::c_uint = 127;
-pub const EI_MAG1: ::libc::c_uint = 1;
-pub const ELFMAG1: u8 = b'E';
-pub const EI_MAG2: ::libc::c_uint = 2;
-pub const ELFMAG2: u8 = b'L';
-pub const EI_MAG3: ::libc::c_uint = 3;
-pub const ELFMAG3: u8 = b'F';
-pub const ELFMAG: &'static [u8; 5usize] = b"\x7fELF\x00";
-pub const EI_CLASS: ::libc::c_uint = 4;
-pub const ELFCLASSNONE: ::libc::c_uint = 0;
-pub const ELFCLASS32: ::libc::c_uint = 1;
-pub const ELFCLASS64: ::libc::c_uint = 2;
-pub const ELFCLASSNUM: ::libc::c_uint = 3;
-pub const EI_DATA: ::libc::c_uint = 5;
-pub const ELFDATANONE: ::libc::c_uint = 0;
-pub const ELFDATA2LSB: ::libc::c_uint = 1;
-pub const ELFDATA2MSB: ::libc::c_uint = 2;
-pub const ELFDATANUM: ::libc::c_uint = 3;
-pub const EI_VERSION: ::libc::c_uint = 6;
-pub const EI_OSABI: ::libc::c_uint = 7;
-pub const ELFOSABI_NONE: ::libc::c_uint = 0;
-pub const ELFOSABI_SYSV: ::libc::c_uint = 0;
-pub const ELFOSABI_HPUX: ::libc::c_uint = 1;
-pub const ELFOSABI_NETBSD: ::libc::c_uint = 2;
-pub const ELFOSABI_GNU: ::libc::c_uint = 3;
-pub const ELFOSABI_LINUX: ::libc::c_uint = 3;
-pub const ELFOSABI_SOLARIS: ::libc::c_uint = 6;
-pub const ELFOSABI_AIX: ::libc::c_uint = 7;
-pub const ELFOSABI_IRIX: ::libc::c_uint = 8;
-pub const ELFOSABI_FREEBSD: ::libc::c_uint = 9;
-pub const ELFOSABI_TRU64: ::libc::c_uint = 10;
-pub const ELFOSABI_MODESTO: ::libc::c_uint = 11;
-pub const ELFOSABI_OPENBSD: ::libc::c_uint = 12;
-pub const ELFOSABI_ARM_AEABI: ::libc::c_uint = 64;
-pub const ELFOSABI_ARM: ::libc::c_uint = 97;
-pub const ELFOSABI_STANDALONE: ::libc::c_uint = 255;
-pub const EI_ABIVERSION: ::libc::c_uint = 8;
-pub const EI_PAD: ::libc::c_uint = 9;
-pub const ET_NONE: ::libc::c_uint = 0;
-pub const ET_REL: ::libc::c_uint = 1;
-pub const ET_EXEC: ::libc::c_uint = 2;
-pub const ET_DYN: ::libc::c_uint = 3;
-pub const ET_CORE: ::libc::c_uint = 4;
-pub const ET_NUM: ::libc::c_uint = 5;
-pub const ET_LOOS: ::libc::c_uint = 65024;
-pub const ET_HIOS: ::libc::c_uint = 65279;
-pub const ET_LOPROC: ::libc::c_uint = 65280;
-pub const ET_HIPROC: ::libc::c_uint = 65535;
-pub const EM_NONE: ::libc::c_uint = 0;
-pub const EM_M32: ::libc::c_uint = 1;
-pub const EM_SPARC: ::libc::c_uint = 2;
-pub const EM_386: ::libc::c_uint = 3;
-pub const EM_68K: ::libc::c_uint = 4;
-pub const EM_88K: ::libc::c_uint = 5;
-pub const EM_IAMCU: ::libc::c_uint = 6;
-pub const EM_860: ::libc::c_uint = 7;
-pub const EM_MIPS: ::libc::c_uint = 8;
-pub const EM_S370: ::libc::c_uint = 9;
-pub const EM_MIPS_RS3_LE: ::libc::c_uint = 10;
-pub const EM_PARISC: ::libc::c_uint = 15;
-pub const EM_VPP500: ::libc::c_uint = 17;
-pub const EM_SPARC32PLUS: ::libc::c_uint = 18;
-pub const EM_960: ::libc::c_uint = 19;
-pub const EM_PPC: ::libc::c_uint = 20;
-pub const EM_PPC64: ::libc::c_uint = 21;
-pub const EM_S390: ::libc::c_uint = 22;
-pub const EM_SPU: ::libc::c_uint = 23;
-pub const EM_V800: ::libc::c_uint = 36;
-pub const EM_FR20: ::libc::c_uint = 37;
-pub const EM_RH32: ::libc::c_uint = 38;
-pub const EM_RCE: ::libc::c_uint = 39;
-pub const EM_ARM: ::libc::c_uint = 40;
-pub const EM_FAKE_ALPHA: ::libc::c_uint = 41;
-pub const EM_SH: ::libc::c_uint = 42;
-pub const EM_SPARCV9: ::libc::c_uint = 43;
-pub const EM_TRICORE: ::libc::c_uint = 44;
-pub const EM_ARC: ::libc::c_uint = 45;
-pub const EM_H8_300: ::libc::c_uint = 46;
-pub const EM_H8_300H: ::libc::c_uint = 47;
-pub const EM_H8S: ::libc::c_uint = 48;
-pub const EM_H8_500: ::libc::c_uint = 49;
-pub const EM_IA_64: ::libc::c_uint = 50;
-pub const EM_MIPS_X: ::libc::c_uint = 51;
-pub const EM_COLDFIRE: ::libc::c_uint = 52;
-pub const EM_68HC12: ::libc::c_uint = 53;
-pub const EM_MMA: ::libc::c_uint = 54;
-pub const EM_PCP: ::libc::c_uint = 55;
-pub const EM_NCPU: ::libc::c_uint = 56;
-pub const EM_NDR1: ::libc::c_uint = 57;
-pub const EM_STARCORE: ::libc::c_uint = 58;
-pub const EM_ME16: ::libc::c_uint = 59;
-pub const EM_ST100: ::libc::c_uint = 60;
-pub const EM_TINYJ: ::libc::c_uint = 61;
-pub const EM_X86_64: ::libc::c_uint = 62;
-pub const EM_PDSP: ::libc::c_uint = 63;
-pub const EM_PDP10: ::libc::c_uint = 64;
-pub const EM_PDP11: ::libc::c_uint = 65;
-pub const EM_FX66: ::libc::c_uint = 66;
-pub const EM_ST9PLUS: ::libc::c_uint = 67;
-pub const EM_ST7: ::libc::c_uint = 68;
-pub const EM_68HC16: ::libc::c_uint = 69;
-pub const EM_68HC11: ::libc::c_uint = 70;
-pub const EM_68HC08: ::libc::c_uint = 71;
-pub const EM_68HC05: ::libc::c_uint = 72;
-pub const EM_SVX: ::libc::c_uint = 73;
-pub const EM_ST19: ::libc::c_uint = 74;
-pub const EM_VAX: ::libc::c_uint = 75;
-pub const EM_CRIS: ::libc::c_uint = 76;
-pub const EM_JAVELIN: ::libc::c_uint = 77;
-pub const EM_FIREPATH: ::libc::c_uint = 78;
-pub const EM_ZSP: ::libc::c_uint = 79;
-pub const EM_MMIX: ::libc::c_uint = 80;
-pub const EM_HUANY: ::libc::c_uint = 81;
-pub const EM_PRISM: ::libc::c_uint = 82;
-pub const EM_AVR: ::libc::c_uint = 83;
-pub const EM_FR30: ::libc::c_uint = 84;
-pub const EM_D10V: ::libc::c_uint = 85;
-pub const EM_D30V: ::libc::c_uint = 86;
-pub const EM_V850: ::libc::c_uint = 87;
-pub const EM_M32R: ::libc::c_uint = 88;
-pub const EM_MN10300: ::libc::c_uint = 89;
-pub const EM_MN10200: ::libc::c_uint = 90;
-pub const EM_PJ: ::libc::c_uint = 91;
-pub const EM_OPENRISC: ::libc::c_uint = 92;
-pub const EM_ARC_COMPACT: ::libc::c_uint = 93;
-pub const EM_XTENSA: ::libc::c_uint = 94;
-pub const EM_VIDEOCORE: ::libc::c_uint = 95;
-pub const EM_TMM_GPP: ::libc::c_uint = 96;
-pub const EM_NS32K: ::libc::c_uint = 97;
-pub const EM_TPC: ::libc::c_uint = 98;
-pub const EM_SNP1K: ::libc::c_uint = 99;
-pub const EM_ST200: ::libc::c_uint = 100;
-pub const EM_IP2K: ::libc::c_uint = 101;
-pub const EM_MAX: ::libc::c_uint = 102;
-pub const EM_CR: ::libc::c_uint = 103;
-pub const EM_F2MC16: ::libc::c_uint = 104;
-pub const EM_MSP430: ::libc::c_uint = 105;
-pub const EM_BLACKFIN: ::libc::c_uint = 106;
-pub const EM_SE_C33: ::libc::c_uint = 107;
-pub const EM_SEP: ::libc::c_uint = 108;
-pub const EM_ARCA: ::libc::c_uint = 109;
-pub const EM_UNICORE: ::libc::c_uint = 110;
-pub const EM_EXCESS: ::libc::c_uint = 111;
-pub const EM_DXP: ::libc::c_uint = 112;
-pub const EM_ALTERA_NIOS2: ::libc::c_uint = 113;
-pub const EM_CRX: ::libc::c_uint = 114;
-pub const EM_XGATE: ::libc::c_uint = 115;
-pub const EM_C166: ::libc::c_uint = 116;
-pub const EM_M16C: ::libc::c_uint = 117;
-pub const EM_DSPIC30F: ::libc::c_uint = 118;
-pub const EM_CE: ::libc::c_uint = 119;
-pub const EM_M32C: ::libc::c_uint = 120;
-pub const EM_TSK3000: ::libc::c_uint = 131;
-pub const EM_RS08: ::libc::c_uint = 132;
-pub const EM_SHARC: ::libc::c_uint = 133;
-pub const EM_ECOG2: ::libc::c_uint = 134;
-pub const EM_SCORE7: ::libc::c_uint = 135;
-pub const EM_DSP24: ::libc::c_uint = 136;
-pub const EM_VIDEOCORE3: ::libc::c_uint = 137;
-pub const EM_LATTICEMICO32: ::libc::c_uint = 138;
-pub const EM_SE_C17: ::libc::c_uint = 139;
-pub const EM_TI_C6000: ::libc::c_uint = 140;
-pub const EM_TI_C2000: ::libc::c_uint = 141;
-pub const EM_TI_C5500: ::libc::c_uint = 142;
-pub const EM_TI_ARP32: ::libc::c_uint = 143;
-pub const EM_TI_PRU: ::libc::c_uint = 144;
-pub const EM_MMDSP_PLUS: ::libc::c_uint = 160;
-pub const EM_CYPRESS_M8C: ::libc::c_uint = 161;
-pub const EM_R32C: ::libc::c_uint = 162;
-pub const EM_TRIMEDIA: ::libc::c_uint = 163;
-pub const EM_QDSP6: ::libc::c_uint = 164;
-pub const EM_8051: ::libc::c_uint = 165;
-pub const EM_STXP7X: ::libc::c_uint = 166;
-pub const EM_NDS32: ::libc::c_uint = 167;
-pub const EM_ECOG1X: ::libc::c_uint = 168;
-pub const EM_MAXQ30: ::libc::c_uint = 169;
-pub const EM_XIMO16: ::libc::c_uint = 170;
-pub const EM_MANIK: ::libc::c_uint = 171;
-pub const EM_CRAYNV2: ::libc::c_uint = 172;
-pub const EM_RX: ::libc::c_uint = 173;
-pub const EM_METAG: ::libc::c_uint = 174;
-pub const EM_MCST_ELBRUS: ::libc::c_uint = 175;
-pub const EM_ECOG16: ::libc::c_uint = 176;
-pub const EM_CR16: ::libc::c_uint = 177;
-pub const EM_ETPU: ::libc::c_uint = 178;
-pub const EM_SLE9X: ::libc::c_uint = 179;
-pub const EM_L10M: ::libc::c_uint = 180;
-pub const EM_K10M: ::libc::c_uint = 181;
-pub const EM_AARCH64: ::libc::c_uint = 183;
-pub const EM_AVR32: ::libc::c_uint = 185;
-pub const EM_STM8: ::libc::c_uint = 186;
-pub const EM_TILE64: ::libc::c_uint = 187;
-pub const EM_TILEPRO: ::libc::c_uint = 188;
-pub const EM_MICROBLAZE: ::libc::c_uint = 189;
-pub const EM_CUDA: ::libc::c_uint = 190;
-pub const EM_TILEGX: ::libc::c_uint = 191;
-pub const EM_CLOUDSHIELD: ::libc::c_uint = 192;
-pub const EM_COREA_1ST: ::libc::c_uint = 193;
-pub const EM_COREA_2ND: ::libc::c_uint = 194;
-pub const EM_ARC_COMPACT2: ::libc::c_uint = 195;
-pub const EM_OPEN8: ::libc::c_uint = 196;
-pub const EM_RL78: ::libc::c_uint = 197;
-pub const EM_VIDEOCORE5: ::libc::c_uint = 198;
-pub const EM_78KOR: ::libc::c_uint = 199;
-pub const EM_56800EX: ::libc::c_uint = 200;
-pub const EM_BA1: ::libc::c_uint = 201;
-pub const EM_BA2: ::libc::c_uint = 202;
-pub const EM_XCORE: ::libc::c_uint = 203;
-pub const EM_MCHP_PIC: ::libc::c_uint = 204;
-pub const EM_KM32: ::libc::c_uint = 210;
-pub const EM_KMX32: ::libc::c_uint = 211;
-pub const EM_EMX16: ::libc::c_uint = 212;
-pub const EM_EMX8: ::libc::c_uint = 213;
-pub const EM_KVARC: ::libc::c_uint = 214;
-pub const EM_CDP: ::libc::c_uint = 215;
-pub const EM_COGE: ::libc::c_uint = 216;
-pub const EM_COOL: ::libc::c_uint = 217;
-pub const EM_NORC: ::libc::c_uint = 218;
-pub const EM_CSR_KALIMBA: ::libc::c_uint = 219;
-pub const EM_Z80: ::libc::c_uint = 220;
-pub const EM_VISIUM: ::libc::c_uint = 221;
-pub const EM_FT32: ::libc::c_uint = 222;
-pub const EM_MOXIE: ::libc::c_uint = 223;
-pub const EM_AMDGPU: ::libc::c_uint = 224;
-pub const EM_RISCV: ::libc::c_uint = 243;
-pub const EM_BPF: ::libc::c_uint = 247;
-pub const EM_NUM: ::libc::c_uint = 248;
-pub const EM_ARC_A5: ::libc::c_uint = 93;
-pub const EM_ALPHA: ::libc::c_uint = 36902;
-pub const EV_NONE: ::libc::c_uint = 0;
-pub const EV_CURRENT: ::libc::c_uint = 1;
-pub const EV_NUM: ::libc::c_uint = 2;
-pub const SHN_UNDEF: ::libc::c_uint = 0;
-pub const SHN_LORESERVE: ::libc::c_uint = 65280;
-pub const SHN_LOPROC: ::libc::c_uint = 65280;
-pub const SHN_BEFORE: ::libc::c_uint = 65280;
-pub const SHN_AFTER: ::libc::c_uint = 65281;
-pub const SHN_HIPROC: ::libc::c_uint = 65311;
-pub const SHN_LOOS: ::libc::c_uint = 65312;
-pub const SHN_HIOS: ::libc::c_uint = 65343;
-pub const SHN_ABS: ::libc::c_uint = 65521;
-pub const SHN_COMMON: ::libc::c_uint = 65522;
-pub const SHN_XINDEX: ::libc::c_uint = 65535;
-pub const SHN_HIRESERVE: ::libc::c_uint = 65535;
-pub const SHT_NULL: ::libc::c_uint = 0;
-pub const SHT_PROGBITS: ::libc::c_uint = 1;
-pub const SHT_SYMTAB: ::libc::c_uint = 2;
-pub const SHT_STRTAB: ::libc::c_uint = 3;
-pub const SHT_RELA: ::libc::c_uint = 4;
-pub const SHT_HASH: ::libc::c_uint = 5;
-pub const SHT_DYNAMIC: ::libc::c_uint = 6;
-pub const SHT_NOTE: ::libc::c_uint = 7;
-pub const SHT_NOBITS: ::libc::c_uint = 8;
-pub const SHT_REL: ::libc::c_uint = 9;
-pub const SHT_SHLIB: ::libc::c_uint = 10;
-pub const SHT_DYNSYM: ::libc::c_uint = 11;
-pub const SHT_INIT_ARRAY: ::libc::c_uint = 14;
-pub const SHT_FINI_ARRAY: ::libc::c_uint = 15;
-pub const SHT_PREINIT_ARRAY: ::libc::c_uint = 16;
-pub const SHT_GROUP: ::libc::c_uint = 17;
-pub const SHT_SYMTAB_SHNDX: ::libc::c_uint = 18;
-pub const SHT_NUM: ::libc::c_uint = 19;
-pub const SHT_LOOS: ::libc::c_uint = 1610612736;
-pub const SHT_GNU_ATTRIBUTES: ::libc::c_uint = 1879048181;
-pub const SHT_GNU_HASH: ::libc::c_uint = 1879048182;
-pub const SHT_GNU_LIBLIST: ::libc::c_uint = 1879048183;
-pub const SHT_CHECKSUM: ::libc::c_uint = 1879048184;
-pub const SHT_LOSUNW: ::libc::c_uint = 1879048186;
-pub const SHT_SUNW_move: ::libc::c_uint = 1879048186;
-pub const SHT_SUNW_COMDAT: ::libc::c_uint = 1879048187;
-pub const SHT_SUNW_syminfo: ::libc::c_uint = 1879048188;
-pub const SHT_GNU_verdef: ::libc::c_uint = 1879048189;
-pub const SHT_GNU_verneed: ::libc::c_uint = 1879048190;
-pub const SHT_GNU_versym: ::libc::c_uint = 1879048191;
-pub const SHT_HISUNW: ::libc::c_uint = 1879048191;
-pub const SHT_HIOS: ::libc::c_uint = 1879048191;
-pub const SHT_LOPROC: ::libc::c_uint = 1879048192;
-pub const SHT_HIPROC: ::libc::c_uint = 2147483647;
-pub const SHT_LOUSER: ::libc::c_uint = 2147483648;
-pub const SHT_HIUSER: ::libc::c_uint = 2415919103;
-pub const SHF_WRITE: ::libc::c_uint = 1;
-pub const SHF_ALLOC: ::libc::c_uint = 2;
-pub const SHF_EXECINSTR: ::libc::c_uint = 4;
-pub const SHF_MERGE: ::libc::c_uint = 16;
-pub const SHF_STRINGS: ::libc::c_uint = 32;
-pub const SHF_INFO_LINK: ::libc::c_uint = 64;
-pub const SHF_LINK_ORDER: ::libc::c_uint = 128;
-pub const SHF_OS_NONCONFORMING: ::libc::c_uint = 256;
-pub const SHF_GROUP: ::libc::c_uint = 512;
-pub const SHF_TLS: ::libc::c_uint = 1024;
-pub const SHF_COMPRESSED: ::libc::c_uint = 2048;
-pub const SHF_MASKOS: ::libc::c_uint = 267386880;
-pub const SHF_MASKPROC: ::libc::c_uint = 4026531840;
-pub const SHF_ORDERED: ::libc::c_uint = 1073741824;
-pub const SHF_EXCLUDE: ::libc::c_uint = 2147483648;
-pub const ELFCOMPRESS_ZLIB: ::libc::c_uint = 1;
-pub const ELFCOMPRESS_LOOS: ::libc::c_uint = 1610612736;
-pub const ELFCOMPRESS_HIOS: ::libc::c_uint = 1879048191;
-pub const ELFCOMPRESS_LOPROC: ::libc::c_uint = 1879048192;
-pub const ELFCOMPRESS_HIPROC: ::libc::c_uint = 2147483647;
-pub const SYMINFO_BT_SELF: ::libc::c_uint = 65535;
-pub const SYMINFO_BT_PARENT: ::libc::c_uint = 65534;
-pub const SYMINFO_BT_LOWRESERVE: ::libc::c_uint = 65280;
-pub const SYMINFO_FLG_DIRECT: ::libc::c_uint = 1;
-pub const SYMINFO_FLG_PASSTHRU: ::libc::c_uint = 2;
-pub const SYMINFO_FLG_COPY: ::libc::c_uint = 4;
-pub const SYMINFO_FLG_LAZYLOAD: ::libc::c_uint = 8;
-pub const SYMINFO_NONE: ::libc::c_uint = 0;
-pub const SYMINFO_CURRENT: ::libc::c_uint = 1;
-pub const SYMINFO_NUM: ::libc::c_uint = 2;
-pub const STB_LOCAL: ::libc::c_uint = 0;
-pub const STB_GLOBAL: ::libc::c_uint = 1;
-pub const STB_WEAK: ::libc::c_uint = 2;
-pub const STB_NUM: ::libc::c_uint = 3;
-pub const STB_LOOS: ::libc::c_uint = 10;
-pub const STB_GNU_UNIQUE: ::libc::c_uint = 10;
-pub const STB_HIOS: ::libc::c_uint = 12;
-pub const STB_LOPROC: ::libc::c_uint = 13;
-pub const STB_HIPROC: ::libc::c_uint = 15;
-pub const STT_NOTYPE: ::libc::c_uint = 0;
-pub const STT_OBJECT: ::libc::c_uint = 1;
-pub const STT_FUNC: ::libc::c_uint = 2;
-pub const STT_SECTION: ::libc::c_uint = 3;
-pub const STT_FILE: ::libc::c_uint = 4;
-pub const STT_COMMON: ::libc::c_uint = 5;
-pub const STT_TLS: ::libc::c_uint = 6;
-pub const STT_NUM: ::libc::c_uint = 7;
-pub const STT_LOOS: ::libc::c_uint = 10;
-pub const STT_GNU_IFUNC: ::libc::c_uint = 10;
-pub const STT_HIOS: ::libc::c_uint = 12;
-pub const STT_LOPROC: ::libc::c_uint = 13;
-pub const STT_HIPROC: ::libc::c_uint = 15;
-pub const STN_UNDEF: ::libc::c_uint = 0;
-pub const STV_DEFAULT: ::libc::c_uint = 0;
-pub const STV_INTERNAL: ::libc::c_uint = 1;
-pub const STV_HIDDEN: ::libc::c_uint = 2;
-pub const STV_PROTECTED: ::libc::c_uint = 3;
-pub const PN_XNUM: ::libc::c_uint = 65535;
-pub const PT_NULL: ::libc::c_uint = 0;
-pub const PT_LOAD: ::libc::c_uint = 1;
-pub const PT_DYNAMIC: ::libc::c_uint = 2;
-pub const PT_INTERP: ::libc::c_uint = 3;
-pub const PT_NOTE: ::libc::c_uint = 4;
-pub const PT_SHLIB: ::libc::c_uint = 5;
-pub const PT_PHDR: ::libc::c_uint = 6;
-pub const PT_TLS: ::libc::c_uint = 7;
-pub const PT_NUM: ::libc::c_uint = 8;
-pub const PT_LOOS: ::libc::c_uint = 1610612736;
-pub const PT_GNU_EH_FRAME: ::libc::c_uint = 1685382480;
-pub const PT_GNU_STACK: ::libc::c_uint = 1685382481;
-pub const PT_GNU_RELRO: ::libc::c_uint = 1685382482;
-pub const PT_LOSUNW: ::libc::c_uint = 1879048186;
-pub const PT_SUNWBSS: ::libc::c_uint = 1879048186;
-pub const PT_SUNWSTACK: ::libc::c_uint = 1879048187;
-pub const PT_HISUNW: ::libc::c_uint = 1879048191;
-pub const PT_HIOS: ::libc::c_uint = 1879048191;
-pub const PT_LOPROC: ::libc::c_uint = 1879048192;
-pub const PT_HIPROC: ::libc::c_uint = 2147483647;
-pub const PF_X: ::libc::c_uint = 1;
-pub const PF_W: ::libc::c_uint = 2;
-pub const PF_R: ::libc::c_uint = 4;
-pub const PF_MASKOS: ::libc::c_uint = 267386880;
-pub const PF_MASKPROC: ::libc::c_uint = 4026531840;
-pub const NT_PRSTATUS: ::libc::c_uint = 1;
-pub const NT_FPREGSET: ::libc::c_uint = 2;
-pub const NT_PRPSINFO: ::libc::c_uint = 3;
-pub const NT_PRXREG: ::libc::c_uint = 4;
-pub const NT_TASKSTRUCT: ::libc::c_uint = 4;
-pub const NT_PLATFORM: ::libc::c_uint = 5;
-pub const NT_AUXV: ::libc::c_uint = 6;
-pub const NT_GWINDOWS: ::libc::c_uint = 7;
-pub const NT_ASRS: ::libc::c_uint = 8;
-pub const NT_PSTATUS: ::libc::c_uint = 10;
-pub const NT_PSINFO: ::libc::c_uint = 13;
-pub const NT_PRCRED: ::libc::c_uint = 14;
-pub const NT_UTSNAME: ::libc::c_uint = 15;
-pub const NT_LWPSTATUS: ::libc::c_uint = 16;
-pub const NT_LWPSINFO: ::libc::c_uint = 17;
-pub const NT_PRFPXREG: ::libc::c_uint = 20;
-pub const NT_SIGINFO: ::libc::c_uint = 1397311305;
-pub const NT_FILE: ::libc::c_uint = 1179208773;
-pub const NT_PRXFPREG: ::libc::c_uint = 1189489535;
-pub const NT_PPC_VMX: ::libc::c_uint = 256;
-pub const NT_PPC_SPE: ::libc::c_uint = 257;
-pub const NT_PPC_VSX: ::libc::c_uint = 258;
-pub const NT_386_TLS: ::libc::c_uint = 512;
-pub const NT_PPC_TM_SPR: ::libc::c_uint = 268;
-pub const NT_386_IOPERM: ::libc::c_uint = 513;
-pub const NT_X86_XSTATE: ::libc::c_uint = 514;
-pub const NT_S390_HIGH_GPRS: ::libc::c_uint = 768;
-pub const NT_S390_TIMER: ::libc::c_uint = 769;
-pub const NT_S390_TODCMP: ::libc::c_uint = 770;
-pub const NT_S390_TODPREG: ::libc::c_uint = 771;
-pub const NT_S390_CTRS: ::libc::c_uint = 772;
-pub const NT_S390_PREFIX: ::libc::c_uint = 773;
-pub const NT_S390_LAST_BREAK: ::libc::c_uint = 774;
-pub const NT_S390_SYSTEM_CALL: ::libc::c_uint = 775;
-pub const NT_S390_TDB: ::libc::c_uint = 776;
-pub const NT_ARM_VFP: ::libc::c_uint = 1024;
-pub const NT_ARM_TLS: ::libc::c_uint = 1025;
-pub const NT_ARM_HW_BREAK: ::libc::c_uint = 1026;
-pub const NT_ARM_HW_WATCH: ::libc::c_uint = 1027;
-pub const NT_ARM_SYSTEM_CALL: ::libc::c_uint = 1028;
-pub const NT_VERSION: ::libc::c_uint = 1;
-pub const DT_NULL: ::libc::c_uint = 0;
-pub const DT_NEEDED: ::libc::c_uint = 1;
-pub const DT_PLTRELSZ: ::libc::c_uint = 2;
-pub const DT_PLTGOT: ::libc::c_uint = 3;
-pub const DT_HASH: ::libc::c_uint = 4;
-pub const DT_STRTAB: ::libc::c_uint = 5;
-pub const DT_SYMTAB: ::libc::c_uint = 6;
-pub const DT_RELA: ::libc::c_uint = 7;
-pub const DT_RELASZ: ::libc::c_uint = 8;
-pub const DT_RELAENT: ::libc::c_uint = 9;
-pub const DT_STRSZ: ::libc::c_uint = 10;
-pub const DT_SYMENT: ::libc::c_uint = 11;
-pub const DT_INIT: ::libc::c_uint = 12;
-pub const DT_FINI: ::libc::c_uint = 13;
-pub const DT_SONAME: ::libc::c_uint = 14;
-pub const DT_RPATH: ::libc::c_uint = 15;
-pub const DT_SYMBOLIC: ::libc::c_uint = 16;
-pub const DT_REL: ::libc::c_uint = 17;
-pub const DT_RELSZ: ::libc::c_uint = 18;
-pub const DT_RELENT: ::libc::c_uint = 19;
-pub const DT_PLTREL: ::libc::c_uint = 20;
-pub const DT_DEBUG: ::libc::c_uint = 21;
-pub const DT_TEXTREL: ::libc::c_uint = 22;
-pub const DT_JMPREL: ::libc::c_uint = 23;
-pub const DT_BIND_NOW: ::libc::c_uint = 24;
-pub const DT_INIT_ARRAY: ::libc::c_uint = 25;
-pub const DT_FINI_ARRAY: ::libc::c_uint = 26;
-pub const DT_INIT_ARRAYSZ: ::libc::c_uint = 27;
-pub const DT_FINI_ARRAYSZ: ::libc::c_uint = 28;
-pub const DT_RUNPATH: ::libc::c_uint = 29;
-pub const DT_FLAGS: ::libc::c_uint = 30;
-pub const DT_ENCODING: ::libc::c_uint = 32;
-pub const DT_PREINIT_ARRAY: ::libc::c_uint = 32;
-pub const DT_PREINIT_ARRAYSZ: ::libc::c_uint = 33;
-pub const DT_NUM: ::libc::c_uint = 34;
-pub const DT_LOOS: ::libc::c_uint = 1610612749;
-pub const DT_HIOS: ::libc::c_uint = 1879044096;
-pub const DT_LOPROC: ::libc::c_uint = 1879048192;
-pub const DT_HIPROC: ::libc::c_uint = 2147483647;
-pub const DT_VALRNGLO: ::libc::c_uint = 1879047424;
-pub const DT_GNU_PRELINKED: ::libc::c_uint = 1879047669;
-pub const DT_GNU_CONFLICTSZ: ::libc::c_uint = 1879047670;
-pub const DT_GNU_LIBLISTSZ: ::libc::c_uint = 1879047671;
-pub const DT_CHECKSUM: ::libc::c_uint = 1879047672;
-pub const DT_PLTPADSZ: ::libc::c_uint = 1879047673;
-pub const DT_MOVEENT: ::libc::c_uint = 1879047674;
-pub const DT_MOVESZ: ::libc::c_uint = 1879047675;
-pub const DT_FEATURE_1: ::libc::c_uint = 1879047676;
-pub const DT_POSFLAG_1: ::libc::c_uint = 1879047677;
-pub const DT_SYMINSZ: ::libc::c_uint = 1879047678;
-pub const DT_SYMINENT: ::libc::c_uint = 1879047679;
-pub const DT_VALRNGHI: ::libc::c_uint = 1879047679;
-pub const DT_VALNUM: ::libc::c_uint = 12;
-pub const DT_ADDRRNGLO: ::libc::c_uint = 1879047680;
-pub const DT_GNU_HASH: ::libc::c_uint = 1879047925;
-pub const DT_TLSDESC_PLT: ::libc::c_uint = 1879047926;
-pub const DT_TLSDESC_GOT: ::libc::c_uint = 1879047927;
-pub const DT_GNU_CONFLICT: ::libc::c_uint = 1879047928;
-pub const DT_GNU_LIBLIST: ::libc::c_uint = 1879047929;
-pub const DT_CONFIG: ::libc::c_uint = 1879047930;
-pub const DT_DEPAUDIT: ::libc::c_uint = 1879047931;
-pub const DT_AUDIT: ::libc::c_uint = 1879047932;
-pub const DT_PLTPAD: ::libc::c_uint = 1879047933;
-pub const DT_MOVETAB: ::libc::c_uint = 1879047934;
-pub const DT_SYMINFO: ::libc::c_uint = 1879047935;
-pub const DT_ADDRRNGHI: ::libc::c_uint = 1879047935;
-pub const DT_ADDRNUM: ::libc::c_uint = 11;
-pub const DT_VERSYM: ::libc::c_uint = 1879048176;
-pub const DT_RELACOUNT: ::libc::c_uint = 1879048185;
-pub const DT_RELCOUNT: ::libc::c_uint = 1879048186;
-pub const DT_FLAGS_1: ::libc::c_uint = 1879048187;
-pub const DT_VERDEF: ::libc::c_uint = 1879048188;
-pub const DT_VERDEFNUM: ::libc::c_uint = 1879048189;
-pub const DT_VERNEED: ::libc::c_uint = 1879048190;
-pub const DT_VERNEEDNUM: ::libc::c_uint = 1879048191;
-pub const DT_VERSIONTAGNUM: ::libc::c_uint = 16;
-pub const DT_AUXILIARY: ::libc::c_uint = 2147483645;
-pub const DT_FILTER: ::libc::c_uint = 2147483647;
-pub const DT_EXTRANUM: ::libc::c_uint = 3;
-pub const DF_ORIGIN: ::libc::c_uint = 1;
-pub const DF_SYMBOLIC: ::libc::c_uint = 2;
-pub const DF_TEXTREL: ::libc::c_uint = 4;
-pub const DF_BIND_NOW: ::libc::c_uint = 8;
-pub const DF_STATIC_TLS: ::libc::c_uint = 16;
-pub const DF_1_NOW: ::libc::c_uint = 1;
-pub const DF_1_GLOBAL: ::libc::c_uint = 2;
-pub const DF_1_GROUP: ::libc::c_uint = 4;
-pub const DF_1_NODELETE: ::libc::c_uint = 8;
-pub const DF_1_LOADFLTR: ::libc::c_uint = 16;
-pub const DF_1_INITFIRST: ::libc::c_uint = 32;
-pub const DF_1_NOOPEN: ::libc::c_uint = 64;
-pub const DF_1_ORIGIN: ::libc::c_uint = 128;
-pub const DF_1_DIRECT: ::libc::c_uint = 256;
-pub const DF_1_TRANS: ::libc::c_uint = 512;
-pub const DF_1_INTERPOSE: ::libc::c_uint = 1024;
-pub const DF_1_NODEFLIB: ::libc::c_uint = 2048;
-pub const DF_1_NODUMP: ::libc::c_uint = 4096;
-pub const DF_1_CONFALT: ::libc::c_uint = 8192;
-pub const DF_1_ENDFILTEE: ::libc::c_uint = 16384;
-pub const DF_1_DISPRELDNE: ::libc::c_uint = 32768;
-pub const DF_1_DISPRELPND: ::libc::c_uint = 65536;
-pub const DF_1_NODIRECT: ::libc::c_uint = 131072;
-pub const DF_1_IGNMULDEF: ::libc::c_uint = 262144;
-pub const DF_1_NOKSYMS: ::libc::c_uint = 524288;
-pub const DF_1_NOHDR: ::libc::c_uint = 1048576;
-pub const DF_1_EDITED: ::libc::c_uint = 2097152;
-pub const DF_1_NORELOC: ::libc::c_uint = 4194304;
-pub const DF_1_SYMINTPOSE: ::libc::c_uint = 8388608;
-pub const DF_1_GLOBAUDIT: ::libc::c_uint = 16777216;
-pub const DF_1_SINGLETON: ::libc::c_uint = 33554432;
-pub const DTF_1_PARINIT: ::libc::c_uint = 1;
-pub const DTF_1_CONFEXP: ::libc::c_uint = 2;
-pub const DF_P1_LAZYLOAD: ::libc::c_uint = 1;
-pub const DF_P1_GROUPPERM: ::libc::c_uint = 2;
-pub const VER_DEF_NONE: ::libc::c_uint = 0;
-pub const VER_DEF_CURRENT: ::libc::c_uint = 1;
-pub const VER_DEF_NUM: ::libc::c_uint = 2;
-pub const VER_FLG_BASE: ::libc::c_uint = 1;
-pub const VER_FLG_WEAK: ::libc::c_uint = 2;
-pub const VER_NDX_LOCAL: ::libc::c_uint = 0;
-pub const VER_NDX_GLOBAL: ::libc::c_uint = 1;
-pub const VER_NDX_LORESERVE: ::libc::c_uint = 65280;
-pub const VER_NDX_ELIMINATE: ::libc::c_uint = 65281;
-pub const VER_NEED_NONE: ::libc::c_uint = 0;
-pub const VER_NEED_CURRENT: ::libc::c_uint = 1;
-pub const VER_NEED_NUM: ::libc::c_uint = 2;
-pub const AT_NULL: ::libc::c_uint = 0;
-pub const AT_IGNORE: ::libc::c_uint = 1;
-pub const AT_EXECFD: ::libc::c_uint = 2;
-pub const AT_PHDR: ::libc::c_uint = 3;
-pub const AT_PHENT: ::libc::c_uint = 4;
-pub const AT_PHNUM: ::libc::c_uint = 5;
-pub const AT_PAGESZ: ::libc::c_uint = 6;
-pub const AT_BASE: ::libc::c_uint = 7;
-pub const AT_FLAGS: ::libc::c_uint = 8;
-pub const AT_ENTRY: ::libc::c_uint = 9;
-pub const AT_NOTELF: ::libc::c_uint = 10;
-pub const AT_UID: ::libc::c_uint = 11;
-pub const AT_EUID: ::libc::c_uint = 12;
-pub const AT_GID: ::libc::c_uint = 13;
-pub const AT_EGID: ::libc::c_uint = 14;
-pub const AT_CLKTCK: ::libc::c_uint = 17;
-pub const AT_PLATFORM: ::libc::c_uint = 15;
-pub const AT_HWCAP: ::libc::c_uint = 16;
-pub const AT_FPUCW: ::libc::c_uint = 18;
-pub const AT_DCACHEBSIZE: ::libc::c_uint = 19;
-pub const AT_ICACHEBSIZE: ::libc::c_uint = 20;
-pub const AT_UCACHEBSIZE: ::libc::c_uint = 21;
-pub const AT_IGNOREPPC: ::libc::c_uint = 22;
-pub const AT_SECURE: ::libc::c_uint = 23;
-pub const AT_BASE_PLATFORM: ::libc::c_uint = 24;
-pub const AT_RANDOM: ::libc::c_uint = 25;
-pub const AT_HWCAP2: ::libc::c_uint = 26;
-pub const AT_EXECFN: ::libc::c_uint = 31;
-pub const AT_SYSINFO: ::libc::c_uint = 32;
-pub const AT_SYSINFO_EHDR: ::libc::c_uint = 33;
-pub const AT_L1I_CACHESHAPE: ::libc::c_uint = 34;
-pub const AT_L1D_CACHESHAPE: ::libc::c_uint = 35;
-pub const AT_L2_CACHESHAPE: ::libc::c_uint = 36;
-pub const AT_L3_CACHESHAPE: ::libc::c_uint = 37;
-pub const ELF_NOTE_SOLARIS: &'static [u8; 13usize] = b"SUNW Solaris\x00";
-pub const ELF_NOTE_GNU: &'static [u8; 4usize] = b"GNU\x00";
-pub const ELF_NOTE_PAGESIZE_HINT: ::libc::c_uint = 1;
-pub const NT_GNU_ABI_TAG: ::libc::c_uint = 1;
-pub const ELF_NOTE_ABI: ::libc::c_uint = 1;
-pub const ELF_NOTE_OS_LINUX: ::libc::c_uint = 0;
-pub const ELF_NOTE_OS_GNU: ::libc::c_uint = 1;
-pub const ELF_NOTE_OS_SOLARIS2: ::libc::c_uint = 2;
-pub const ELF_NOTE_OS_FREEBSD: ::libc::c_uint = 3;
-pub const NT_GNU_HWCAP: ::libc::c_uint = 2;
-pub const NT_GNU_BUILD_ID: ::libc::c_uint = 3;
-pub const NT_GNU_GOLD_VERSION: ::libc::c_uint = 4;
-pub const EF_CPU32: ::libc::c_uint = 8454144;
-pub const R_68K_NONE: ::libc::c_uint = 0;
-pub const R_68K_32: ::libc::c_uint = 1;
-pub const R_68K_16: ::libc::c_uint = 2;
-pub const R_68K_8: ::libc::c_uint = 3;
-pub const R_68K_PC32: ::libc::c_uint = 4;
-pub const R_68K_PC16: ::libc::c_uint = 5;
-pub const R_68K_PC8: ::libc::c_uint = 6;
-pub const R_68K_GOT32: ::libc::c_uint = 7;
-pub const R_68K_GOT16: ::libc::c_uint = 8;
-pub const R_68K_GOT8: ::libc::c_uint = 9;
-pub const R_68K_GOT32O: ::libc::c_uint = 10;
-pub const R_68K_GOT16O: ::libc::c_uint = 11;
-pub const R_68K_GOT8O: ::libc::c_uint = 12;
-pub const R_68K_PLT32: ::libc::c_uint = 13;
-pub const R_68K_PLT16: ::libc::c_uint = 14;
-pub const R_68K_PLT8: ::libc::c_uint = 15;
-pub const R_68K_PLT32O: ::libc::c_uint = 16;
-pub const R_68K_PLT16O: ::libc::c_uint = 17;
-pub const R_68K_PLT8O: ::libc::c_uint = 18;
-pub const R_68K_COPY: ::libc::c_uint = 19;
-pub const R_68K_GLOB_DAT: ::libc::c_uint = 20;
-pub const R_68K_JMP_SLOT: ::libc::c_uint = 21;
-pub const R_68K_RELATIVE: ::libc::c_uint = 22;
-pub const R_68K_TLS_GD32: ::libc::c_uint = 25;
-pub const R_68K_TLS_GD16: ::libc::c_uint = 26;
-pub const R_68K_TLS_GD8: ::libc::c_uint = 27;
-pub const R_68K_TLS_LDM32: ::libc::c_uint = 28;
-pub const R_68K_TLS_LDM16: ::libc::c_uint = 29;
-pub const R_68K_TLS_LDM8: ::libc::c_uint = 30;
-pub const R_68K_TLS_LDO32: ::libc::c_uint = 31;
-pub const R_68K_TLS_LDO16: ::libc::c_uint = 32;
-pub const R_68K_TLS_LDO8: ::libc::c_uint = 33;
-pub const R_68K_TLS_IE32: ::libc::c_uint = 34;
-pub const R_68K_TLS_IE16: ::libc::c_uint = 35;
-pub const R_68K_TLS_IE8: ::libc::c_uint = 36;
-pub const R_68K_TLS_LE32: ::libc::c_uint = 37;
-pub const R_68K_TLS_LE16: ::libc::c_uint = 38;
-pub const R_68K_TLS_LE8: ::libc::c_uint = 39;
-pub const R_68K_TLS_DTPMOD32: ::libc::c_uint = 40;
-pub const R_68K_TLS_DTPREL32: ::libc::c_uint = 41;
-pub const R_68K_TLS_TPREL32: ::libc::c_uint = 42;
-pub const R_68K_NUM: ::libc::c_uint = 43;
-pub const R_386_NONE: ::libc::c_uint = 0;
-pub const R_386_32: ::libc::c_uint = 1;
-pub const R_386_PC32: ::libc::c_uint = 2;
-pub const R_386_GOT32: ::libc::c_uint = 3;
-pub const R_386_PLT32: ::libc::c_uint = 4;
-pub const R_386_COPY: ::libc::c_uint = 5;
-pub const R_386_GLOB_DAT: ::libc::c_uint = 6;
-pub const R_386_JMP_SLOT: ::libc::c_uint = 7;
-pub const R_386_RELATIVE: ::libc::c_uint = 8;
-pub const R_386_GOTOFF: ::libc::c_uint = 9;
-pub const R_386_GOTPC: ::libc::c_uint = 10;
-pub const R_386_32PLT: ::libc::c_uint = 11;
-pub const R_386_TLS_TPOFF: ::libc::c_uint = 14;
-pub const R_386_TLS_IE: ::libc::c_uint = 15;
-pub const R_386_TLS_GOTIE: ::libc::c_uint = 16;
-pub const R_386_TLS_LE: ::libc::c_uint = 17;
-pub const R_386_TLS_GD: ::libc::c_uint = 18;
-pub const R_386_TLS_LDM: ::libc::c_uint = 19;
-pub const R_386_16: ::libc::c_uint = 20;
-pub const R_386_PC16: ::libc::c_uint = 21;
-pub const R_386_8: ::libc::c_uint = 22;
-pub const R_386_PC8: ::libc::c_uint = 23;
-pub const R_386_TLS_GD_32: ::libc::c_uint = 24;
-pub const R_386_TLS_GD_PUSH: ::libc::c_uint = 25;
-pub const R_386_TLS_GD_CALL: ::libc::c_uint = 26;
-pub const R_386_TLS_GD_POP: ::libc::c_uint = 27;
-pub const R_386_TLS_LDM_32: ::libc::c_uint = 28;
-pub const R_386_TLS_LDM_PUSH: ::libc::c_uint = 29;
-pub const R_386_TLS_LDM_CALL: ::libc::c_uint = 30;
-pub const R_386_TLS_LDM_POP: ::libc::c_uint = 31;
-pub const R_386_TLS_LDO_32: ::libc::c_uint = 32;
-pub const R_386_TLS_IE_32: ::libc::c_uint = 33;
-pub const R_386_TLS_LE_32: ::libc::c_uint = 34;
-pub const R_386_TLS_DTPMOD32: ::libc::c_uint = 35;
-pub const R_386_TLS_DTPOFF32: ::libc::c_uint = 36;
-pub const R_386_TLS_TPOFF32: ::libc::c_uint = 37;
-pub const R_386_SIZE32: ::libc::c_uint = 38;
-pub const R_386_TLS_GOTDESC: ::libc::c_uint = 39;
-pub const R_386_TLS_DESC_CALL: ::libc::c_uint = 40;
-pub const R_386_TLS_DESC: ::libc::c_uint = 41;
-pub const R_386_IRELATIVE: ::libc::c_uint = 42;
-pub const R_386_GOT32X: ::libc::c_uint = 43;
-pub const R_386_NUM: ::libc::c_uint = 44;
-pub const STT_SPARC_REGISTER: ::libc::c_uint = 13;
-pub const EF_SPARCV9_MM: ::libc::c_uint = 3;
-pub const EF_SPARCV9_TSO: ::libc::c_uint = 0;
-pub const EF_SPARCV9_PSO: ::libc::c_uint = 1;
-pub const EF_SPARCV9_RMO: ::libc::c_uint = 2;
-pub const EF_SPARC_LEDATA: ::libc::c_uint = 8388608;
-pub const EF_SPARC_EXT_MASK: ::libc::c_uint = 16776960;
-pub const EF_SPARC_32PLUS: ::libc::c_uint = 256;
-pub const EF_SPARC_SUN_US1: ::libc::c_uint = 512;
-pub const EF_SPARC_HAL_R1: ::libc::c_uint = 1024;
-pub const EF_SPARC_SUN_US3: ::libc::c_uint = 2048;
-pub const R_SPARC_NONE: ::libc::c_uint = 0;
-pub const R_SPARC_8: ::libc::c_uint = 1;
-pub const R_SPARC_16: ::libc::c_uint = 2;
-pub const R_SPARC_32: ::libc::c_uint = 3;
-pub const R_SPARC_DISP8: ::libc::c_uint = 4;
-pub const R_SPARC_DISP16: ::libc::c_uint = 5;
-pub const R_SPARC_DISP32: ::libc::c_uint = 6;
-pub const R_SPARC_WDISP30: ::libc::c_uint = 7;
-pub const R_SPARC_WDISP22: ::libc::c_uint = 8;
-pub const R_SPARC_HI22: ::libc::c_uint = 9;
-pub const R_SPARC_22: ::libc::c_uint = 10;
-pub const R_SPARC_13: ::libc::c_uint = 11;
-pub const R_SPARC_LO10: ::libc::c_uint = 12;
-pub const R_SPARC_GOT10: ::libc::c_uint = 13;
-pub const R_SPARC_GOT13: ::libc::c_uint = 14;
-pub const R_SPARC_GOT22: ::libc::c_uint = 15;
-pub const R_SPARC_PC10: ::libc::c_uint = 16;
-pub const R_SPARC_PC22: ::libc::c_uint = 17;
-pub const R_SPARC_WPLT30: ::libc::c_uint = 18;
-pub const R_SPARC_COPY: ::libc::c_uint = 19;
-pub const R_SPARC_GLOB_DAT: ::libc::c_uint = 20;
-pub const R_SPARC_JMP_SLOT: ::libc::c_uint = 21;
-pub const R_SPARC_RELATIVE: ::libc::c_uint = 22;
-pub const R_SPARC_UA32: ::libc::c_uint = 23;
-pub const R_SPARC_PLT32: ::libc::c_uint = 24;
-pub const R_SPARC_HIPLT22: ::libc::c_uint = 25;
-pub const R_SPARC_LOPLT10: ::libc::c_uint = 26;
-pub const R_SPARC_PCPLT32: ::libc::c_uint = 27;
-pub const R_SPARC_PCPLT22: ::libc::c_uint = 28;
-pub const R_SPARC_PCPLT10: ::libc::c_uint = 29;
-pub const R_SPARC_10: ::libc::c_uint = 30;
-pub const R_SPARC_11: ::libc::c_uint = 31;
-pub const R_SPARC_64: ::libc::c_uint = 32;
-pub const R_SPARC_OLO10: ::libc::c_uint = 33;
-pub const R_SPARC_HH22: ::libc::c_uint = 34;
-pub const R_SPARC_HM10: ::libc::c_uint = 35;
-pub const R_SPARC_LM22: ::libc::c_uint = 36;
-pub const R_SPARC_PC_HH22: ::libc::c_uint = 37;
-pub const R_SPARC_PC_HM10: ::libc::c_uint = 38;
-pub const R_SPARC_PC_LM22: ::libc::c_uint = 39;
-pub const R_SPARC_WDISP16: ::libc::c_uint = 40;
-pub const R_SPARC_WDISP19: ::libc::c_uint = 41;
-pub const R_SPARC_GLOB_JMP: ::libc::c_uint = 42;
-pub const R_SPARC_7: ::libc::c_uint = 43;
-pub const R_SPARC_5: ::libc::c_uint = 44;
-pub const R_SPARC_6: ::libc::c_uint = 45;
-pub const R_SPARC_DISP64: ::libc::c_uint = 46;
-pub const R_SPARC_PLT64: ::libc::c_uint = 47;
-pub const R_SPARC_HIX22: ::libc::c_uint = 48;
-pub const R_SPARC_LOX10: ::libc::c_uint = 49;
-pub const R_SPARC_H44: ::libc::c_uint = 50;
-pub const R_SPARC_M44: ::libc::c_uint = 51;
-pub const R_SPARC_L44: ::libc::c_uint = 52;
-pub const R_SPARC_REGISTER: ::libc::c_uint = 53;
-pub const R_SPARC_UA64: ::libc::c_uint = 54;
-pub const R_SPARC_UA16: ::libc::c_uint = 55;
-pub const R_SPARC_TLS_GD_HI22: ::libc::c_uint = 56;
-pub const R_SPARC_TLS_GD_LO10: ::libc::c_uint = 57;
-pub const R_SPARC_TLS_GD_ADD: ::libc::c_uint = 58;
-pub const R_SPARC_TLS_GD_CALL: ::libc::c_uint = 59;
-pub const R_SPARC_TLS_LDM_HI22: ::libc::c_uint = 60;
-pub const R_SPARC_TLS_LDM_LO10: ::libc::c_uint = 61;
-pub const R_SPARC_TLS_LDM_ADD: ::libc::c_uint = 62;
-pub const R_SPARC_TLS_LDM_CALL: ::libc::c_uint = 63;
-pub const R_SPARC_TLS_LDO_HIX22: ::libc::c_uint = 64;
-pub const R_SPARC_TLS_LDO_LOX10: ::libc::c_uint = 65;
-pub const R_SPARC_TLS_LDO_ADD: ::libc::c_uint = 66;
-pub const R_SPARC_TLS_IE_HI22: ::libc::c_uint = 67;
-pub const R_SPARC_TLS_IE_LO10: ::libc::c_uint = 68;
-pub const R_SPARC_TLS_IE_LD: ::libc::c_uint = 69;
-pub const R_SPARC_TLS_IE_LDX: ::libc::c_uint = 70;
-pub const R_SPARC_TLS_IE_ADD: ::libc::c_uint = 71;
-pub const R_SPARC_TLS_LE_HIX22: ::libc::c_uint = 72;
-pub const R_SPARC_TLS_LE_LOX10: ::libc::c_uint = 73;
-pub const R_SPARC_TLS_DTPMOD32: ::libc::c_uint = 74;
-pub const R_SPARC_TLS_DTPMOD64: ::libc::c_uint = 75;
-pub const R_SPARC_TLS_DTPOFF32: ::libc::c_uint = 76;
-pub const R_SPARC_TLS_DTPOFF64: ::libc::c_uint = 77;
-pub const R_SPARC_TLS_TPOFF32: ::libc::c_uint = 78;
-pub const R_SPARC_TLS_TPOFF64: ::libc::c_uint = 79;
-pub const R_SPARC_GOTDATA_HIX22: ::libc::c_uint = 80;
-pub const R_SPARC_GOTDATA_LOX10: ::libc::c_uint = 81;
-pub const R_SPARC_GOTDATA_OP_HIX22: ::libc::c_uint = 82;
-pub const R_SPARC_GOTDATA_OP_LOX10: ::libc::c_uint = 83;
-pub const R_SPARC_GOTDATA_OP: ::libc::c_uint = 84;
-pub const R_SPARC_H34: ::libc::c_uint = 85;
-pub const R_SPARC_SIZE32: ::libc::c_uint = 86;
-pub const R_SPARC_SIZE64: ::libc::c_uint = 87;
-pub const R_SPARC_WDISP10: ::libc::c_uint = 88;
-pub const R_SPARC_JMP_IREL: ::libc::c_uint = 248;
-pub const R_SPARC_IRELATIVE: ::libc::c_uint = 249;
-pub const R_SPARC_GNU_VTINHERIT: ::libc::c_uint = 250;
-pub const R_SPARC_GNU_VTENTRY: ::libc::c_uint = 251;
-pub const R_SPARC_REV32: ::libc::c_uint = 252;
-pub const R_SPARC_NUM: ::libc::c_uint = 253;
-pub const DT_SPARC_REGISTER: ::libc::c_uint = 1879048193;
-pub const DT_SPARC_NUM: ::libc::c_uint = 2;
-pub const EF_MIPS_NOREORDER: ::libc::c_uint = 1;
-pub const EF_MIPS_PIC: ::libc::c_uint = 2;
-pub const EF_MIPS_CPIC: ::libc::c_uint = 4;
-pub const EF_MIPS_XGOT: ::libc::c_uint = 8;
-pub const EF_MIPS_64BIT_WHIRL: ::libc::c_uint = 16;
-pub const EF_MIPS_ABI2: ::libc::c_uint = 32;
-pub const EF_MIPS_ABI_ON32: ::libc::c_uint = 64;
-pub const EF_MIPS_FP64: ::libc::c_uint = 512;
-pub const EF_MIPS_NAN2008: ::libc::c_uint = 1024;
-pub const EF_MIPS_ARCH: ::libc::c_uint = 4026531840;
-pub const EF_MIPS_ARCH_1: ::libc::c_uint = 0;
-pub const EF_MIPS_ARCH_2: ::libc::c_uint = 268435456;
-pub const EF_MIPS_ARCH_3: ::libc::c_uint = 536870912;
-pub const EF_MIPS_ARCH_4: ::libc::c_uint = 805306368;
-pub const EF_MIPS_ARCH_5: ::libc::c_uint = 1073741824;
-pub const EF_MIPS_ARCH_32: ::libc::c_uint = 1342177280;
-pub const EF_MIPS_ARCH_64: ::libc::c_uint = 1610612736;
-pub const EF_MIPS_ARCH_32R2: ::libc::c_uint = 1879048192;
-pub const EF_MIPS_ARCH_64R2: ::libc::c_uint = 2147483648;
-pub const SHN_MIPS_ACOMMON: ::libc::c_uint = 65280;
-pub const SHN_MIPS_TEXT: ::libc::c_uint = 65281;
-pub const SHN_MIPS_DATA: ::libc::c_uint = 65282;
-pub const SHN_MIPS_SCOMMON: ::libc::c_uint = 65283;
-pub const SHN_MIPS_SUNDEFINED: ::libc::c_uint = 65284;
-pub const SHT_MIPS_LIBLIST: ::libc::c_uint = 1879048192;
-pub const SHT_MIPS_MSYM: ::libc::c_uint = 1879048193;
-pub const SHT_MIPS_CONFLICT: ::libc::c_uint = 1879048194;
-pub const SHT_MIPS_GPTAB: ::libc::c_uint = 1879048195;
-pub const SHT_MIPS_UCODE: ::libc::c_uint = 1879048196;
-pub const SHT_MIPS_DEBUG: ::libc::c_uint = 1879048197;
-pub const SHT_MIPS_REGINFO: ::libc::c_uint = 1879048198;
-pub const SHT_MIPS_PACKAGE: ::libc::c_uint = 1879048199;
-pub const SHT_MIPS_PACKSYM: ::libc::c_uint = 1879048200;
-pub const SHT_MIPS_RELD: ::libc::c_uint = 1879048201;
-pub const SHT_MIPS_IFACE: ::libc::c_uint = 1879048203;
-pub const SHT_MIPS_CONTENT: ::libc::c_uint = 1879048204;
-pub const SHT_MIPS_OPTIONS: ::libc::c_uint = 1879048205;
-pub const SHT_MIPS_SHDR: ::libc::c_uint = 1879048208;
-pub const SHT_MIPS_FDESC: ::libc::c_uint = 1879048209;
-pub const SHT_MIPS_EXTSYM: ::libc::c_uint = 1879048210;
-pub const SHT_MIPS_DENSE: ::libc::c_uint = 1879048211;
-pub const SHT_MIPS_PDESC: ::libc::c_uint = 1879048212;
-pub const SHT_MIPS_LOCSYM: ::libc::c_uint = 1879048213;
-pub const SHT_MIPS_AUXSYM: ::libc::c_uint = 1879048214;
-pub const SHT_MIPS_OPTSYM: ::libc::c_uint = 1879048215;
-pub const SHT_MIPS_LOCSTR: ::libc::c_uint = 1879048216;
-pub const SHT_MIPS_LINE: ::libc::c_uint = 1879048217;
-pub const SHT_MIPS_RFDESC: ::libc::c_uint = 1879048218;
-pub const SHT_MIPS_DELTASYM: ::libc::c_uint = 1879048219;
-pub const SHT_MIPS_DELTAINST: ::libc::c_uint = 1879048220;
-pub const SHT_MIPS_DELTACLASS: ::libc::c_uint = 1879048221;
-pub const SHT_MIPS_DWARF: ::libc::c_uint = 1879048222;
-pub const SHT_MIPS_DELTADECL: ::libc::c_uint = 1879048223;
-pub const SHT_MIPS_SYMBOL_LIB: ::libc::c_uint = 1879048224;
-pub const SHT_MIPS_EVENTS: ::libc::c_uint = 1879048225;
-pub const SHT_MIPS_TRANSLATE: ::libc::c_uint = 1879048226;
-pub const SHT_MIPS_PIXIE: ::libc::c_uint = 1879048227;
-pub const SHT_MIPS_XLATE: ::libc::c_uint = 1879048228;
-pub const SHT_MIPS_XLATE_DEBUG: ::libc::c_uint = 1879048229;
-pub const SHT_MIPS_WHIRL: ::libc::c_uint = 1879048230;
-pub const SHT_MIPS_EH_REGION: ::libc::c_uint = 1879048231;
-pub const SHT_MIPS_XLATE_OLD: ::libc::c_uint = 1879048232;
-pub const SHT_MIPS_PDR_EXCEPTION: ::libc::c_uint = 1879048233;
-pub const SHF_MIPS_GPREL: ::libc::c_uint = 268435456;
-pub const SHF_MIPS_MERGE: ::libc::c_uint = 536870912;
-pub const SHF_MIPS_ADDR: ::libc::c_uint = 1073741824;
-pub const SHF_MIPS_STRINGS: ::libc::c_uint = 2147483648;
-pub const SHF_MIPS_NOSTRIP: ::libc::c_uint = 134217728;
-pub const SHF_MIPS_LOCAL: ::libc::c_uint = 67108864;
-pub const SHF_MIPS_NAMES: ::libc::c_uint = 33554432;
-pub const SHF_MIPS_NODUPE: ::libc::c_uint = 16777216;
-pub const STO_MIPS_DEFAULT: ::libc::c_uint = 0;
-pub const STO_MIPS_INTERNAL: ::libc::c_uint = 1;
-pub const STO_MIPS_HIDDEN: ::libc::c_uint = 2;
-pub const STO_MIPS_PROTECTED: ::libc::c_uint = 3;
-pub const STO_MIPS_PLT: ::libc::c_uint = 8;
-pub const STO_MIPS_SC_ALIGN_UNUSED: ::libc::c_uint = 255;
-pub const STB_MIPS_SPLIT_COMMON: ::libc::c_uint = 13;
-pub const ODK_NULL: ::libc::c_uint = 0;
-pub const ODK_REGINFO: ::libc::c_uint = 1;
-pub const ODK_EXCEPTIONS: ::libc::c_uint = 2;
-pub const ODK_PAD: ::libc::c_uint = 3;
-pub const ODK_HWPATCH: ::libc::c_uint = 4;
-pub const ODK_FILL: ::libc::c_uint = 5;
-pub const ODK_TAGS: ::libc::c_uint = 6;
-pub const ODK_HWAND: ::libc::c_uint = 7;
-pub const ODK_HWOR: ::libc::c_uint = 8;
-pub const OEX_FPU_MIN: ::libc::c_uint = 31;
-pub const OEX_FPU_MAX: ::libc::c_uint = 7936;
-pub const OEX_PAGE0: ::libc::c_uint = 65536;
-pub const OEX_SMM: ::libc::c_uint = 131072;
-pub const OEX_FPDBUG: ::libc::c_uint = 262144;
-pub const OEX_PRECISEFP: ::libc::c_uint = 262144;
-pub const OEX_DISMISS: ::libc::c_uint = 524288;
-pub const OEX_FPU_INVAL: ::libc::c_uint = 16;
-pub const OEX_FPU_DIV0: ::libc::c_uint = 8;
-pub const OEX_FPU_OFLO: ::libc::c_uint = 4;
-pub const OEX_FPU_UFLO: ::libc::c_uint = 2;
-pub const OEX_FPU_INEX: ::libc::c_uint = 1;
-pub const OHW_R4KEOP: ::libc::c_uint = 1;
-pub const OHW_R8KPFETCH: ::libc::c_uint = 2;
-pub const OHW_R5KEOP: ::libc::c_uint = 4;
-pub const OHW_R5KCVTL: ::libc::c_uint = 8;
-pub const OPAD_PREFIX: ::libc::c_uint = 1;
-pub const OPAD_POSTFIX: ::libc::c_uint = 2;
-pub const OPAD_SYMBOL: ::libc::c_uint = 4;
-pub const OHWA0_R4KEOP_CHECKED: ::libc::c_uint = 1;
-pub const OHWA1_R4KEOP_CLEAN: ::libc::c_uint = 2;
-pub const R_MIPS_NONE: ::libc::c_uint = 0;
-pub const R_MIPS_16: ::libc::c_uint = 1;
-pub const R_MIPS_32: ::libc::c_uint = 2;
-pub const R_MIPS_REL32: ::libc::c_uint = 3;
-pub const R_MIPS_26: ::libc::c_uint = 4;
-pub const R_MIPS_HI16: ::libc::c_uint = 5;
-pub const R_MIPS_LO16: ::libc::c_uint = 6;
-pub const R_MIPS_GPREL16: ::libc::c_uint = 7;
-pub const R_MIPS_LITERAL: ::libc::c_uint = 8;
-pub const R_MIPS_GOT16: ::libc::c_uint = 9;
-pub const R_MIPS_PC16: ::libc::c_uint = 10;
-pub const R_MIPS_CALL16: ::libc::c_uint = 11;
-pub const R_MIPS_GPREL32: ::libc::c_uint = 12;
-pub const R_MIPS_SHIFT5: ::libc::c_uint = 16;
-pub const R_MIPS_SHIFT6: ::libc::c_uint = 17;
-pub const R_MIPS_64: ::libc::c_uint = 18;
-pub const R_MIPS_GOT_DISP: ::libc::c_uint = 19;
-pub const R_MIPS_GOT_PAGE: ::libc::c_uint = 20;
-pub const R_MIPS_GOT_OFST: ::libc::c_uint = 21;
-pub const R_MIPS_GOT_HI16: ::libc::c_uint = 22;
-pub const R_MIPS_GOT_LO16: ::libc::c_uint = 23;
-pub const R_MIPS_SUB: ::libc::c_uint = 24;
-pub const R_MIPS_INSERT_A: ::libc::c_uint = 25;
-pub const R_MIPS_INSERT_B: ::libc::c_uint = 26;
-pub const R_MIPS_DELETE: ::libc::c_uint = 27;
-pub const R_MIPS_HIGHER: ::libc::c_uint = 28;
-pub const R_MIPS_HIGHEST: ::libc::c_uint = 29;
-pub const R_MIPS_CALL_HI16: ::libc::c_uint = 30;
-pub const R_MIPS_CALL_LO16: ::libc::c_uint = 31;
-pub const R_MIPS_SCN_DISP: ::libc::c_uint = 32;
-pub const R_MIPS_REL16: ::libc::c_uint = 33;
-pub const R_MIPS_ADD_IMMEDIATE: ::libc::c_uint = 34;
-pub const R_MIPS_PJUMP: ::libc::c_uint = 35;
-pub const R_MIPS_RELGOT: ::libc::c_uint = 36;
-pub const R_MIPS_JALR: ::libc::c_uint = 37;
-pub const R_MIPS_TLS_DTPMOD32: ::libc::c_uint = 38;
-pub const R_MIPS_TLS_DTPREL32: ::libc::c_uint = 39;
-pub const R_MIPS_TLS_DTPMOD64: ::libc::c_uint = 40;
-pub const R_MIPS_TLS_DTPREL64: ::libc::c_uint = 41;
-pub const R_MIPS_TLS_GD: ::libc::c_uint = 42;
-pub const R_MIPS_TLS_LDM: ::libc::c_uint = 43;
-pub const R_MIPS_TLS_DTPREL_HI16: ::libc::c_uint = 44;
-pub const R_MIPS_TLS_DTPREL_LO16: ::libc::c_uint = 45;
-pub const R_MIPS_TLS_GOTTPREL: ::libc::c_uint = 46;
-pub const R_MIPS_TLS_TPREL32: ::libc::c_uint = 47;
-pub const R_MIPS_TLS_TPREL64: ::libc::c_uint = 48;
-pub const R_MIPS_TLS_TPREL_HI16: ::libc::c_uint = 49;
-pub const R_MIPS_TLS_TPREL_LO16: ::libc::c_uint = 50;
-pub const R_MIPS_GLOB_DAT: ::libc::c_uint = 51;
-pub const R_MIPS_COPY: ::libc::c_uint = 126;
-pub const R_MIPS_JUMP_SLOT: ::libc::c_uint = 127;
-pub const R_MIPS_NUM: ::libc::c_uint = 128;
-pub const PT_MIPS_REGINFO: ::libc::c_uint = 1879048192;
-pub const PT_MIPS_RTPROC: ::libc::c_uint = 1879048193;
-pub const PT_MIPS_OPTIONS: ::libc::c_uint = 1879048194;
-pub const PT_MIPS_ABIFLAGS: ::libc::c_uint = 1879048195;
-pub const PF_MIPS_LOCAL: ::libc::c_uint = 268435456;
-pub const DT_MIPS_RLD_VERSION: ::libc::c_uint = 1879048193;
-pub const DT_MIPS_TIME_STAMP: ::libc::c_uint = 1879048194;
-pub const DT_MIPS_ICHECKSUM: ::libc::c_uint = 1879048195;
-pub const DT_MIPS_IVERSION: ::libc::c_uint = 1879048196;
-pub const DT_MIPS_FLAGS: ::libc::c_uint = 1879048197;
-pub const DT_MIPS_BASE_ADDRESS: ::libc::c_uint = 1879048198;
-pub const DT_MIPS_MSYM: ::libc::c_uint = 1879048199;
-pub const DT_MIPS_CONFLICT: ::libc::c_uint = 1879048200;
-pub const DT_MIPS_LIBLIST: ::libc::c_uint = 1879048201;
-pub const DT_MIPS_LOCAL_GOTNO: ::libc::c_uint = 1879048202;
-pub const DT_MIPS_CONFLICTNO: ::libc::c_uint = 1879048203;
-pub const DT_MIPS_LIBLISTNO: ::libc::c_uint = 1879048208;
-pub const DT_MIPS_SYMTABNO: ::libc::c_uint = 1879048209;
-pub const DT_MIPS_UNREFEXTNO: ::libc::c_uint = 1879048210;
-pub const DT_MIPS_GOTSYM: ::libc::c_uint = 1879048211;
-pub const DT_MIPS_HIPAGENO: ::libc::c_uint = 1879048212;
-pub const DT_MIPS_RLD_MAP: ::libc::c_uint = 1879048214;
-pub const DT_MIPS_DELTA_CLASS: ::libc::c_uint = 1879048215;
-pub const DT_MIPS_DELTA_CLASS_NO: ::libc::c_uint = 1879048216;
-pub const DT_MIPS_DELTA_INSTANCE: ::libc::c_uint = 1879048217;
-pub const DT_MIPS_DELTA_INSTANCE_NO: ::libc::c_uint = 1879048218;
-pub const DT_MIPS_DELTA_RELOC: ::libc::c_uint = 1879048219;
-pub const DT_MIPS_DELTA_RELOC_NO: ::libc::c_uint = 1879048220;
-pub const DT_MIPS_DELTA_SYM: ::libc::c_uint = 1879048221;
-pub const DT_MIPS_DELTA_SYM_NO: ::libc::c_uint = 1879048222;
-pub const DT_MIPS_DELTA_CLASSSYM: ::libc::c_uint = 1879048224;
-pub const DT_MIPS_DELTA_CLASSSYM_NO: ::libc::c_uint = 1879048225;
-pub const DT_MIPS_CXX_FLAGS: ::libc::c_uint = 1879048226;
-pub const DT_MIPS_PIXIE_INIT: ::libc::c_uint = 1879048227;
-pub const DT_MIPS_SYMBOL_LIB: ::libc::c_uint = 1879048228;
-pub const DT_MIPS_LOCALPAGE_GOTIDX: ::libc::c_uint = 1879048229;
-pub const DT_MIPS_LOCAL_GOTIDX: ::libc::c_uint = 1879048230;
-pub const DT_MIPS_HIDDEN_GOTIDX: ::libc::c_uint = 1879048231;
-pub const DT_MIPS_PROTECTED_GOTIDX: ::libc::c_uint = 1879048232;
-pub const DT_MIPS_OPTIONS: ::libc::c_uint = 1879048233;
-pub const DT_MIPS_INTERFACE: ::libc::c_uint = 1879048234;
-pub const DT_MIPS_DYNSTR_ALIGN: ::libc::c_uint = 1879048235;
-pub const DT_MIPS_INTERFACE_SIZE: ::libc::c_uint = 1879048236;
-pub const DT_MIPS_RLD_TEXT_RESOLVE_ADDR: ::libc::c_uint = 1879048237;
-pub const DT_MIPS_PERF_SUFFIX: ::libc::c_uint = 1879048238;
-pub const DT_MIPS_COMPACT_SIZE: ::libc::c_uint = 1879048239;
-pub const DT_MIPS_GP_VALUE: ::libc::c_uint = 1879048240;
-pub const DT_MIPS_AUX_DYNAMIC: ::libc::c_uint = 1879048241;
-pub const DT_MIPS_PLTGOT: ::libc::c_uint = 1879048242;
-pub const DT_MIPS_RWPLT: ::libc::c_uint = 1879048244;
-pub const DT_MIPS_RLD_MAP_REL: ::libc::c_uint = 1879048245;
-pub const DT_MIPS_NUM: ::libc::c_uint = 54;
-pub const RHF_NONE: ::libc::c_uint = 0;
-pub const RHF_QUICKSTART: ::libc::c_uint = 1;
-pub const RHF_NOTPOT: ::libc::c_uint = 2;
-pub const RHF_NO_LIBRARY_REPLACEMENT: ::libc::c_uint = 4;
-pub const RHF_NO_MOVE: ::libc::c_uint = 8;
-pub const RHF_SGI_ONLY: ::libc::c_uint = 16;
-pub const RHF_GUARANTEE_INIT: ::libc::c_uint = 32;
-pub const RHF_DELTA_C_PLUS_PLUS: ::libc::c_uint = 64;
-pub const RHF_GUARANTEE_START_INIT: ::libc::c_uint = 128;
-pub const RHF_PIXIE: ::libc::c_uint = 256;
-pub const RHF_DEFAULT_DELAY_LOAD: ::libc::c_uint = 512;
-pub const RHF_REQUICKSTART: ::libc::c_uint = 1024;
-pub const RHF_REQUICKSTARTED: ::libc::c_uint = 2048;
-pub const RHF_CORD: ::libc::c_uint = 4096;
-pub const RHF_NO_UNRES_UNDEF: ::libc::c_uint = 8192;
-pub const RHF_RLD_ORDER_SAFE: ::libc::c_uint = 16384;
-pub const LL_NONE: ::libc::c_uint = 0;
-pub const LL_EXACT_MATCH: ::libc::c_uint = 1;
-pub const LL_IGNORE_INT_VER: ::libc::c_uint = 2;
-pub const LL_REQUIRE_MINOR: ::libc::c_uint = 4;
-pub const LL_EXPORTS: ::libc::c_uint = 8;
-pub const LL_DELAY_LOAD: ::libc::c_uint = 16;
-pub const LL_DELTA: ::libc::c_uint = 32;
-pub const MIPS_AFL_REG_NONE: ::libc::c_uint = 0;
-pub const MIPS_AFL_REG_32: ::libc::c_uint = 1;
-pub const MIPS_AFL_REG_64: ::libc::c_uint = 2;
-pub const MIPS_AFL_REG_128: ::libc::c_uint = 3;
-pub const MIPS_AFL_ASE_DSP: ::libc::c_uint = 1;
-pub const MIPS_AFL_ASE_DSPR2: ::libc::c_uint = 2;
-pub const MIPS_AFL_ASE_EVA: ::libc::c_uint = 4;
-pub const MIPS_AFL_ASE_MCU: ::libc::c_uint = 8;
-pub const MIPS_AFL_ASE_MDMX: ::libc::c_uint = 16;
-pub const MIPS_AFL_ASE_MIPS3D: ::libc::c_uint = 32;
-pub const MIPS_AFL_ASE_MT: ::libc::c_uint = 64;
-pub const MIPS_AFL_ASE_SMARTMIPS: ::libc::c_uint = 128;
-pub const MIPS_AFL_ASE_VIRT: ::libc::c_uint = 256;
-pub const MIPS_AFL_ASE_MSA: ::libc::c_uint = 512;
-pub const MIPS_AFL_ASE_MIPS16: ::libc::c_uint = 1024;
-pub const MIPS_AFL_ASE_MICROMIPS: ::libc::c_uint = 2048;
-pub const MIPS_AFL_ASE_XPA: ::libc::c_uint = 4096;
-pub const MIPS_AFL_ASE_MASK: ::libc::c_uint = 8191;
-pub const MIPS_AFL_EXT_XLR: ::libc::c_uint = 1;
-pub const MIPS_AFL_EXT_OCTEON2: ::libc::c_uint = 2;
-pub const MIPS_AFL_EXT_OCTEONP: ::libc::c_uint = 3;
-pub const MIPS_AFL_EXT_LOONGSON_3A: ::libc::c_uint = 4;
-pub const MIPS_AFL_EXT_OCTEON: ::libc::c_uint = 5;
-pub const MIPS_AFL_EXT_5900: ::libc::c_uint = 6;
-pub const MIPS_AFL_EXT_4650: ::libc::c_uint = 7;
-pub const MIPS_AFL_EXT_4010: ::libc::c_uint = 8;
-pub const MIPS_AFL_EXT_4100: ::libc::c_uint = 9;
-pub const MIPS_AFL_EXT_3900: ::libc::c_uint = 10;
-pub const MIPS_AFL_EXT_10000: ::libc::c_uint = 11;
-pub const MIPS_AFL_EXT_SB1: ::libc::c_uint = 12;
-pub const MIPS_AFL_EXT_4111: ::libc::c_uint = 13;
-pub const MIPS_AFL_EXT_4120: ::libc::c_uint = 14;
-pub const MIPS_AFL_EXT_5400: ::libc::c_uint = 15;
-pub const MIPS_AFL_EXT_5500: ::libc::c_uint = 16;
-pub const MIPS_AFL_EXT_LOONGSON_2E: ::libc::c_uint = 17;
-pub const MIPS_AFL_EXT_LOONGSON_2F: ::libc::c_uint = 18;
-pub const MIPS_AFL_FLAGS1_ODDSPREG: ::libc::c_uint = 1;
-pub const EF_PARISC_TRAPNIL: ::libc::c_uint = 65536;
-pub const EF_PARISC_EXT: ::libc::c_uint = 131072;
-pub const EF_PARISC_LSB: ::libc::c_uint = 262144;
-pub const EF_PARISC_WIDE: ::libc::c_uint = 524288;
-pub const EF_PARISC_NO_KABP: ::libc::c_uint = 1048576;
-pub const EF_PARISC_LAZYSWAP: ::libc::c_uint = 4194304;
-pub const EF_PARISC_ARCH: ::libc::c_uint = 65535;
-pub const EFA_PARISC_1_0: ::libc::c_uint = 523;
-pub const EFA_PARISC_1_1: ::libc::c_uint = 528;
-pub const EFA_PARISC_2_0: ::libc::c_uint = 532;
-pub const SHN_PARISC_ANSI_COMMON: ::libc::c_uint = 65280;
-pub const SHN_PARISC_HUGE_COMMON: ::libc::c_uint = 65281;
-pub const SHT_PARISC_EXT: ::libc::c_uint = 1879048192;
-pub const SHT_PARISC_UNWIND: ::libc::c_uint = 1879048193;
-pub const SHT_PARISC_DOC: ::libc::c_uint = 1879048194;
-pub const SHF_PARISC_SHORT: ::libc::c_uint = 536870912;
-pub const SHF_PARISC_HUGE: ::libc::c_uint = 1073741824;
-pub const SHF_PARISC_SBP: ::libc::c_uint = 2147483648;
-pub const STT_PARISC_MILLICODE: ::libc::c_uint = 13;
-pub const STT_HP_OPAQUE: ::libc::c_uint = 11;
-pub const STT_HP_STUB: ::libc::c_uint = 12;
-pub const R_PARISC_NONE: ::libc::c_uint = 0;
-pub const R_PARISC_DIR32: ::libc::c_uint = 1;
-pub const R_PARISC_DIR21L: ::libc::c_uint = 2;
-pub const R_PARISC_DIR17R: ::libc::c_uint = 3;
-pub const R_PARISC_DIR17F: ::libc::c_uint = 4;
-pub const R_PARISC_DIR14R: ::libc::c_uint = 6;
-pub const R_PARISC_PCREL32: ::libc::c_uint = 9;
-pub const R_PARISC_PCREL21L: ::libc::c_uint = 10;
-pub const R_PARISC_PCREL17R: ::libc::c_uint = 11;
-pub const R_PARISC_PCREL17F: ::libc::c_uint = 12;
-pub const R_PARISC_PCREL14R: ::libc::c_uint = 14;
-pub const R_PARISC_DPREL21L: ::libc::c_uint = 18;
-pub const R_PARISC_DPREL14R: ::libc::c_uint = 22;
-pub const R_PARISC_GPREL21L: ::libc::c_uint = 26;
-pub const R_PARISC_GPREL14R: ::libc::c_uint = 30;
-pub const R_PARISC_LTOFF21L: ::libc::c_uint = 34;
-pub const R_PARISC_LTOFF14R: ::libc::c_uint = 38;
-pub const R_PARISC_SECREL32: ::libc::c_uint = 41;
-pub const R_PARISC_SEGBASE: ::libc::c_uint = 48;
-pub const R_PARISC_SEGREL32: ::libc::c_uint = 49;
-pub const R_PARISC_PLTOFF21L: ::libc::c_uint = 50;
-pub const R_PARISC_PLTOFF14R: ::libc::c_uint = 54;
-pub const R_PARISC_LTOFF_FPTR32: ::libc::c_uint = 57;
-pub const R_PARISC_LTOFF_FPTR21L: ::libc::c_uint = 58;
-pub const R_PARISC_LTOFF_FPTR14R: ::libc::c_uint = 62;
-pub const R_PARISC_FPTR64: ::libc::c_uint = 64;
-pub const R_PARISC_PLABEL32: ::libc::c_uint = 65;
-pub const R_PARISC_PLABEL21L: ::libc::c_uint = 66;
-pub const R_PARISC_PLABEL14R: ::libc::c_uint = 70;
-pub const R_PARISC_PCREL64: ::libc::c_uint = 72;
-pub const R_PARISC_PCREL22F: ::libc::c_uint = 74;
-pub const R_PARISC_PCREL14WR: ::libc::c_uint = 75;
-pub const R_PARISC_PCREL14DR: ::libc::c_uint = 76;
-pub const R_PARISC_PCREL16F: ::libc::c_uint = 77;
-pub const R_PARISC_PCREL16WF: ::libc::c_uint = 78;
-pub const R_PARISC_PCREL16DF: ::libc::c_uint = 79;
-pub const R_PARISC_DIR64: ::libc::c_uint = 80;
-pub const R_PARISC_DIR14WR: ::libc::c_uint = 83;
-pub const R_PARISC_DIR14DR: ::libc::c_uint = 84;
-pub const R_PARISC_DIR16F: ::libc::c_uint = 85;
-pub const R_PARISC_DIR16WF: ::libc::c_uint = 86;
-pub const R_PARISC_DIR16DF: ::libc::c_uint = 87;
-pub const R_PARISC_GPREL64: ::libc::c_uint = 88;
-pub const R_PARISC_GPREL14WR: ::libc::c_uint = 91;
-pub const R_PARISC_GPREL14DR: ::libc::c_uint = 92;
-pub const R_PARISC_GPREL16F: ::libc::c_uint = 93;
-pub const R_PARISC_GPREL16WF: ::libc::c_uint = 94;
-pub const R_PARISC_GPREL16DF: ::libc::c_uint = 95;
-pub const R_PARISC_LTOFF64: ::libc::c_uint = 96;
-pub const R_PARISC_LTOFF14WR: ::libc::c_uint = 99;
-pub const R_PARISC_LTOFF14DR: ::libc::c_uint = 100;
-pub const R_PARISC_LTOFF16F: ::libc::c_uint = 101;
-pub const R_PARISC_LTOFF16WF: ::libc::c_uint = 102;
-pub const R_PARISC_LTOFF16DF: ::libc::c_uint = 103;
-pub const R_PARISC_SECREL64: ::libc::c_uint = 104;
-pub const R_PARISC_SEGREL64: ::libc::c_uint = 112;
-pub const R_PARISC_PLTOFF14WR: ::libc::c_uint = 115;
-pub const R_PARISC_PLTOFF14DR: ::libc::c_uint = 116;
-pub const R_PARISC_PLTOFF16F: ::libc::c_uint = 117;
-pub const R_PARISC_PLTOFF16WF: ::libc::c_uint = 118;
-pub const R_PARISC_PLTOFF16DF: ::libc::c_uint = 119;
-pub const R_PARISC_LTOFF_FPTR64: ::libc::c_uint = 120;
-pub const R_PARISC_LTOFF_FPTR14WR: ::libc::c_uint = 123;
-pub const R_PARISC_LTOFF_FPTR14DR: ::libc::c_uint = 124;
-pub const R_PARISC_LTOFF_FPTR16F: ::libc::c_uint = 125;
-pub const R_PARISC_LTOFF_FPTR16WF: ::libc::c_uint = 126;
-pub const R_PARISC_LTOFF_FPTR16DF: ::libc::c_uint = 127;
-pub const R_PARISC_LORESERVE: ::libc::c_uint = 128;
-pub const R_PARISC_COPY: ::libc::c_uint = 128;
-pub const R_PARISC_IPLT: ::libc::c_uint = 129;
-pub const R_PARISC_EPLT: ::libc::c_uint = 130;
-pub const R_PARISC_TPREL32: ::libc::c_uint = 153;
-pub const R_PARISC_TPREL21L: ::libc::c_uint = 154;
-pub const R_PARISC_TPREL14R: ::libc::c_uint = 158;
-pub const R_PARISC_LTOFF_TP21L: ::libc::c_uint = 162;
-pub const R_PARISC_LTOFF_TP14R: ::libc::c_uint = 166;
-pub const R_PARISC_LTOFF_TP14F: ::libc::c_uint = 167;
-pub const R_PARISC_TPREL64: ::libc::c_uint = 216;
-pub const R_PARISC_TPREL14WR: ::libc::c_uint = 219;
-pub const R_PARISC_TPREL14DR: ::libc::c_uint = 220;
-pub const R_PARISC_TPREL16F: ::libc::c_uint = 221;
-pub const R_PARISC_TPREL16WF: ::libc::c_uint = 222;
-pub const R_PARISC_TPREL16DF: ::libc::c_uint = 223;
-pub const R_PARISC_LTOFF_TP64: ::libc::c_uint = 224;
-pub const R_PARISC_LTOFF_TP14WR: ::libc::c_uint = 227;
-pub const R_PARISC_LTOFF_TP14DR: ::libc::c_uint = 228;
-pub const R_PARISC_LTOFF_TP16F: ::libc::c_uint = 229;
-pub const R_PARISC_LTOFF_TP16WF: ::libc::c_uint = 230;
-pub const R_PARISC_LTOFF_TP16DF: ::libc::c_uint = 231;
-pub const R_PARISC_GNU_VTENTRY: ::libc::c_uint = 232;
-pub const R_PARISC_GNU_VTINHERIT: ::libc::c_uint = 233;
-pub const R_PARISC_TLS_GD21L: ::libc::c_uint = 234;
-pub const R_PARISC_TLS_GD14R: ::libc::c_uint = 235;
-pub const R_PARISC_TLS_GDCALL: ::libc::c_uint = 236;
-pub const R_PARISC_TLS_LDM21L: ::libc::c_uint = 237;
-pub const R_PARISC_TLS_LDM14R: ::libc::c_uint = 238;
-pub const R_PARISC_TLS_LDMCALL: ::libc::c_uint = 239;
-pub const R_PARISC_TLS_LDO21L: ::libc::c_uint = 240;
-pub const R_PARISC_TLS_LDO14R: ::libc::c_uint = 241;
-pub const R_PARISC_TLS_DTPMOD32: ::libc::c_uint = 242;
-pub const R_PARISC_TLS_DTPMOD64: ::libc::c_uint = 243;
-pub const R_PARISC_TLS_DTPOFF32: ::libc::c_uint = 244;
-pub const R_PARISC_TLS_DTPOFF64: ::libc::c_uint = 245;
-pub const R_PARISC_TLS_LE21L: ::libc::c_uint = 154;
-pub const R_PARISC_TLS_LE14R: ::libc::c_uint = 158;
-pub const R_PARISC_TLS_IE21L: ::libc::c_uint = 162;
-pub const R_PARISC_TLS_IE14R: ::libc::c_uint = 166;
-pub const R_PARISC_TLS_TPREL32: ::libc::c_uint = 153;
-pub const R_PARISC_TLS_TPREL64: ::libc::c_uint = 216;
-pub const R_PARISC_HIRESERVE: ::libc::c_uint = 255;
-pub const PT_HP_TLS: ::libc::c_uint = 1610612736;
-pub const PT_HP_CORE_NONE: ::libc::c_uint = 1610612737;
-pub const PT_HP_CORE_VERSION: ::libc::c_uint = 1610612738;
-pub const PT_HP_CORE_KERNEL: ::libc::c_uint = 1610612739;
-pub const PT_HP_CORE_COMM: ::libc::c_uint = 1610612740;
-pub const PT_HP_CORE_PROC: ::libc::c_uint = 1610612741;
-pub const PT_HP_CORE_LOADABLE: ::libc::c_uint = 1610612742;
-pub const PT_HP_CORE_STACK: ::libc::c_uint = 1610612743;
-pub const PT_HP_CORE_SHM: ::libc::c_uint = 1610612744;
-pub const PT_HP_CORE_MMF: ::libc::c_uint = 1610612745;
-pub const PT_HP_PARALLEL: ::libc::c_uint = 1610612752;
-pub const PT_HP_FASTBIND: ::libc::c_uint = 1610612753;
-pub const PT_HP_OPT_ANNOT: ::libc::c_uint = 1610612754;
-pub const PT_HP_HSL_ANNOT: ::libc::c_uint = 1610612755;
-pub const PT_HP_STACK: ::libc::c_uint = 1610612756;
-pub const PT_PARISC_ARCHEXT: ::libc::c_uint = 1879048192;
-pub const PT_PARISC_UNWIND: ::libc::c_uint = 1879048193;
-pub const PF_PARISC_SBP: ::libc::c_uint = 134217728;
-pub const PF_HP_PAGE_SIZE: ::libc::c_uint = 1048576;
-pub const PF_HP_FAR_SHARED: ::libc::c_uint = 2097152;
-pub const PF_HP_NEAR_SHARED: ::libc::c_uint = 4194304;
-pub const PF_HP_CODE: ::libc::c_uint = 16777216;
-pub const PF_HP_MODIFY: ::libc::c_uint = 33554432;
-pub const PF_HP_LAZYSWAP: ::libc::c_uint = 67108864;
-pub const PF_HP_SBP: ::libc::c_uint = 134217728;
-pub const EF_ALPHA_32BIT: ::libc::c_uint = 1;
-pub const EF_ALPHA_CANRELAX: ::libc::c_uint = 2;
-pub const SHT_ALPHA_DEBUG: ::libc::c_uint = 1879048193;
-pub const SHT_ALPHA_REGINFO: ::libc::c_uint = 1879048194;
-pub const SHF_ALPHA_GPREL: ::libc::c_uint = 268435456;
-pub const STO_ALPHA_NOPV: ::libc::c_uint = 128;
-pub const STO_ALPHA_STD_GPLOAD: ::libc::c_uint = 136;
-pub const R_ALPHA_NONE: ::libc::c_uint = 0;
-pub const R_ALPHA_REFLONG: ::libc::c_uint = 1;
-pub const R_ALPHA_REFQUAD: ::libc::c_uint = 2;
-pub const R_ALPHA_GPREL32: ::libc::c_uint = 3;
-pub const R_ALPHA_LITERAL: ::libc::c_uint = 4;
-pub const R_ALPHA_LITUSE: ::libc::c_uint = 5;
-pub const R_ALPHA_GPDISP: ::libc::c_uint = 6;
-pub const R_ALPHA_BRADDR: ::libc::c_uint = 7;
-pub const R_ALPHA_HINT: ::libc::c_uint = 8;
-pub const R_ALPHA_SREL16: ::libc::c_uint = 9;
-pub const R_ALPHA_SREL32: ::libc::c_uint = 10;
-pub const R_ALPHA_SREL64: ::libc::c_uint = 11;
-pub const R_ALPHA_GPRELHIGH: ::libc::c_uint = 17;
-pub const R_ALPHA_GPRELLOW: ::libc::c_uint = 18;
-pub const R_ALPHA_GPREL16: ::libc::c_uint = 19;
-pub const R_ALPHA_COPY: ::libc::c_uint = 24;
-pub const R_ALPHA_GLOB_DAT: ::libc::c_uint = 25;
-pub const R_ALPHA_JMP_SLOT: ::libc::c_uint = 26;
-pub const R_ALPHA_RELATIVE: ::libc::c_uint = 27;
-pub const R_ALPHA_TLS_GD_HI: ::libc::c_uint = 28;
-pub const R_ALPHA_TLSGD: ::libc::c_uint = 29;
-pub const R_ALPHA_TLS_LDM: ::libc::c_uint = 30;
-pub const R_ALPHA_DTPMOD64: ::libc::c_uint = 31;
-pub const R_ALPHA_GOTDTPREL: ::libc::c_uint = 32;
-pub const R_ALPHA_DTPREL64: ::libc::c_uint = 33;
-pub const R_ALPHA_DTPRELHI: ::libc::c_uint = 34;
-pub const R_ALPHA_DTPRELLO: ::libc::c_uint = 35;
-pub const R_ALPHA_DTPREL16: ::libc::c_uint = 36;
-pub const R_ALPHA_GOTTPREL: ::libc::c_uint = 37;
-pub const R_ALPHA_TPREL64: ::libc::c_uint = 38;
-pub const R_ALPHA_TPRELHI: ::libc::c_uint = 39;
-pub const R_ALPHA_TPRELLO: ::libc::c_uint = 40;
-pub const R_ALPHA_TPREL16: ::libc::c_uint = 41;
-pub const R_ALPHA_NUM: ::libc::c_uint = 46;
-pub const LITUSE_ALPHA_ADDR: ::libc::c_uint = 0;
-pub const LITUSE_ALPHA_BASE: ::libc::c_uint = 1;
-pub const LITUSE_ALPHA_BYTOFF: ::libc::c_uint = 2;
-pub const LITUSE_ALPHA_JSR: ::libc::c_uint = 3;
-pub const LITUSE_ALPHA_TLS_GD: ::libc::c_uint = 4;
-pub const LITUSE_ALPHA_TLS_LDM: ::libc::c_uint = 5;
-pub const DT_ALPHA_PLTRO: ::libc::c_uint = 1879048192;
-pub const DT_ALPHA_NUM: ::libc::c_uint = 1;
-pub const EF_PPC_EMB: ::libc::c_uint = 2147483648;
-pub const EF_PPC_RELOCATABLE: ::libc::c_uint = 65536;
-pub const EF_PPC_RELOCATABLE_LIB: ::libc::c_uint = 32768;
-pub const R_PPC_NONE: ::libc::c_uint = 0;
-pub const R_PPC_ADDR32: ::libc::c_uint = 1;
-pub const R_PPC_ADDR24: ::libc::c_uint = 2;
-pub const R_PPC_ADDR16: ::libc::c_uint = 3;
-pub const R_PPC_ADDR16_LO: ::libc::c_uint = 4;
-pub const R_PPC_ADDR16_HI: ::libc::c_uint = 5;
-pub const R_PPC_ADDR16_HA: ::libc::c_uint = 6;
-pub const R_PPC_ADDR14: ::libc::c_uint = 7;
-pub const R_PPC_ADDR14_BRTAKEN: ::libc::c_uint = 8;
-pub const R_PPC_ADDR14_BRNTAKEN: ::libc::c_uint = 9;
-pub const R_PPC_REL24: ::libc::c_uint = 10;
-pub const R_PPC_REL14: ::libc::c_uint = 11;
-pub const R_PPC_REL14_BRTAKEN: ::libc::c_uint = 12;
-pub const R_PPC_REL14_BRNTAKEN: ::libc::c_uint = 13;
-pub const R_PPC_GOT16: ::libc::c_uint = 14;
-pub const R_PPC_GOT16_LO: ::libc::c_uint = 15;
-pub const R_PPC_GOT16_HI: ::libc::c_uint = 16;
-pub const R_PPC_GOT16_HA: ::libc::c_uint = 17;
-pub const R_PPC_PLTREL24: ::libc::c_uint = 18;
-pub const R_PPC_COPY: ::libc::c_uint = 19;
-pub const R_PPC_GLOB_DAT: ::libc::c_uint = 20;
-pub const R_PPC_JMP_SLOT: ::libc::c_uint = 21;
-pub const R_PPC_RELATIVE: ::libc::c_uint = 22;
-pub const R_PPC_LOCAL24PC: ::libc::c_uint = 23;
-pub const R_PPC_UADDR32: ::libc::c_uint = 24;
-pub const R_PPC_UADDR16: ::libc::c_uint = 25;
-pub const R_PPC_REL32: ::libc::c_uint = 26;
-pub const R_PPC_PLT32: ::libc::c_uint = 27;
-pub const R_PPC_PLTREL32: ::libc::c_uint = 28;
-pub const R_PPC_PLT16_LO: ::libc::c_uint = 29;
-pub const R_PPC_PLT16_HI: ::libc::c_uint = 30;
-pub const R_PPC_PLT16_HA: ::libc::c_uint = 31;
-pub const R_PPC_SDAREL16: ::libc::c_uint = 32;
-pub const R_PPC_SECTOFF: ::libc::c_uint = 33;
-pub const R_PPC_SECTOFF_LO: ::libc::c_uint = 34;
-pub const R_PPC_SECTOFF_HI: ::libc::c_uint = 35;
-pub const R_PPC_SECTOFF_HA: ::libc::c_uint = 36;
-pub const R_PPC_TLS: ::libc::c_uint = 67;
-pub const R_PPC_DTPMOD32: ::libc::c_uint = 68;
-pub const R_PPC_TPREL16: ::libc::c_uint = 69;
-pub const R_PPC_TPREL16_LO: ::libc::c_uint = 70;
-pub const R_PPC_TPREL16_HI: ::libc::c_uint = 71;
-pub const R_PPC_TPREL16_HA: ::libc::c_uint = 72;
-pub const R_PPC_TPREL32: ::libc::c_uint = 73;
-pub const R_PPC_DTPREL16: ::libc::c_uint = 74;
-pub const R_PPC_DTPREL16_LO: ::libc::c_uint = 75;
-pub const R_PPC_DTPREL16_HI: ::libc::c_uint = 76;
-pub const R_PPC_DTPREL16_HA: ::libc::c_uint = 77;
-pub const R_PPC_DTPREL32: ::libc::c_uint = 78;
-pub const R_PPC_GOT_TLSGD16: ::libc::c_uint = 79;
-pub const R_PPC_GOT_TLSGD16_LO: ::libc::c_uint = 80;
-pub const R_PPC_GOT_TLSGD16_HI: ::libc::c_uint = 81;
-pub const R_PPC_GOT_TLSGD16_HA: ::libc::c_uint = 82;
-pub const R_PPC_GOT_TLSLD16: ::libc::c_uint = 83;
-pub const R_PPC_GOT_TLSLD16_LO: ::libc::c_uint = 84;
-pub const R_PPC_GOT_TLSLD16_HI: ::libc::c_uint = 85;
-pub const R_PPC_GOT_TLSLD16_HA: ::libc::c_uint = 86;
-pub const R_PPC_GOT_TPREL16: ::libc::c_uint = 87;
-pub const R_PPC_GOT_TPREL16_LO: ::libc::c_uint = 88;
-pub const R_PPC_GOT_TPREL16_HI: ::libc::c_uint = 89;
-pub const R_PPC_GOT_TPREL16_HA: ::libc::c_uint = 90;
-pub const R_PPC_GOT_DTPREL16: ::libc::c_uint = 91;
-pub const R_PPC_GOT_DTPREL16_LO: ::libc::c_uint = 92;
-pub const R_PPC_GOT_DTPREL16_HI: ::libc::c_uint = 93;
-pub const R_PPC_GOT_DTPREL16_HA: ::libc::c_uint = 94;
-pub const R_PPC_TLSGD: ::libc::c_uint = 95;
-pub const R_PPC_TLSLD: ::libc::c_uint = 96;
-pub const R_PPC_EMB_NADDR32: ::libc::c_uint = 101;
-pub const R_PPC_EMB_NADDR16: ::libc::c_uint = 102;
-pub const R_PPC_EMB_NADDR16_LO: ::libc::c_uint = 103;
-pub const R_PPC_EMB_NADDR16_HI: ::libc::c_uint = 104;
-pub const R_PPC_EMB_NADDR16_HA: ::libc::c_uint = 105;
-pub const R_PPC_EMB_SDAI16: ::libc::c_uint = 106;
-pub const R_PPC_EMB_SDA2I16: ::libc::c_uint = 107;
-pub const R_PPC_EMB_SDA2REL: ::libc::c_uint = 108;
-pub const R_PPC_EMB_SDA21: ::libc::c_uint = 109;
-pub const R_PPC_EMB_MRKREF: ::libc::c_uint = 110;
-pub const R_PPC_EMB_RELSEC16: ::libc::c_uint = 111;
-pub const R_PPC_EMB_RELST_LO: ::libc::c_uint = 112;
-pub const R_PPC_EMB_RELST_HI: ::libc::c_uint = 113;
-pub const R_PPC_EMB_RELST_HA: ::libc::c_uint = 114;
-pub const R_PPC_EMB_BIT_FLD: ::libc::c_uint = 115;
-pub const R_PPC_EMB_RELSDA: ::libc::c_uint = 116;
-pub const R_PPC_DIAB_SDA21_LO: ::libc::c_uint = 180;
-pub const R_PPC_DIAB_SDA21_HI: ::libc::c_uint = 181;
-pub const R_PPC_DIAB_SDA21_HA: ::libc::c_uint = 182;
-pub const R_PPC_DIAB_RELSDA_LO: ::libc::c_uint = 183;
-pub const R_PPC_DIAB_RELSDA_HI: ::libc::c_uint = 184;
-pub const R_PPC_DIAB_RELSDA_HA: ::libc::c_uint = 185;
-pub const R_PPC_IRELATIVE: ::libc::c_uint = 248;
-pub const R_PPC_REL16: ::libc::c_uint = 249;
-pub const R_PPC_REL16_LO: ::libc::c_uint = 250;
-pub const R_PPC_REL16_HI: ::libc::c_uint = 251;
-pub const R_PPC_REL16_HA: ::libc::c_uint = 252;
-pub const R_PPC_TOC16: ::libc::c_uint = 255;
-pub const DT_PPC_GOT: ::libc::c_uint = 1879048192;
-pub const DT_PPC_OPT: ::libc::c_uint = 1879048193;
-pub const DT_PPC_NUM: ::libc::c_uint = 2;
-pub const PPC_OPT_TLS: ::libc::c_uint = 1;
-pub const R_PPC64_NONE: ::libc::c_uint = 0;
-pub const R_PPC64_ADDR32: ::libc::c_uint = 1;
-pub const R_PPC64_ADDR24: ::libc::c_uint = 2;
-pub const R_PPC64_ADDR16: ::libc::c_uint = 3;
-pub const R_PPC64_ADDR16_LO: ::libc::c_uint = 4;
-pub const R_PPC64_ADDR16_HI: ::libc::c_uint = 5;
-pub const R_PPC64_ADDR16_HA: ::libc::c_uint = 6;
-pub const R_PPC64_ADDR14: ::libc::c_uint = 7;
-pub const R_PPC64_ADDR14_BRTAKEN: ::libc::c_uint = 8;
-pub const R_PPC64_ADDR14_BRNTAKEN: ::libc::c_uint = 9;
-pub const R_PPC64_REL24: ::libc::c_uint = 10;
-pub const R_PPC64_REL14: ::libc::c_uint = 11;
-pub const R_PPC64_REL14_BRTAKEN: ::libc::c_uint = 12;
-pub const R_PPC64_REL14_BRNTAKEN: ::libc::c_uint = 13;
-pub const R_PPC64_GOT16: ::libc::c_uint = 14;
-pub const R_PPC64_GOT16_LO: ::libc::c_uint = 15;
-pub const R_PPC64_GOT16_HI: ::libc::c_uint = 16;
-pub const R_PPC64_GOT16_HA: ::libc::c_uint = 17;
-pub const R_PPC64_COPY: ::libc::c_uint = 19;
-pub const R_PPC64_GLOB_DAT: ::libc::c_uint = 20;
-pub const R_PPC64_JMP_SLOT: ::libc::c_uint = 21;
-pub const R_PPC64_RELATIVE: ::libc::c_uint = 22;
-pub const R_PPC64_UADDR32: ::libc::c_uint = 24;
-pub const R_PPC64_UADDR16: ::libc::c_uint = 25;
-pub const R_PPC64_REL32: ::libc::c_uint = 26;
-pub const R_PPC64_PLT32: ::libc::c_uint = 27;
-pub const R_PPC64_PLTREL32: ::libc::c_uint = 28;
-pub const R_PPC64_PLT16_LO: ::libc::c_uint = 29;
-pub const R_PPC64_PLT16_HI: ::libc::c_uint = 30;
-pub const R_PPC64_PLT16_HA: ::libc::c_uint = 31;
-pub const R_PPC64_SECTOFF: ::libc::c_uint = 33;
-pub const R_PPC64_SECTOFF_LO: ::libc::c_uint = 34;
-pub const R_PPC64_SECTOFF_HI: ::libc::c_uint = 35;
-pub const R_PPC64_SECTOFF_HA: ::libc::c_uint = 36;
-pub const R_PPC64_ADDR30: ::libc::c_uint = 37;
-pub const R_PPC64_ADDR64: ::libc::c_uint = 38;
-pub const R_PPC64_ADDR16_HIGHER: ::libc::c_uint = 39;
-pub const R_PPC64_ADDR16_HIGHERA: ::libc::c_uint = 40;
-pub const R_PPC64_ADDR16_HIGHEST: ::libc::c_uint = 41;
-pub const R_PPC64_ADDR16_HIGHESTA: ::libc::c_uint = 42;
-pub const R_PPC64_UADDR64: ::libc::c_uint = 43;
-pub const R_PPC64_REL64: ::libc::c_uint = 44;
-pub const R_PPC64_PLT64: ::libc::c_uint = 45;
-pub const R_PPC64_PLTREL64: ::libc::c_uint = 46;
-pub const R_PPC64_TOC16: ::libc::c_uint = 47;
-pub const R_PPC64_TOC16_LO: ::libc::c_uint = 48;
-pub const R_PPC64_TOC16_HI: ::libc::c_uint = 49;
-pub const R_PPC64_TOC16_HA: ::libc::c_uint = 50;
-pub const R_PPC64_TOC: ::libc::c_uint = 51;
-pub const R_PPC64_PLTGOT16: ::libc::c_uint = 52;
-pub const R_PPC64_PLTGOT16_LO: ::libc::c_uint = 53;
-pub const R_PPC64_PLTGOT16_HI: ::libc::c_uint = 54;
-pub const R_PPC64_PLTGOT16_HA: ::libc::c_uint = 55;
-pub const R_PPC64_ADDR16_DS: ::libc::c_uint = 56;
-pub const R_PPC64_ADDR16_LO_DS: ::libc::c_uint = 57;
-pub const R_PPC64_GOT16_DS: ::libc::c_uint = 58;
-pub const R_PPC64_GOT16_LO_DS: ::libc::c_uint = 59;
-pub const R_PPC64_PLT16_LO_DS: ::libc::c_uint = 60;
-pub const R_PPC64_SECTOFF_DS: ::libc::c_uint = 61;
-pub const R_PPC64_SECTOFF_LO_DS: ::libc::c_uint = 62;
-pub const R_PPC64_TOC16_DS: ::libc::c_uint = 63;
-pub const R_PPC64_TOC16_LO_DS: ::libc::c_uint = 64;
-pub const R_PPC64_PLTGOT16_DS: ::libc::c_uint = 65;
-pub const R_PPC64_PLTGOT16_LO_DS: ::libc::c_uint = 66;
-pub const R_PPC64_TLS: ::libc::c_uint = 67;
-pub const R_PPC64_DTPMOD64: ::libc::c_uint = 68;
-pub const R_PPC64_TPREL16: ::libc::c_uint = 69;
-pub const R_PPC64_TPREL16_LO: ::libc::c_uint = 70;
-pub const R_PPC64_TPREL16_HI: ::libc::c_uint = 71;
-pub const R_PPC64_TPREL16_HA: ::libc::c_uint = 72;
-pub const R_PPC64_TPREL64: ::libc::c_uint = 73;
-pub const R_PPC64_DTPREL16: ::libc::c_uint = 74;
-pub const R_PPC64_DTPREL16_LO: ::libc::c_uint = 75;
-pub const R_PPC64_DTPREL16_HI: ::libc::c_uint = 76;
-pub const R_PPC64_DTPREL16_HA: ::libc::c_uint = 77;
-pub const R_PPC64_DTPREL64: ::libc::c_uint = 78;
-pub const R_PPC64_GOT_TLSGD16: ::libc::c_uint = 79;
-pub const R_PPC64_GOT_TLSGD16_LO: ::libc::c_uint = 80;
-pub const R_PPC64_GOT_TLSGD16_HI: ::libc::c_uint = 81;
-pub const R_PPC64_GOT_TLSGD16_HA: ::libc::c_uint = 82;
-pub const R_PPC64_GOT_TLSLD16: ::libc::c_uint = 83;
-pub const R_PPC64_GOT_TLSLD16_LO: ::libc::c_uint = 84;
-pub const R_PPC64_GOT_TLSLD16_HI: ::libc::c_uint = 85;
-pub const R_PPC64_GOT_TLSLD16_HA: ::libc::c_uint = 86;
-pub const R_PPC64_GOT_TPREL16_DS: ::libc::c_uint = 87;
-pub const R_PPC64_GOT_TPREL16_LO_DS: ::libc::c_uint = 88;
-pub const R_PPC64_GOT_TPREL16_HI: ::libc::c_uint = 89;
-pub const R_PPC64_GOT_TPREL16_HA: ::libc::c_uint = 90;
-pub const R_PPC64_GOT_DTPREL16_DS: ::libc::c_uint = 91;
-pub const R_PPC64_GOT_DTPREL16_LO_DS: ::libc::c_uint = 92;
-pub const R_PPC64_GOT_DTPREL16_HI: ::libc::c_uint = 93;
-pub const R_PPC64_GOT_DTPREL16_HA: ::libc::c_uint = 94;
-pub const R_PPC64_TPREL16_DS: ::libc::c_uint = 95;
-pub const R_PPC64_TPREL16_LO_DS: ::libc::c_uint = 96;
-pub const R_PPC64_TPREL16_HIGHER: ::libc::c_uint = 97;
-pub const R_PPC64_TPREL16_HIGHERA: ::libc::c_uint = 98;
-pub const R_PPC64_TPREL16_HIGHEST: ::libc::c_uint = 99;
-pub const R_PPC64_TPREL16_HIGHESTA: ::libc::c_uint = 100;
-pub const R_PPC64_DTPREL16_DS: ::libc::c_uint = 101;
-pub const R_PPC64_DTPREL16_LO_DS: ::libc::c_uint = 102;
-pub const R_PPC64_DTPREL16_HIGHER: ::libc::c_uint = 103;
-pub const R_PPC64_DTPREL16_HIGHERA: ::libc::c_uint = 104;
-pub const R_PPC64_DTPREL16_HIGHEST: ::libc::c_uint = 105;
-pub const R_PPC64_DTPREL16_HIGHESTA: ::libc::c_uint = 106;
-pub const R_PPC64_TLSGD: ::libc::c_uint = 107;
-pub const R_PPC64_TLSLD: ::libc::c_uint = 108;
-pub const R_PPC64_TOCSAVE: ::libc::c_uint = 109;
-pub const R_PPC64_ADDR16_HIGH: ::libc::c_uint = 110;
-pub const R_PPC64_ADDR16_HIGHA: ::libc::c_uint = 111;
-pub const R_PPC64_TPREL16_HIGH: ::libc::c_uint = 112;
-pub const R_PPC64_TPREL16_HIGHA: ::libc::c_uint = 113;
-pub const R_PPC64_DTPREL16_HIGH: ::libc::c_uint = 114;
-pub const R_PPC64_DTPREL16_HIGHA: ::libc::c_uint = 115;
-pub const R_PPC64_JMP_IREL: ::libc::c_uint = 247;
-pub const R_PPC64_IRELATIVE: ::libc::c_uint = 248;
-pub const R_PPC64_REL16: ::libc::c_uint = 249;
-pub const R_PPC64_REL16_LO: ::libc::c_uint = 250;
-pub const R_PPC64_REL16_HI: ::libc::c_uint = 251;
-pub const R_PPC64_REL16_HA: ::libc::c_uint = 252;
-pub const EF_PPC64_ABI: ::libc::c_uint = 3;
-pub const DT_PPC64_GLINK: ::libc::c_uint = 1879048192;
-pub const DT_PPC64_OPD: ::libc::c_uint = 1879048193;
-pub const DT_PPC64_OPDSZ: ::libc::c_uint = 1879048194;
-pub const DT_PPC64_OPT: ::libc::c_uint = 1879048195;
-pub const DT_PPC64_NUM: ::libc::c_uint = 4;
-pub const PPC64_OPT_TLS: ::libc::c_uint = 1;
-pub const PPC64_OPT_MULTI_TOC: ::libc::c_uint = 2;
-pub const STO_PPC64_LOCAL_BIT: ::libc::c_uint = 5;
-pub const STO_PPC64_LOCAL_MASK: ::libc::c_uint = 224;
-pub const EF_ARM_RELEXEC: ::libc::c_uint = 1;
-pub const EF_ARM_HASENTRY: ::libc::c_uint = 2;
-pub const EF_ARM_INTERWORK: ::libc::c_uint = 4;
-pub const EF_ARM_APCS_26: ::libc::c_uint = 8;
-pub const EF_ARM_APCS_FLOAT: ::libc::c_uint = 16;
-pub const EF_ARM_PIC: ::libc::c_uint = 32;
-pub const EF_ARM_ALIGN8: ::libc::c_uint = 64;
-pub const EF_ARM_NEW_ABI: ::libc::c_uint = 128;
-pub const EF_ARM_OLD_ABI: ::libc::c_uint = 256;
-pub const EF_ARM_SOFT_FLOAT: ::libc::c_uint = 512;
-pub const EF_ARM_VFP_FLOAT: ::libc::c_uint = 1024;
-pub const EF_ARM_MAVERICK_FLOAT: ::libc::c_uint = 2048;
-pub const EF_ARM_ABI_FLOAT_SOFT: ::libc::c_uint = 512;
-pub const EF_ARM_ABI_FLOAT_HARD: ::libc::c_uint = 1024;
-pub const EF_ARM_SYMSARESORTED: ::libc::c_uint = 4;
-pub const EF_ARM_DYNSYMSUSESEGIDX: ::libc::c_uint = 8;
-pub const EF_ARM_MAPSYMSFIRST: ::libc::c_uint = 16;
-pub const EF_ARM_BE8: ::libc::c_uint = 8388608;
-pub const EF_ARM_LE8: ::libc::c_uint = 4194304;
-pub const EF_ARM_EABI_UNKNOWN: ::libc::c_uint = 0;
-pub const EF_ARM_EABI_VER1: ::libc::c_uint = 16777216;
-pub const EF_ARM_EABI_VER2: ::libc::c_uint = 33554432;
-pub const EF_ARM_EABI_VER3: ::libc::c_uint = 50331648;
-pub const EF_ARM_EABI_VER4: ::libc::c_uint = 67108864;
-pub const EF_ARM_EABI_VER5: ::libc::c_uint = 83886080;
-pub const STT_ARM_TFUNC: ::libc::c_uint = 13;
-pub const STT_ARM_16BIT: ::libc::c_uint = 15;
-pub const SHF_ARM_ENTRYSECT: ::libc::c_uint = 268435456;
-pub const SHF_ARM_COMDEF: ::libc::c_uint = 2147483648;
-pub const PF_ARM_SB: ::libc::c_uint = 268435456;
-pub const PF_ARM_PI: ::libc::c_uint = 536870912;
-pub const PF_ARM_ABS: ::libc::c_uint = 1073741824;
-pub const PT_ARM_EXIDX: ::libc::c_uint = 1879048193;
-pub const SHT_ARM_EXIDX: ::libc::c_uint = 1879048193;
-pub const SHT_ARM_PREEMPTMAP: ::libc::c_uint = 1879048194;
-pub const SHT_ARM_ATTRIBUTES: ::libc::c_uint = 1879048195;
-pub const R_AARCH64_NONE: ::libc::c_uint = 0;
-pub const R_AARCH64_P32_ABS32: ::libc::c_uint = 1;
-pub const R_AARCH64_P32_COPY: ::libc::c_uint = 180;
-pub const R_AARCH64_P32_GLOB_DAT: ::libc::c_uint = 181;
-pub const R_AARCH64_P32_JUMP_SLOT: ::libc::c_uint = 182;
-pub const R_AARCH64_P32_RELATIVE: ::libc::c_uint = 183;
-pub const R_AARCH64_P32_TLS_DTPMOD: ::libc::c_uint = 184;
-pub const R_AARCH64_P32_TLS_DTPREL: ::libc::c_uint = 185;
-pub const R_AARCH64_P32_TLS_TPREL: ::libc::c_uint = 186;
-pub const R_AARCH64_P32_TLSDESC: ::libc::c_uint = 187;
-pub const R_AARCH64_P32_IRELATIVE: ::libc::c_uint = 188;
-pub const R_AARCH64_ABS64: ::libc::c_uint = 257;
-pub const R_AARCH64_ABS32: ::libc::c_uint = 258;
-pub const R_AARCH64_ABS16: ::libc::c_uint = 259;
-pub const R_AARCH64_PREL64: ::libc::c_uint = 260;
-pub const R_AARCH64_PREL32: ::libc::c_uint = 261;
-pub const R_AARCH64_PREL16: ::libc::c_uint = 262;
-pub const R_AARCH64_MOVW_UABS_G0: ::libc::c_uint = 263;
-pub const R_AARCH64_MOVW_UABS_G0_NC: ::libc::c_uint = 264;
-pub const R_AARCH64_MOVW_UABS_G1: ::libc::c_uint = 265;
-pub const R_AARCH64_MOVW_UABS_G1_NC: ::libc::c_uint = 266;
-pub const R_AARCH64_MOVW_UABS_G2: ::libc::c_uint = 267;
-pub const R_AARCH64_MOVW_UABS_G2_NC: ::libc::c_uint = 268;
-pub const R_AARCH64_MOVW_UABS_G3: ::libc::c_uint = 269;
-pub const R_AARCH64_MOVW_SABS_G0: ::libc::c_uint = 270;
-pub const R_AARCH64_MOVW_SABS_G1: ::libc::c_uint = 271;
-pub const R_AARCH64_MOVW_SABS_G2: ::libc::c_uint = 272;
-pub const R_AARCH64_LD_PREL_LO19: ::libc::c_uint = 273;
-pub const R_AARCH64_ADR_PREL_LO21: ::libc::c_uint = 274;
-pub const R_AARCH64_ADR_PREL_PG_HI21: ::libc::c_uint = 275;
-pub const R_AARCH64_ADR_PREL_PG_HI21_NC: ::libc::c_uint = 276;
-pub const R_AARCH64_ADD_ABS_LO12_NC: ::libc::c_uint = 277;
-pub const R_AARCH64_LDST8_ABS_LO12_NC: ::libc::c_uint = 278;
-pub const R_AARCH64_TSTBR14: ::libc::c_uint = 279;
-pub const R_AARCH64_CONDBR19: ::libc::c_uint = 280;
-pub const R_AARCH64_JUMP26: ::libc::c_uint = 282;
-pub const R_AARCH64_CALL26: ::libc::c_uint = 283;
-pub const R_AARCH64_LDST16_ABS_LO12_NC: ::libc::c_uint = 284;
-pub const R_AARCH64_LDST32_ABS_LO12_NC: ::libc::c_uint = 285;
-pub const R_AARCH64_LDST64_ABS_LO12_NC: ::libc::c_uint = 286;
-pub const R_AARCH64_MOVW_PREL_G0: ::libc::c_uint = 287;
-pub const R_AARCH64_MOVW_PREL_G0_NC: ::libc::c_uint = 288;
-pub const R_AARCH64_MOVW_PREL_G1: ::libc::c_uint = 289;
-pub const R_AARCH64_MOVW_PREL_G1_NC: ::libc::c_uint = 290;
-pub const R_AARCH64_MOVW_PREL_G2: ::libc::c_uint = 291;
-pub const R_AARCH64_MOVW_PREL_G2_NC: ::libc::c_uint = 292;
-pub const R_AARCH64_MOVW_PREL_G3: ::libc::c_uint = 293;
-pub const R_AARCH64_LDST128_ABS_LO12_NC: ::libc::c_uint = 299;
-pub const R_AARCH64_MOVW_GOTOFF_G0: ::libc::c_uint = 300;
-pub const R_AARCH64_MOVW_GOTOFF_G0_NC: ::libc::c_uint = 301;
-pub const R_AARCH64_MOVW_GOTOFF_G1: ::libc::c_uint = 302;
-pub const R_AARCH64_MOVW_GOTOFF_G1_NC: ::libc::c_uint = 303;
-pub const R_AARCH64_MOVW_GOTOFF_G2: ::libc::c_uint = 304;
-pub const R_AARCH64_MOVW_GOTOFF_G2_NC: ::libc::c_uint = 305;
-pub const R_AARCH64_MOVW_GOTOFF_G3: ::libc::c_uint = 306;
-pub const R_AARCH64_GOTREL64: ::libc::c_uint = 307;
-pub const R_AARCH64_GOTREL32: ::libc::c_uint = 308;
-pub const R_AARCH64_GOT_LD_PREL19: ::libc::c_uint = 309;
-pub const R_AARCH64_LD64_GOTOFF_LO15: ::libc::c_uint = 310;
-pub const R_AARCH64_ADR_GOT_PAGE: ::libc::c_uint = 311;
-pub const R_AARCH64_LD64_GOT_LO12_NC: ::libc::c_uint = 312;
-pub const R_AARCH64_LD64_GOTPAGE_LO15: ::libc::c_uint = 313;
-pub const R_AARCH64_TLSGD_ADR_PREL21: ::libc::c_uint = 512;
-pub const R_AARCH64_TLSGD_ADR_PAGE21: ::libc::c_uint = 513;
-pub const R_AARCH64_TLSGD_ADD_LO12_NC: ::libc::c_uint = 514;
-pub const R_AARCH64_TLSGD_MOVW_G1: ::libc::c_uint = 515;
-pub const R_AARCH64_TLSGD_MOVW_G0_NC: ::libc::c_uint = 516;
-pub const R_AARCH64_TLSLD_ADR_PREL21: ::libc::c_uint = 517;
-pub const R_AARCH64_TLSLD_ADR_PAGE21: ::libc::c_uint = 518;
-pub const R_AARCH64_TLSLD_ADD_LO12_NC: ::libc::c_uint = 519;
-pub const R_AARCH64_TLSLD_MOVW_G1: ::libc::c_uint = 520;
-pub const R_AARCH64_TLSLD_MOVW_G0_NC: ::libc::c_uint = 521;
-pub const R_AARCH64_TLSLD_LD_PREL19: ::libc::c_uint = 522;
-pub const R_AARCH64_TLSLD_MOVW_DTPREL_G2: ::libc::c_uint = 523;
-pub const R_AARCH64_TLSLD_MOVW_DTPREL_G1: ::libc::c_uint = 524;
-pub const R_AARCH64_TLSLD_MOVW_DTPREL_G1_NC: ::libc::c_uint = 525;
-pub const R_AARCH64_TLSLD_MOVW_DTPREL_G0: ::libc::c_uint = 526;
-pub const R_AARCH64_TLSLD_MOVW_DTPREL_G0_NC: ::libc::c_uint = 527;
-pub const R_AARCH64_TLSLD_ADD_DTPREL_HI12: ::libc::c_uint = 528;
-pub const R_AARCH64_TLSLD_ADD_DTPREL_LO12: ::libc::c_uint = 529;
-pub const R_AARCH64_TLSLD_ADD_DTPREL_LO12_NC: ::libc::c_uint = 530;
-pub const R_AARCH64_TLSLD_LDST8_DTPREL_LO12: ::libc::c_uint = 531;
-pub const R_AARCH64_TLSLD_LDST8_DTPREL_LO12_NC: ::libc::c_uint = 532;
-pub const R_AARCH64_TLSLD_LDST16_DTPREL_LO12: ::libc::c_uint = 533;
-pub const R_AARCH64_TLSLD_LDST16_DTPREL_LO12_NC: ::libc::c_uint = 534;
-pub const R_AARCH64_TLSLD_LDST32_DTPREL_LO12: ::libc::c_uint = 535;
-pub const R_AARCH64_TLSLD_LDST32_DTPREL_LO12_NC: ::libc::c_uint = 536;
-pub const R_AARCH64_TLSLD_LDST64_DTPREL_LO12: ::libc::c_uint = 537;
-pub const R_AARCH64_TLSLD_LDST64_DTPREL_LO12_NC: ::libc::c_uint = 538;
-pub const R_AARCH64_TLSIE_MOVW_GOTTPREL_G1: ::libc::c_uint = 539;
-pub const R_AARCH64_TLSIE_MOVW_GOTTPREL_G0_NC: ::libc::c_uint = 540;
-pub const R_AARCH64_TLSIE_ADR_GOTTPREL_PAGE21: ::libc::c_uint = 541;
-pub const R_AARCH64_TLSIE_LD64_GOTTPREL_LO12_NC: ::libc::c_uint = 542;
-pub const R_AARCH64_TLSIE_LD_GOTTPREL_PREL19: ::libc::c_uint = 543;
-pub const R_AARCH64_TLSLE_MOVW_TPREL_G2: ::libc::c_uint = 544;
-pub const R_AARCH64_TLSLE_MOVW_TPREL_G1: ::libc::c_uint = 545;
-pub const R_AARCH64_TLSLE_MOVW_TPREL_G1_NC: ::libc::c_uint = 546;
-pub const R_AARCH64_TLSLE_MOVW_TPREL_G0: ::libc::c_uint = 547;
-pub const R_AARCH64_TLSLE_MOVW_TPREL_G0_NC: ::libc::c_uint = 548;
-pub const R_AARCH64_TLSLE_ADD_TPREL_HI12: ::libc::c_uint = 549;
-pub const R_AARCH64_TLSLE_ADD_TPREL_LO12: ::libc::c_uint = 550;
-pub const R_AARCH64_TLSLE_ADD_TPREL_LO12_NC: ::libc::c_uint = 551;
-pub const R_AARCH64_TLSLE_LDST8_TPREL_LO12: ::libc::c_uint = 552;
-pub const R_AARCH64_TLSLE_LDST8_TPREL_LO12_NC: ::libc::c_uint = 553;
-pub const R_AARCH64_TLSLE_LDST16_TPREL_LO12: ::libc::c_uint = 554;
-pub const R_AARCH64_TLSLE_LDST16_TPREL_LO12_NC: ::libc::c_uint = 555;
-pub const R_AARCH64_TLSLE_LDST32_TPREL_LO12: ::libc::c_uint = 556;
-pub const R_AARCH64_TLSLE_LDST32_TPREL_LO12_NC: ::libc::c_uint = 557;
-pub const R_AARCH64_TLSLE_LDST64_TPREL_LO12: ::libc::c_uint = 558;
-pub const R_AARCH64_TLSLE_LDST64_TPREL_LO12_NC: ::libc::c_uint = 559;
-pub const R_AARCH64_TLSDESC_LD_PREL19: ::libc::c_uint = 560;
-pub const R_AARCH64_TLSDESC_ADR_PREL21: ::libc::c_uint = 561;
-pub const R_AARCH64_TLSDESC_ADR_PAGE21: ::libc::c_uint = 562;
-pub const R_AARCH64_TLSDESC_LD64_LO12: ::libc::c_uint = 563;
-pub const R_AARCH64_TLSDESC_ADD_LO12: ::libc::c_uint = 564;
-pub const R_AARCH64_TLSDESC_OFF_G1: ::libc::c_uint = 565;
-pub const R_AARCH64_TLSDESC_OFF_G0_NC: ::libc::c_uint = 566;
-pub const R_AARCH64_TLSDESC_LDR: ::libc::c_uint = 567;
-pub const R_AARCH64_TLSDESC_ADD: ::libc::c_uint = 568;
-pub const R_AARCH64_TLSDESC_CALL: ::libc::c_uint = 569;
-pub const R_AARCH64_TLSLE_LDST128_TPREL_LO12: ::libc::c_uint = 570;
-pub const R_AARCH64_TLSLE_LDST128_TPREL_LO12_NC: ::libc::c_uint = 571;
-pub const R_AARCH64_TLSLD_LDST128_DTPREL_LO12: ::libc::c_uint = 572;
-pub const R_AARCH64_TLSLD_LDST128_DTPREL_LO12_NC: ::libc::c_uint = 573;
-pub const R_AARCH64_COPY: ::libc::c_uint = 1024;
-pub const R_AARCH64_GLOB_DAT: ::libc::c_uint = 1025;
-pub const R_AARCH64_JUMP_SLOT: ::libc::c_uint = 1026;
-pub const R_AARCH64_RELATIVE: ::libc::c_uint = 1027;
-pub const R_AARCH64_TLS_DTPMOD: ::libc::c_uint = 1028;
-pub const R_AARCH64_TLS_DTPREL: ::libc::c_uint = 1029;
-pub const R_AARCH64_TLS_TPREL: ::libc::c_uint = 1030;
-pub const R_AARCH64_TLSDESC: ::libc::c_uint = 1031;
-pub const R_AARCH64_IRELATIVE: ::libc::c_uint = 1032;
-pub const R_ARM_NONE: ::libc::c_uint = 0;
-pub const R_ARM_PC24: ::libc::c_uint = 1;
-pub const R_ARM_ABS32: ::libc::c_uint = 2;
-pub const R_ARM_REL32: ::libc::c_uint = 3;
-pub const R_ARM_PC13: ::libc::c_uint = 4;
-pub const R_ARM_ABS16: ::libc::c_uint = 5;
-pub const R_ARM_ABS12: ::libc::c_uint = 6;
-pub const R_ARM_THM_ABS5: ::libc::c_uint = 7;
-pub const R_ARM_ABS8: ::libc::c_uint = 8;
-pub const R_ARM_SBREL32: ::libc::c_uint = 9;
-pub const R_ARM_THM_PC22: ::libc::c_uint = 10;
-pub const R_ARM_THM_PC8: ::libc::c_uint = 11;
-pub const R_ARM_AMP_VCALL9: ::libc::c_uint = 12;
-pub const R_ARM_SWI24: ::libc::c_uint = 13;
-pub const R_ARM_TLS_DESC: ::libc::c_uint = 13;
-pub const R_ARM_THM_SWI8: ::libc::c_uint = 14;
-pub const R_ARM_XPC25: ::libc::c_uint = 15;
-pub const R_ARM_THM_XPC22: ::libc::c_uint = 16;
-pub const R_ARM_TLS_DTPMOD32: ::libc::c_uint = 17;
-pub const R_ARM_TLS_DTPOFF32: ::libc::c_uint = 18;
-pub const R_ARM_TLS_TPOFF32: ::libc::c_uint = 19;
-pub const R_ARM_COPY: ::libc::c_uint = 20;
-pub const R_ARM_GLOB_DAT: ::libc::c_uint = 21;
-pub const R_ARM_JUMP_SLOT: ::libc::c_uint = 22;
-pub const R_ARM_RELATIVE: ::libc::c_uint = 23;
-pub const R_ARM_GOTOFF: ::libc::c_uint = 24;
-pub const R_ARM_GOTPC: ::libc::c_uint = 25;
-pub const R_ARM_GOT32: ::libc::c_uint = 26;
-pub const R_ARM_PLT32: ::libc::c_uint = 27;
-pub const R_ARM_CALL: ::libc::c_uint = 28;
-pub const R_ARM_JUMP24: ::libc::c_uint = 29;
-pub const R_ARM_THM_JUMP24: ::libc::c_uint = 30;
-pub const R_ARM_BASE_ABS: ::libc::c_uint = 31;
-pub const R_ARM_ALU_PCREL_7_0: ::libc::c_uint = 32;
-pub const R_ARM_ALU_PCREL_15_8: ::libc::c_uint = 33;
-pub const R_ARM_ALU_PCREL_23_15: ::libc::c_uint = 34;
-pub const R_ARM_LDR_SBREL_11_0: ::libc::c_uint = 35;
-pub const R_ARM_ALU_SBREL_19_12: ::libc::c_uint = 36;
-pub const R_ARM_ALU_SBREL_27_20: ::libc::c_uint = 37;
-pub const R_ARM_TARGET1: ::libc::c_uint = 38;
-pub const R_ARM_SBREL31: ::libc::c_uint = 39;
-pub const R_ARM_V4BX: ::libc::c_uint = 40;
-pub const R_ARM_TARGET2: ::libc::c_uint = 41;
-pub const R_ARM_PREL31: ::libc::c_uint = 42;
-pub const R_ARM_MOVW_ABS_NC: ::libc::c_uint = 43;
-pub const R_ARM_MOVT_ABS: ::libc::c_uint = 44;
-pub const R_ARM_MOVW_PREL_NC: ::libc::c_uint = 45;
-pub const R_ARM_MOVT_PREL: ::libc::c_uint = 46;
-pub const R_ARM_THM_MOVW_ABS_NC: ::libc::c_uint = 47;
-pub const R_ARM_THM_MOVT_ABS: ::libc::c_uint = 48;
-pub const R_ARM_THM_MOVW_PREL_NC: ::libc::c_uint = 49;
-pub const R_ARM_THM_MOVT_PREL: ::libc::c_uint = 50;
-pub const R_ARM_THM_JUMP19: ::libc::c_uint = 51;
-pub const R_ARM_THM_JUMP6: ::libc::c_uint = 52;
-pub const R_ARM_THM_ALU_PREL_11_0: ::libc::c_uint = 53;
-pub const R_ARM_THM_PC12: ::libc::c_uint = 54;
-pub const R_ARM_ABS32_NOI: ::libc::c_uint = 55;
-pub const R_ARM_REL32_NOI: ::libc::c_uint = 56;
-pub const R_ARM_ALU_PC_G0_NC: ::libc::c_uint = 57;
-pub const R_ARM_ALU_PC_G0: ::libc::c_uint = 58;
-pub const R_ARM_ALU_PC_G1_NC: ::libc::c_uint = 59;
-pub const R_ARM_ALU_PC_G1: ::libc::c_uint = 60;
-pub const R_ARM_ALU_PC_G2: ::libc::c_uint = 61;
-pub const R_ARM_LDR_PC_G1: ::libc::c_uint = 62;
-pub const R_ARM_LDR_PC_G2: ::libc::c_uint = 63;
-pub const R_ARM_LDRS_PC_G0: ::libc::c_uint = 64;
-pub const R_ARM_LDRS_PC_G1: ::libc::c_uint = 65;
-pub const R_ARM_LDRS_PC_G2: ::libc::c_uint = 66;
-pub const R_ARM_LDC_PC_G0: ::libc::c_uint = 67;
-pub const R_ARM_LDC_PC_G1: ::libc::c_uint = 68;
-pub const R_ARM_LDC_PC_G2: ::libc::c_uint = 69;
-pub const R_ARM_ALU_SB_G0_NC: ::libc::c_uint = 70;
-pub const R_ARM_ALU_SB_G0: ::libc::c_uint = 71;
-pub const R_ARM_ALU_SB_G1_NC: ::libc::c_uint = 72;
-pub const R_ARM_ALU_SB_G1: ::libc::c_uint = 73;
-pub const R_ARM_ALU_SB_G2: ::libc::c_uint = 74;
-pub const R_ARM_LDR_SB_G0: ::libc::c_uint = 75;
-pub const R_ARM_LDR_SB_G1: ::libc::c_uint = 76;
-pub const R_ARM_LDR_SB_G2: ::libc::c_uint = 77;
-pub const R_ARM_LDRS_SB_G0: ::libc::c_uint = 78;
-pub const R_ARM_LDRS_SB_G1: ::libc::c_uint = 79;
-pub const R_ARM_LDRS_SB_G2: ::libc::c_uint = 80;
-pub const R_ARM_LDC_SB_G0: ::libc::c_uint = 81;
-pub const R_ARM_LDC_SB_G1: ::libc::c_uint = 82;
-pub const R_ARM_LDC_SB_G2: ::libc::c_uint = 83;
-pub const R_ARM_MOVW_BREL_NC: ::libc::c_uint = 84;
-pub const R_ARM_MOVT_BREL: ::libc::c_uint = 85;
-pub const R_ARM_MOVW_BREL: ::libc::c_uint = 86;
-pub const R_ARM_THM_MOVW_BREL_NC: ::libc::c_uint = 87;
-pub const R_ARM_THM_MOVT_BREL: ::libc::c_uint = 88;
-pub const R_ARM_THM_MOVW_BREL: ::libc::c_uint = 89;
-pub const R_ARM_TLS_GOTDESC: ::libc::c_uint = 90;
-pub const R_ARM_TLS_CALL: ::libc::c_uint = 91;
-pub const R_ARM_TLS_DESCSEQ: ::libc::c_uint = 92;
-pub const R_ARM_THM_TLS_CALL: ::libc::c_uint = 93;
-pub const R_ARM_PLT32_ABS: ::libc::c_uint = 94;
-pub const R_ARM_GOT_ABS: ::libc::c_uint = 95;
-pub const R_ARM_GOT_PREL: ::libc::c_uint = 96;
-pub const R_ARM_GOT_BREL12: ::libc::c_uint = 97;
-pub const R_ARM_GOTOFF12: ::libc::c_uint = 98;
-pub const R_ARM_GOTRELAX: ::libc::c_uint = 99;
-pub const R_ARM_GNU_VTENTRY: ::libc::c_uint = 100;
-pub const R_ARM_GNU_VTINHERIT: ::libc::c_uint = 101;
-pub const R_ARM_THM_PC11: ::libc::c_uint = 102;
-pub const R_ARM_THM_PC9: ::libc::c_uint = 103;
-pub const R_ARM_TLS_GD32: ::libc::c_uint = 104;
-pub const R_ARM_TLS_LDM32: ::libc::c_uint = 105;
-pub const R_ARM_TLS_LDO32: ::libc::c_uint = 106;
-pub const R_ARM_TLS_IE32: ::libc::c_uint = 107;
-pub const R_ARM_TLS_LE32: ::libc::c_uint = 108;
-pub const R_ARM_TLS_LDO12: ::libc::c_uint = 109;
-pub const R_ARM_TLS_LE12: ::libc::c_uint = 110;
-pub const R_ARM_TLS_IE12GP: ::libc::c_uint = 111;
-pub const R_ARM_ME_TOO: ::libc::c_uint = 128;
-pub const R_ARM_THM_TLS_DESCSEQ: ::libc::c_uint = 129;
-pub const R_ARM_THM_TLS_DESCSEQ16: ::libc::c_uint = 129;
-pub const R_ARM_THM_TLS_DESCSEQ32: ::libc::c_uint = 130;
-pub const R_ARM_THM_GOT_BREL12: ::libc::c_uint = 131;
-pub const R_ARM_IRELATIVE: ::libc::c_uint = 160;
-pub const R_ARM_RXPC25: ::libc::c_uint = 249;
-pub const R_ARM_RSBREL32: ::libc::c_uint = 250;
-pub const R_ARM_THM_RPC22: ::libc::c_uint = 251;
-pub const R_ARM_RREL32: ::libc::c_uint = 252;
-pub const R_ARM_RABS22: ::libc::c_uint = 253;
-pub const R_ARM_RPC24: ::libc::c_uint = 254;
-pub const R_ARM_RBASE: ::libc::c_uint = 255;
-pub const R_ARM_NUM: ::libc::c_uint = 256;
-pub const EF_IA_64_MASKOS: ::libc::c_uint = 15;
-pub const EF_IA_64_ABI64: ::libc::c_uint = 16;
-pub const EF_IA_64_ARCH: ::libc::c_uint = 4278190080;
-pub const PT_IA_64_ARCHEXT: ::libc::c_uint = 1879048192;
-pub const PT_IA_64_UNWIND: ::libc::c_uint = 1879048193;
-pub const PT_IA_64_HP_OPT_ANOT: ::libc::c_uint = 1610612754;
-pub const PT_IA_64_HP_HSL_ANOT: ::libc::c_uint = 1610612755;
-pub const PT_IA_64_HP_STACK: ::libc::c_uint = 1610612756;
-pub const PF_IA_64_NORECOV: ::libc::c_uint = 2147483648;
-pub const SHT_IA_64_EXT: ::libc::c_uint = 1879048192;
-pub const SHT_IA_64_UNWIND: ::libc::c_uint = 1879048193;
-pub const SHF_IA_64_SHORT: ::libc::c_uint = 268435456;
-pub const SHF_IA_64_NORECOV: ::libc::c_uint = 536870912;
-pub const DT_IA_64_PLT_RESERVE: ::libc::c_uint = 1879048192;
-pub const DT_IA_64_NUM: ::libc::c_uint = 1;
-pub const R_IA64_NONE: ::libc::c_uint = 0;
-pub const R_IA64_IMM14: ::libc::c_uint = 33;
-pub const R_IA64_IMM22: ::libc::c_uint = 34;
-pub const R_IA64_IMM64: ::libc::c_uint = 35;
-pub const R_IA64_DIR32MSB: ::libc::c_uint = 36;
-pub const R_IA64_DIR32LSB: ::libc::c_uint = 37;
-pub const R_IA64_DIR64MSB: ::libc::c_uint = 38;
-pub const R_IA64_DIR64LSB: ::libc::c_uint = 39;
-pub const R_IA64_GPREL22: ::libc::c_uint = 42;
-pub const R_IA64_GPREL64I: ::libc::c_uint = 43;
-pub const R_IA64_GPREL32MSB: ::libc::c_uint = 44;
-pub const R_IA64_GPREL32LSB: ::libc::c_uint = 45;
-pub const R_IA64_GPREL64MSB: ::libc::c_uint = 46;
-pub const R_IA64_GPREL64LSB: ::libc::c_uint = 47;
-pub const R_IA64_LTOFF22: ::libc::c_uint = 50;
-pub const R_IA64_LTOFF64I: ::libc::c_uint = 51;
-pub const R_IA64_PLTOFF22: ::libc::c_uint = 58;
-pub const R_IA64_PLTOFF64I: ::libc::c_uint = 59;
-pub const R_IA64_PLTOFF64MSB: ::libc::c_uint = 62;
-pub const R_IA64_PLTOFF64LSB: ::libc::c_uint = 63;
-pub const R_IA64_FPTR64I: ::libc::c_uint = 67;
-pub const R_IA64_FPTR32MSB: ::libc::c_uint = 68;
-pub const R_IA64_FPTR32LSB: ::libc::c_uint = 69;
-pub const R_IA64_FPTR64MSB: ::libc::c_uint = 70;
-pub const R_IA64_FPTR64LSB: ::libc::c_uint = 71;
-pub const R_IA64_PCREL60B: ::libc::c_uint = 72;
-pub const R_IA64_PCREL21B: ::libc::c_uint = 73;
-pub const R_IA64_PCREL21M: ::libc::c_uint = 74;
-pub const R_IA64_PCREL21F: ::libc::c_uint = 75;
-pub const R_IA64_PCREL32MSB: ::libc::c_uint = 76;
-pub const R_IA64_PCREL32LSB: ::libc::c_uint = 77;
-pub const R_IA64_PCREL64MSB: ::libc::c_uint = 78;
-pub const R_IA64_PCREL64LSB: ::libc::c_uint = 79;
-pub const R_IA64_LTOFF_FPTR22: ::libc::c_uint = 82;
-pub const R_IA64_LTOFF_FPTR64I: ::libc::c_uint = 83;
-pub const R_IA64_LTOFF_FPTR32MSB: ::libc::c_uint = 84;
-pub const R_IA64_LTOFF_FPTR32LSB: ::libc::c_uint = 85;
-pub const R_IA64_LTOFF_FPTR64MSB: ::libc::c_uint = 86;
-pub const R_IA64_LTOFF_FPTR64LSB: ::libc::c_uint = 87;
-pub const R_IA64_SEGREL32MSB: ::libc::c_uint = 92;
-pub const R_IA64_SEGREL32LSB: ::libc::c_uint = 93;
-pub const R_IA64_SEGREL64MSB: ::libc::c_uint = 94;
-pub const R_IA64_SEGREL64LSB: ::libc::c_uint = 95;
-pub const R_IA64_SECREL32MSB: ::libc::c_uint = 100;
-pub const R_IA64_SECREL32LSB: ::libc::c_uint = 101;
-pub const R_IA64_SECREL64MSB: ::libc::c_uint = 102;
-pub const R_IA64_SECREL64LSB: ::libc::c_uint = 103;
-pub const R_IA64_REL32MSB: ::libc::c_uint = 108;
-pub const R_IA64_REL32LSB: ::libc::c_uint = 109;
-pub const R_IA64_REL64MSB: ::libc::c_uint = 110;
-pub const R_IA64_REL64LSB: ::libc::c_uint = 111;
-pub const R_IA64_LTV32MSB: ::libc::c_uint = 116;
-pub const R_IA64_LTV32LSB: ::libc::c_uint = 117;
-pub const R_IA64_LTV64MSB: ::libc::c_uint = 118;
-pub const R_IA64_LTV64LSB: ::libc::c_uint = 119;
-pub const R_IA64_PCREL21BI: ::libc::c_uint = 121;
-pub const R_IA64_PCREL22: ::libc::c_uint = 122;
-pub const R_IA64_PCREL64I: ::libc::c_uint = 123;
-pub const R_IA64_IPLTMSB: ::libc::c_uint = 128;
-pub const R_IA64_IPLTLSB: ::libc::c_uint = 129;
-pub const R_IA64_COPY: ::libc::c_uint = 132;
-pub const R_IA64_SUB: ::libc::c_uint = 133;
-pub const R_IA64_LTOFF22X: ::libc::c_uint = 134;
-pub const R_IA64_LDXMOV: ::libc::c_uint = 135;
-pub const R_IA64_TPREL14: ::libc::c_uint = 145;
-pub const R_IA64_TPREL22: ::libc::c_uint = 146;
-pub const R_IA64_TPREL64I: ::libc::c_uint = 147;
-pub const R_IA64_TPREL64MSB: ::libc::c_uint = 150;
-pub const R_IA64_TPREL64LSB: ::libc::c_uint = 151;
-pub const R_IA64_LTOFF_TPREL22: ::libc::c_uint = 154;
-pub const R_IA64_DTPMOD64MSB: ::libc::c_uint = 166;
-pub const R_IA64_DTPMOD64LSB: ::libc::c_uint = 167;
-pub const R_IA64_LTOFF_DTPMOD22: ::libc::c_uint = 170;
-pub const R_IA64_DTPREL14: ::libc::c_uint = 177;
-pub const R_IA64_DTPREL22: ::libc::c_uint = 178;
-pub const R_IA64_DTPREL64I: ::libc::c_uint = 179;
-pub const R_IA64_DTPREL32MSB: ::libc::c_uint = 180;
-pub const R_IA64_DTPREL32LSB: ::libc::c_uint = 181;
-pub const R_IA64_DTPREL64MSB: ::libc::c_uint = 182;
-pub const R_IA64_DTPREL64LSB: ::libc::c_uint = 183;
-pub const R_IA64_LTOFF_DTPREL22: ::libc::c_uint = 186;
-pub const EF_SH_MACH_MASK: ::libc::c_uint = 31;
-pub const EF_SH_UNKNOWN: ::libc::c_uint = 0;
-pub const EF_SH1: ::libc::c_uint = 1;
-pub const EF_SH2: ::libc::c_uint = 2;
-pub const EF_SH3: ::libc::c_uint = 3;
-pub const EF_SH_DSP: ::libc::c_uint = 4;
-pub const EF_SH3_DSP: ::libc::c_uint = 5;
-pub const EF_SH4AL_DSP: ::libc::c_uint = 6;
-pub const EF_SH3E: ::libc::c_uint = 8;
-pub const EF_SH4: ::libc::c_uint = 9;
-pub const EF_SH2E: ::libc::c_uint = 11;
-pub const EF_SH4A: ::libc::c_uint = 12;
-pub const EF_SH2A: ::libc::c_uint = 13;
-pub const EF_SH4_NOFPU: ::libc::c_uint = 16;
-pub const EF_SH4A_NOFPU: ::libc::c_uint = 17;
-pub const EF_SH4_NOMMU_NOFPU: ::libc::c_uint = 18;
-pub const EF_SH2A_NOFPU: ::libc::c_uint = 19;
-pub const EF_SH3_NOMMU: ::libc::c_uint = 20;
-pub const EF_SH2A_SH4_NOFPU: ::libc::c_uint = 21;
-pub const EF_SH2A_SH3_NOFPU: ::libc::c_uint = 22;
-pub const EF_SH2A_SH4: ::libc::c_uint = 23;
-pub const EF_SH2A_SH3E: ::libc::c_uint = 24;
-pub const R_SH_NONE: ::libc::c_uint = 0;
-pub const R_SH_DIR32: ::libc::c_uint = 1;
-pub const R_SH_REL32: ::libc::c_uint = 2;
-pub const R_SH_DIR8WPN: ::libc::c_uint = 3;
-pub const R_SH_IND12W: ::libc::c_uint = 4;
-pub const R_SH_DIR8WPL: ::libc::c_uint = 5;
-pub const R_SH_DIR8WPZ: ::libc::c_uint = 6;
-pub const R_SH_DIR8BP: ::libc::c_uint = 7;
-pub const R_SH_DIR8W: ::libc::c_uint = 8;
-pub const R_SH_DIR8L: ::libc::c_uint = 9;
-pub const R_SH_SWITCH16: ::libc::c_uint = 25;
-pub const R_SH_SWITCH32: ::libc::c_uint = 26;
-pub const R_SH_USES: ::libc::c_uint = 27;
-pub const R_SH_COUNT: ::libc::c_uint = 28;
-pub const R_SH_ALIGN: ::libc::c_uint = 29;
-pub const R_SH_CODE: ::libc::c_uint = 30;
-pub const R_SH_DATA: ::libc::c_uint = 31;
-pub const R_SH_LABEL: ::libc::c_uint = 32;
-pub const R_SH_SWITCH8: ::libc::c_uint = 33;
-pub const R_SH_GNU_VTINHERIT: ::libc::c_uint = 34;
-pub const R_SH_GNU_VTENTRY: ::libc::c_uint = 35;
-pub const R_SH_TLS_GD_32: ::libc::c_uint = 144;
-pub const R_SH_TLS_LD_32: ::libc::c_uint = 145;
-pub const R_SH_TLS_LDO_32: ::libc::c_uint = 146;
-pub const R_SH_TLS_IE_32: ::libc::c_uint = 147;
-pub const R_SH_TLS_LE_32: ::libc::c_uint = 148;
-pub const R_SH_TLS_DTPMOD32: ::libc::c_uint = 149;
-pub const R_SH_TLS_DTPOFF32: ::libc::c_uint = 150;
-pub const R_SH_TLS_TPOFF32: ::libc::c_uint = 151;
-pub const R_SH_GOT32: ::libc::c_uint = 160;
-pub const R_SH_PLT32: ::libc::c_uint = 161;
-pub const R_SH_COPY: ::libc::c_uint = 162;
-pub const R_SH_GLOB_DAT: ::libc::c_uint = 163;
-pub const R_SH_JMP_SLOT: ::libc::c_uint = 164;
-pub const R_SH_RELATIVE: ::libc::c_uint = 165;
-pub const R_SH_GOTOFF: ::libc::c_uint = 166;
-pub const R_SH_GOTPC: ::libc::c_uint = 167;
-pub const R_SH_NUM: ::libc::c_uint = 256;
-pub const EF_S390_HIGH_GPRS: ::libc::c_uint = 1;
-pub const R_390_NONE: ::libc::c_uint = 0;
-pub const R_390_8: ::libc::c_uint = 1;
-pub const R_390_12: ::libc::c_uint = 2;
-pub const R_390_16: ::libc::c_uint = 3;
-pub const R_390_32: ::libc::c_uint = 4;
-pub const R_390_PC32: ::libc::c_uint = 5;
-pub const R_390_GOT12: ::libc::c_uint = 6;
-pub const R_390_GOT32: ::libc::c_uint = 7;
-pub const R_390_PLT32: ::libc::c_uint = 8;
-pub const R_390_COPY: ::libc::c_uint = 9;
-pub const R_390_GLOB_DAT: ::libc::c_uint = 10;
-pub const R_390_JMP_SLOT: ::libc::c_uint = 11;
-pub const R_390_RELATIVE: ::libc::c_uint = 12;
-pub const R_390_GOTOFF32: ::libc::c_uint = 13;
-pub const R_390_GOTPC: ::libc::c_uint = 14;
-pub const R_390_GOT16: ::libc::c_uint = 15;
-pub const R_390_PC16: ::libc::c_uint = 16;
-pub const R_390_PC16DBL: ::libc::c_uint = 17;
-pub const R_390_PLT16DBL: ::libc::c_uint = 18;
-pub const R_390_PC32DBL: ::libc::c_uint = 19;
-pub const R_390_PLT32DBL: ::libc::c_uint = 20;
-pub const R_390_GOTPCDBL: ::libc::c_uint = 21;
-pub const R_390_64: ::libc::c_uint = 22;
-pub const R_390_PC64: ::libc::c_uint = 23;
-pub const R_390_GOT64: ::libc::c_uint = 24;
-pub const R_390_PLT64: ::libc::c_uint = 25;
-pub const R_390_GOTENT: ::libc::c_uint = 26;
-pub const R_390_GOTOFF16: ::libc::c_uint = 27;
-pub const R_390_GOTOFF64: ::libc::c_uint = 28;
-pub const R_390_GOTPLT12: ::libc::c_uint = 29;
-pub const R_390_GOTPLT16: ::libc::c_uint = 30;
-pub const R_390_GOTPLT32: ::libc::c_uint = 31;
-pub const R_390_GOTPLT64: ::libc::c_uint = 32;
-pub const R_390_GOTPLTENT: ::libc::c_uint = 33;
-pub const R_390_PLTOFF16: ::libc::c_uint = 34;
-pub const R_390_PLTOFF32: ::libc::c_uint = 35;
-pub const R_390_PLTOFF64: ::libc::c_uint = 36;
-pub const R_390_TLS_LOAD: ::libc::c_uint = 37;
-pub const R_390_TLS_GDCALL: ::libc::c_uint = 38;
-pub const R_390_TLS_LDCALL: ::libc::c_uint = 39;
-pub const R_390_TLS_GD32: ::libc::c_uint = 40;
-pub const R_390_TLS_GD64: ::libc::c_uint = 41;
-pub const R_390_TLS_GOTIE12: ::libc::c_uint = 42;
-pub const R_390_TLS_GOTIE32: ::libc::c_uint = 43;
-pub const R_390_TLS_GOTIE64: ::libc::c_uint = 44;
-pub const R_390_TLS_LDM32: ::libc::c_uint = 45;
-pub const R_390_TLS_LDM64: ::libc::c_uint = 46;
-pub const R_390_TLS_IE32: ::libc::c_uint = 47;
-pub const R_390_TLS_IE64: ::libc::c_uint = 48;
-pub const R_390_TLS_IEENT: ::libc::c_uint = 49;
-pub const R_390_TLS_LE32: ::libc::c_uint = 50;
-pub const R_390_TLS_LE64: ::libc::c_uint = 51;
-pub const R_390_TLS_LDO32: ::libc::c_uint = 52;
-pub const R_390_TLS_LDO64: ::libc::c_uint = 53;
-pub const R_390_TLS_DTPMOD: ::libc::c_uint = 54;
-pub const R_390_TLS_DTPOFF: ::libc::c_uint = 55;
-pub const R_390_TLS_TPOFF: ::libc::c_uint = 56;
-pub const R_390_20: ::libc::c_uint = 57;
-pub const R_390_GOT20: ::libc::c_uint = 58;
-pub const R_390_GOTPLT20: ::libc::c_uint = 59;
-pub const R_390_TLS_GOTIE20: ::libc::c_uint = 60;
-pub const R_390_IRELATIVE: ::libc::c_uint = 61;
-pub const R_390_NUM: ::libc::c_uint = 62;
-pub const R_CRIS_NONE: ::libc::c_uint = 0;
-pub const R_CRIS_8: ::libc::c_uint = 1;
-pub const R_CRIS_16: ::libc::c_uint = 2;
-pub const R_CRIS_32: ::libc::c_uint = 3;
-pub const R_CRIS_8_PCREL: ::libc::c_uint = 4;
-pub const R_CRIS_16_PCREL: ::libc::c_uint = 5;
-pub const R_CRIS_32_PCREL: ::libc::c_uint = 6;
-pub const R_CRIS_GNU_VTINHERIT: ::libc::c_uint = 7;
-pub const R_CRIS_GNU_VTENTRY: ::libc::c_uint = 8;
-pub const R_CRIS_COPY: ::libc::c_uint = 9;
-pub const R_CRIS_GLOB_DAT: ::libc::c_uint = 10;
-pub const R_CRIS_JUMP_SLOT: ::libc::c_uint = 11;
-pub const R_CRIS_RELATIVE: ::libc::c_uint = 12;
-pub const R_CRIS_16_GOT: ::libc::c_uint = 13;
-pub const R_CRIS_32_GOT: ::libc::c_uint = 14;
-pub const R_CRIS_16_GOTPLT: ::libc::c_uint = 15;
-pub const R_CRIS_32_GOTPLT: ::libc::c_uint = 16;
-pub const R_CRIS_32_GOTREL: ::libc::c_uint = 17;
-pub const R_CRIS_32_PLT_GOTREL: ::libc::c_uint = 18;
-pub const R_CRIS_32_PLT_PCREL: ::libc::c_uint = 19;
-pub const R_CRIS_NUM: ::libc::c_uint = 20;
-pub const R_X86_64_NONE: ::libc::c_uint = 0;
-pub const R_X86_64_64: ::libc::c_uint = 1;
-pub const R_X86_64_PC32: ::libc::c_uint = 2;
-pub const R_X86_64_GOT32: ::libc::c_uint = 3;
-pub const R_X86_64_PLT32: ::libc::c_uint = 4;
-pub const R_X86_64_COPY: ::libc::c_uint = 5;
-pub const R_X86_64_GLOB_DAT: ::libc::c_uint = 6;
-pub const R_X86_64_JUMP_SLOT: ::libc::c_uint = 7;
-pub const R_X86_64_RELATIVE: ::libc::c_uint = 8;
-pub const R_X86_64_GOTPCREL: ::libc::c_uint = 9;
-pub const R_X86_64_32: ::libc::c_uint = 10;
-pub const R_X86_64_32S: ::libc::c_uint = 11;
-pub const R_X86_64_16: ::libc::c_uint = 12;
-pub const R_X86_64_PC16: ::libc::c_uint = 13;
-pub const R_X86_64_8: ::libc::c_uint = 14;
-pub const R_X86_64_PC8: ::libc::c_uint = 15;
-pub const R_X86_64_DTPMOD64: ::libc::c_uint = 16;
-pub const R_X86_64_DTPOFF64: ::libc::c_uint = 17;
-pub const R_X86_64_TPOFF64: ::libc::c_uint = 18;
-pub const R_X86_64_TLSGD: ::libc::c_uint = 19;
-pub const R_X86_64_TLSLD: ::libc::c_uint = 20;
-pub const R_X86_64_DTPOFF32: ::libc::c_uint = 21;
-pub const R_X86_64_GOTTPOFF: ::libc::c_uint = 22;
-pub const R_X86_64_TPOFF32: ::libc::c_uint = 23;
-pub const R_X86_64_PC64: ::libc::c_uint = 24;
-pub const R_X86_64_GOTOFF64: ::libc::c_uint = 25;
-pub const R_X86_64_GOTPC32: ::libc::c_uint = 26;
-pub const R_X86_64_GOT64: ::libc::c_uint = 27;
-pub const R_X86_64_GOTPCREL64: ::libc::c_uint = 28;
-pub const R_X86_64_GOTPC64: ::libc::c_uint = 29;
-pub const R_X86_64_GOTPLT64: ::libc::c_uint = 30;
-pub const R_X86_64_PLTOFF64: ::libc::c_uint = 31;
-pub const R_X86_64_SIZE32: ::libc::c_uint = 32;
-pub const R_X86_64_SIZE64: ::libc::c_uint = 33;
-pub const R_X86_64_GOTPC32_TLSDESC: ::libc::c_uint = 34;
-pub const R_X86_64_TLSDESC_CALL: ::libc::c_uint = 35;
-pub const R_X86_64_TLSDESC: ::libc::c_uint = 36;
-pub const R_X86_64_IRELATIVE: ::libc::c_uint = 37;
-pub const R_X86_64_RELATIVE64: ::libc::c_uint = 38;
-pub const R_X86_64_GOTPCRELX: ::libc::c_uint = 41;
-pub const R_X86_64_REX_GOTPCRELX: ::libc::c_uint = 42;
-pub const R_X86_64_NUM: ::libc::c_uint = 43;
-pub const R_MN10300_NONE: ::libc::c_uint = 0;
-pub const R_MN10300_32: ::libc::c_uint = 1;
-pub const R_MN10300_16: ::libc::c_uint = 2;
-pub const R_MN10300_8: ::libc::c_uint = 3;
-pub const R_MN10300_PCREL32: ::libc::c_uint = 4;
-pub const R_MN10300_PCREL16: ::libc::c_uint = 5;
-pub const R_MN10300_PCREL8: ::libc::c_uint = 6;
-pub const R_MN10300_GNU_VTINHERIT: ::libc::c_uint = 7;
-pub const R_MN10300_GNU_VTENTRY: ::libc::c_uint = 8;
-pub const R_MN10300_24: ::libc::c_uint = 9;
-pub const R_MN10300_GOTPC32: ::libc::c_uint = 10;
-pub const R_MN10300_GOTPC16: ::libc::c_uint = 11;
-pub const R_MN10300_GOTOFF32: ::libc::c_uint = 12;
-pub const R_MN10300_GOTOFF24: ::libc::c_uint = 13;
-pub const R_MN10300_GOTOFF16: ::libc::c_uint = 14;
-pub const R_MN10300_PLT32: ::libc::c_uint = 15;
-pub const R_MN10300_PLT16: ::libc::c_uint = 16;
-pub const R_MN10300_GOT32: ::libc::c_uint = 17;
-pub const R_MN10300_GOT24: ::libc::c_uint = 18;
-pub const R_MN10300_GOT16: ::libc::c_uint = 19;
-pub const R_MN10300_COPY: ::libc::c_uint = 20;
-pub const R_MN10300_GLOB_DAT: ::libc::c_uint = 21;
-pub const R_MN10300_JMP_SLOT: ::libc::c_uint = 22;
-pub const R_MN10300_RELATIVE: ::libc::c_uint = 23;
-pub const R_MN10300_TLS_GD: ::libc::c_uint = 24;
-pub const R_MN10300_TLS_LD: ::libc::c_uint = 25;
-pub const R_MN10300_TLS_LDO: ::libc::c_uint = 26;
-pub const R_MN10300_TLS_GOTIE: ::libc::c_uint = 27;
-pub const R_MN10300_TLS_IE: ::libc::c_uint = 28;
-pub const R_MN10300_TLS_LE: ::libc::c_uint = 29;
-pub const R_MN10300_TLS_DTPMOD: ::libc::c_uint = 30;
-pub const R_MN10300_TLS_DTPOFF: ::libc::c_uint = 31;
-pub const R_MN10300_TLS_TPOFF: ::libc::c_uint = 32;
-pub const R_MN10300_SYM_DIFF: ::libc::c_uint = 33;
-pub const R_MN10300_ALIGN: ::libc::c_uint = 34;
-pub const R_MN10300_NUM: ::libc::c_uint = 35;
-pub const R_M32R_NONE: ::libc::c_uint = 0;
-pub const R_M32R_16: ::libc::c_uint = 1;
-pub const R_M32R_32: ::libc::c_uint = 2;
-pub const R_M32R_24: ::libc::c_uint = 3;
-pub const R_M32R_10_PCREL: ::libc::c_uint = 4;
-pub const R_M32R_18_PCREL: ::libc::c_uint = 5;
-pub const R_M32R_26_PCREL: ::libc::c_uint = 6;
-pub const R_M32R_HI16_ULO: ::libc::c_uint = 7;
-pub const R_M32R_HI16_SLO: ::libc::c_uint = 8;
-pub const R_M32R_LO16: ::libc::c_uint = 9;
-pub const R_M32R_SDA16: ::libc::c_uint = 10;
-pub const R_M32R_GNU_VTINHERIT: ::libc::c_uint = 11;
-pub const R_M32R_GNU_VTENTRY: ::libc::c_uint = 12;
-pub const R_M32R_16_RELA: ::libc::c_uint = 33;
-pub const R_M32R_32_RELA: ::libc::c_uint = 34;
-pub const R_M32R_24_RELA: ::libc::c_uint = 35;
-pub const R_M32R_10_PCREL_RELA: ::libc::c_uint = 36;
-pub const R_M32R_18_PCREL_RELA: ::libc::c_uint = 37;
-pub const R_M32R_26_PCREL_RELA: ::libc::c_uint = 38;
-pub const R_M32R_HI16_ULO_RELA: ::libc::c_uint = 39;
-pub const R_M32R_HI16_SLO_RELA: ::libc::c_uint = 40;
-pub const R_M32R_LO16_RELA: ::libc::c_uint = 41;
-pub const R_M32R_SDA16_RELA: ::libc::c_uint = 42;
-pub const R_M32R_RELA_GNU_VTINHERIT: ::libc::c_uint = 43;
-pub const R_M32R_RELA_GNU_VTENTRY: ::libc::c_uint = 44;
-pub const R_M32R_REL32: ::libc::c_uint = 45;
-pub const R_M32R_GOT24: ::libc::c_uint = 48;
-pub const R_M32R_26_PLTREL: ::libc::c_uint = 49;
-pub const R_M32R_COPY: ::libc::c_uint = 50;
-pub const R_M32R_GLOB_DAT: ::libc::c_uint = 51;
-pub const R_M32R_JMP_SLOT: ::libc::c_uint = 52;
-pub const R_M32R_RELATIVE: ::libc::c_uint = 53;
-pub const R_M32R_GOTOFF: ::libc::c_uint = 54;
-pub const R_M32R_GOTPC24: ::libc::c_uint = 55;
-pub const R_M32R_GOT16_HI_ULO: ::libc::c_uint = 56;
-pub const R_M32R_GOT16_HI_SLO: ::libc::c_uint = 57;
-pub const R_M32R_GOT16_LO: ::libc::c_uint = 58;
-pub const R_M32R_GOTPC_HI_ULO: ::libc::c_uint = 59;
-pub const R_M32R_GOTPC_HI_SLO: ::libc::c_uint = 60;
-pub const R_M32R_GOTPC_LO: ::libc::c_uint = 61;
-pub const R_M32R_GOTOFF_HI_ULO: ::libc::c_uint = 62;
-pub const R_M32R_GOTOFF_HI_SLO: ::libc::c_uint = 63;
-pub const R_M32R_GOTOFF_LO: ::libc::c_uint = 64;
-pub const R_M32R_NUM: ::libc::c_uint = 256;
-pub const R_MICROBLAZE_NONE: ::libc::c_uint = 0;
-pub const R_MICROBLAZE_32: ::libc::c_uint = 1;
-pub const R_MICROBLAZE_32_PCREL: ::libc::c_uint = 2;
-pub const R_MICROBLAZE_64_PCREL: ::libc::c_uint = 3;
-pub const R_MICROBLAZE_32_PCREL_LO: ::libc::c_uint = 4;
-pub const R_MICROBLAZE_64: ::libc::c_uint = 5;
-pub const R_MICROBLAZE_32_LO: ::libc::c_uint = 6;
-pub const R_MICROBLAZE_SRO32: ::libc::c_uint = 7;
-pub const R_MICROBLAZE_SRW32: ::libc::c_uint = 8;
-pub const R_MICROBLAZE_64_NONE: ::libc::c_uint = 9;
-pub const R_MICROBLAZE_32_SYM_OP_SYM: ::libc::c_uint = 10;
-pub const R_MICROBLAZE_GNU_VTINHERIT: ::libc::c_uint = 11;
-pub const R_MICROBLAZE_GNU_VTENTRY: ::libc::c_uint = 12;
-pub const R_MICROBLAZE_GOTPC_64: ::libc::c_uint = 13;
-pub const R_MICROBLAZE_GOT_64: ::libc::c_uint = 14;
-pub const R_MICROBLAZE_PLT_64: ::libc::c_uint = 15;
-pub const R_MICROBLAZE_REL: ::libc::c_uint = 16;
-pub const R_MICROBLAZE_JUMP_SLOT: ::libc::c_uint = 17;
-pub const R_MICROBLAZE_GLOB_DAT: ::libc::c_uint = 18;
-pub const R_MICROBLAZE_GOTOFF_64: ::libc::c_uint = 19;
-pub const R_MICROBLAZE_GOTOFF_32: ::libc::c_uint = 20;
-pub const R_MICROBLAZE_COPY: ::libc::c_uint = 21;
-pub const R_MICROBLAZE_TLS: ::libc::c_uint = 22;
-pub const R_MICROBLAZE_TLSGD: ::libc::c_uint = 23;
-pub const R_MICROBLAZE_TLSLD: ::libc::c_uint = 24;
-pub const R_MICROBLAZE_TLSDTPMOD32: ::libc::c_uint = 25;
-pub const R_MICROBLAZE_TLSDTPREL32: ::libc::c_uint = 26;
-pub const R_MICROBLAZE_TLSDTPREL64: ::libc::c_uint = 27;
-pub const R_MICROBLAZE_TLSGOTTPREL32: ::libc::c_uint = 28;
-pub const R_MICROBLAZE_TLSTPREL32: ::libc::c_uint = 29;
-pub const DT_NIOS2_GP: ::libc::c_uint = 1879048194;
-pub const R_NIOS2_NONE: ::libc::c_uint = 0;
-pub const R_NIOS2_S16: ::libc::c_uint = 1;
-pub const R_NIOS2_U16: ::libc::c_uint = 2;
-pub const R_NIOS2_PCREL16: ::libc::c_uint = 3;
-pub const R_NIOS2_CALL26: ::libc::c_uint = 4;
-pub const R_NIOS2_IMM5: ::libc::c_uint = 5;
-pub const R_NIOS2_CACHE_OPX: ::libc::c_uint = 6;
-pub const R_NIOS2_IMM6: ::libc::c_uint = 7;
-pub const R_NIOS2_IMM8: ::libc::c_uint = 8;
-pub const R_NIOS2_HI16: ::libc::c_uint = 9;
-pub const R_NIOS2_LO16: ::libc::c_uint = 10;
-pub const R_NIOS2_HIADJ16: ::libc::c_uint = 11;
-pub const R_NIOS2_BFD_RELOC_32: ::libc::c_uint = 12;
-pub const R_NIOS2_BFD_RELOC_16: ::libc::c_uint = 13;
-pub const R_NIOS2_BFD_RELOC_8: ::libc::c_uint = 14;
-pub const R_NIOS2_GPREL: ::libc::c_uint = 15;
-pub const R_NIOS2_GNU_VTINHERIT: ::libc::c_uint = 16;
-pub const R_NIOS2_GNU_VTENTRY: ::libc::c_uint = 17;
-pub const R_NIOS2_UJMP: ::libc::c_uint = 18;
-pub const R_NIOS2_CJMP: ::libc::c_uint = 19;
-pub const R_NIOS2_CALLR: ::libc::c_uint = 20;
-pub const R_NIOS2_ALIGN: ::libc::c_uint = 21;
-pub const R_NIOS2_GOT16: ::libc::c_uint = 22;
-pub const R_NIOS2_CALL16: ::libc::c_uint = 23;
-pub const R_NIOS2_GOTOFF_LO: ::libc::c_uint = 24;
-pub const R_NIOS2_GOTOFF_HA: ::libc::c_uint = 25;
-pub const R_NIOS2_PCREL_LO: ::libc::c_uint = 26;
-pub const R_NIOS2_PCREL_HA: ::libc::c_uint = 27;
-pub const R_NIOS2_TLS_GD16: ::libc::c_uint = 28;
-pub const R_NIOS2_TLS_LDM16: ::libc::c_uint = 29;
-pub const R_NIOS2_TLS_LDO16: ::libc::c_uint = 30;
-pub const R_NIOS2_TLS_IE16: ::libc::c_uint = 31;
-pub const R_NIOS2_TLS_LE16: ::libc::c_uint = 32;
-pub const R_NIOS2_TLS_DTPMOD: ::libc::c_uint = 33;
-pub const R_NIOS2_TLS_DTPREL: ::libc::c_uint = 34;
-pub const R_NIOS2_TLS_TPREL: ::libc::c_uint = 35;
-pub const R_NIOS2_COPY: ::libc::c_uint = 36;
-pub const R_NIOS2_GLOB_DAT: ::libc::c_uint = 37;
-pub const R_NIOS2_JUMP_SLOT: ::libc::c_uint = 38;
-pub const R_NIOS2_RELATIVE: ::libc::c_uint = 39;
-pub const R_NIOS2_GOTOFF: ::libc::c_uint = 40;
-pub const R_NIOS2_CALL26_NOAT: ::libc::c_uint = 41;
-pub const R_NIOS2_GOT_LO: ::libc::c_uint = 42;
-pub const R_NIOS2_GOT_HA: ::libc::c_uint = 43;
-pub const R_NIOS2_CALL_LO: ::libc::c_uint = 44;
-pub const R_NIOS2_CALL_HA: ::libc::c_uint = 45;
-pub const R_TILEPRO_NONE: ::libc::c_uint = 0;
-pub const R_TILEPRO_32: ::libc::c_uint = 1;
-pub const R_TILEPRO_16: ::libc::c_uint = 2;
-pub const R_TILEPRO_8: ::libc::c_uint = 3;
-pub const R_TILEPRO_32_PCREL: ::libc::c_uint = 4;
-pub const R_TILEPRO_16_PCREL: ::libc::c_uint = 5;
-pub const R_TILEPRO_8_PCREL: ::libc::c_uint = 6;
-pub const R_TILEPRO_LO16: ::libc::c_uint = 7;
-pub const R_TILEPRO_HI16: ::libc::c_uint = 8;
-pub const R_TILEPRO_HA16: ::libc::c_uint = 9;
-pub const R_TILEPRO_COPY: ::libc::c_uint = 10;
-pub const R_TILEPRO_GLOB_DAT: ::libc::c_uint = 11;
-pub const R_TILEPRO_JMP_SLOT: ::libc::c_uint = 12;
-pub const R_TILEPRO_RELATIVE: ::libc::c_uint = 13;
-pub const R_TILEPRO_BROFF_X1: ::libc::c_uint = 14;
-pub const R_TILEPRO_JOFFLONG_X1: ::libc::c_uint = 15;
-pub const R_TILEPRO_JOFFLONG_X1_PLT: ::libc::c_uint = 16;
-pub const R_TILEPRO_IMM8_X0: ::libc::c_uint = 17;
-pub const R_TILEPRO_IMM8_Y0: ::libc::c_uint = 18;
-pub const R_TILEPRO_IMM8_X1: ::libc::c_uint = 19;
-pub const R_TILEPRO_IMM8_Y1: ::libc::c_uint = 20;
-pub const R_TILEPRO_MT_IMM15_X1: ::libc::c_uint = 21;
-pub const R_TILEPRO_MF_IMM15_X1: ::libc::c_uint = 22;
-pub const R_TILEPRO_IMM16_X0: ::libc::c_uint = 23;
-pub const R_TILEPRO_IMM16_X1: ::libc::c_uint = 24;
-pub const R_TILEPRO_IMM16_X0_LO: ::libc::c_uint = 25;
-pub const R_TILEPRO_IMM16_X1_LO: ::libc::c_uint = 26;
-pub const R_TILEPRO_IMM16_X0_HI: ::libc::c_uint = 27;
-pub const R_TILEPRO_IMM16_X1_HI: ::libc::c_uint = 28;
-pub const R_TILEPRO_IMM16_X0_HA: ::libc::c_uint = 29;
-pub const R_TILEPRO_IMM16_X1_HA: ::libc::c_uint = 30;
-pub const R_TILEPRO_IMM16_X0_PCREL: ::libc::c_uint = 31;
-pub const R_TILEPRO_IMM16_X1_PCREL: ::libc::c_uint = 32;
-pub const R_TILEPRO_IMM16_X0_LO_PCREL: ::libc::c_uint = 33;
-pub const R_TILEPRO_IMM16_X1_LO_PCREL: ::libc::c_uint = 34;
-pub const R_TILEPRO_IMM16_X0_HI_PCREL: ::libc::c_uint = 35;
-pub const R_TILEPRO_IMM16_X1_HI_PCREL: ::libc::c_uint = 36;
-pub const R_TILEPRO_IMM16_X0_HA_PCREL: ::libc::c_uint = 37;
-pub const R_TILEPRO_IMM16_X1_HA_PCREL: ::libc::c_uint = 38;
-pub const R_TILEPRO_IMM16_X0_GOT: ::libc::c_uint = 39;
-pub const R_TILEPRO_IMM16_X1_GOT: ::libc::c_uint = 40;
-pub const R_TILEPRO_IMM16_X0_GOT_LO: ::libc::c_uint = 41;
-pub const R_TILEPRO_IMM16_X1_GOT_LO: ::libc::c_uint = 42;
-pub const R_TILEPRO_IMM16_X0_GOT_HI: ::libc::c_uint = 43;
-pub const R_TILEPRO_IMM16_X1_GOT_HI: ::libc::c_uint = 44;
-pub const R_TILEPRO_IMM16_X0_GOT_HA: ::libc::c_uint = 45;
-pub const R_TILEPRO_IMM16_X1_GOT_HA: ::libc::c_uint = 46;
-pub const R_TILEPRO_MMSTART_X0: ::libc::c_uint = 47;
-pub const R_TILEPRO_MMEND_X0: ::libc::c_uint = 48;
-pub const R_TILEPRO_MMSTART_X1: ::libc::c_uint = 49;
-pub const R_TILEPRO_MMEND_X1: ::libc::c_uint = 50;
-pub const R_TILEPRO_SHAMT_X0: ::libc::c_uint = 51;
-pub const R_TILEPRO_SHAMT_X1: ::libc::c_uint = 52;
-pub const R_TILEPRO_SHAMT_Y0: ::libc::c_uint = 53;
-pub const R_TILEPRO_SHAMT_Y1: ::libc::c_uint = 54;
-pub const R_TILEPRO_DEST_IMM8_X1: ::libc::c_uint = 55;
-pub const R_TILEPRO_TLS_GD_CALL: ::libc::c_uint = 60;
-pub const R_TILEPRO_IMM8_X0_TLS_GD_ADD: ::libc::c_uint = 61;
-pub const R_TILEPRO_IMM8_X1_TLS_GD_ADD: ::libc::c_uint = 62;
-pub const R_TILEPRO_IMM8_Y0_TLS_GD_ADD: ::libc::c_uint = 63;
-pub const R_TILEPRO_IMM8_Y1_TLS_GD_ADD: ::libc::c_uint = 64;
-pub const R_TILEPRO_TLS_IE_LOAD: ::libc::c_uint = 65;
-pub const R_TILEPRO_IMM16_X0_TLS_GD: ::libc::c_uint = 66;
-pub const R_TILEPRO_IMM16_X1_TLS_GD: ::libc::c_uint = 67;
-pub const R_TILEPRO_IMM16_X0_TLS_GD_LO: ::libc::c_uint = 68;
-pub const R_TILEPRO_IMM16_X1_TLS_GD_LO: ::libc::c_uint = 69;
-pub const R_TILEPRO_IMM16_X0_TLS_GD_HI: ::libc::c_uint = 70;
-pub const R_TILEPRO_IMM16_X1_TLS_GD_HI: ::libc::c_uint = 71;
-pub const R_TILEPRO_IMM16_X0_TLS_GD_HA: ::libc::c_uint = 72;
-pub const R_TILEPRO_IMM16_X1_TLS_GD_HA: ::libc::c_uint = 73;
-pub const R_TILEPRO_IMM16_X0_TLS_IE: ::libc::c_uint = 74;
-pub const R_TILEPRO_IMM16_X1_TLS_IE: ::libc::c_uint = 75;
-pub const R_TILEPRO_IMM16_X0_TLS_IE_LO: ::libc::c_uint = 76;
-pub const R_TILEPRO_IMM16_X1_TLS_IE_LO: ::libc::c_uint = 77;
-pub const R_TILEPRO_IMM16_X0_TLS_IE_HI: ::libc::c_uint = 78;
-pub const R_TILEPRO_IMM16_X1_TLS_IE_HI: ::libc::c_uint = 79;
-pub const R_TILEPRO_IMM16_X0_TLS_IE_HA: ::libc::c_uint = 80;
-pub const R_TILEPRO_IMM16_X1_TLS_IE_HA: ::libc::c_uint = 81;
-pub const R_TILEPRO_TLS_DTPMOD32: ::libc::c_uint = 82;
-pub const R_TILEPRO_TLS_DTPOFF32: ::libc::c_uint = 83;
-pub const R_TILEPRO_TLS_TPOFF32: ::libc::c_uint = 84;
-pub const R_TILEPRO_IMM16_X0_TLS_LE: ::libc::c_uint = 85;
-pub const R_TILEPRO_IMM16_X1_TLS_LE: ::libc::c_uint = 86;
-pub const R_TILEPRO_IMM16_X0_TLS_LE_LO: ::libc::c_uint = 87;
-pub const R_TILEPRO_IMM16_X1_TLS_LE_LO: ::libc::c_uint = 88;
-pub const R_TILEPRO_IMM16_X0_TLS_LE_HI: ::libc::c_uint = 89;
-pub const R_TILEPRO_IMM16_X1_TLS_LE_HI: ::libc::c_uint = 90;
-pub const R_TILEPRO_IMM16_X0_TLS_LE_HA: ::libc::c_uint = 91;
-pub const R_TILEPRO_IMM16_X1_TLS_LE_HA: ::libc::c_uint = 92;
-pub const R_TILEPRO_GNU_VTINHERIT: ::libc::c_uint = 128;
-pub const R_TILEPRO_GNU_VTENTRY: ::libc::c_uint = 129;
-pub const R_TILEPRO_NUM: ::libc::c_uint = 130;
-pub const R_TILEGX_NONE: ::libc::c_uint = 0;
-pub const R_TILEGX_64: ::libc::c_uint = 1;
-pub const R_TILEGX_32: ::libc::c_uint = 2;
-pub const R_TILEGX_16: ::libc::c_uint = 3;
-pub const R_TILEGX_8: ::libc::c_uint = 4;
-pub const R_TILEGX_64_PCREL: ::libc::c_uint = 5;
-pub const R_TILEGX_32_PCREL: ::libc::c_uint = 6;
-pub const R_TILEGX_16_PCREL: ::libc::c_uint = 7;
-pub const R_TILEGX_8_PCREL: ::libc::c_uint = 8;
-pub const R_TILEGX_HW0: ::libc::c_uint = 9;
-pub const R_TILEGX_HW1: ::libc::c_uint = 10;
-pub const R_TILEGX_HW2: ::libc::c_uint = 11;
-pub const R_TILEGX_HW3: ::libc::c_uint = 12;
-pub const R_TILEGX_HW0_LAST: ::libc::c_uint = 13;
-pub const R_TILEGX_HW1_LAST: ::libc::c_uint = 14;
-pub const R_TILEGX_HW2_LAST: ::libc::c_uint = 15;
-pub const R_TILEGX_COPY: ::libc::c_uint = 16;
-pub const R_TILEGX_GLOB_DAT: ::libc::c_uint = 17;
-pub const R_TILEGX_JMP_SLOT: ::libc::c_uint = 18;
-pub const R_TILEGX_RELATIVE: ::libc::c_uint = 19;
-pub const R_TILEGX_BROFF_X1: ::libc::c_uint = 20;
-pub const R_TILEGX_JUMPOFF_X1: ::libc::c_uint = 21;
-pub const R_TILEGX_JUMPOFF_X1_PLT: ::libc::c_uint = 22;
-pub const R_TILEGX_IMM8_X0: ::libc::c_uint = 23;
-pub const R_TILEGX_IMM8_Y0: ::libc::c_uint = 24;
-pub const R_TILEGX_IMM8_X1: ::libc::c_uint = 25;
-pub const R_TILEGX_IMM8_Y1: ::libc::c_uint = 26;
-pub const R_TILEGX_DEST_IMM8_X1: ::libc::c_uint = 27;
-pub const R_TILEGX_MT_IMM14_X1: ::libc::c_uint = 28;
-pub const R_TILEGX_MF_IMM14_X1: ::libc::c_uint = 29;
-pub const R_TILEGX_MMSTART_X0: ::libc::c_uint = 30;
-pub const R_TILEGX_MMEND_X0: ::libc::c_uint = 31;
-pub const R_TILEGX_SHAMT_X0: ::libc::c_uint = 32;
-pub const R_TILEGX_SHAMT_X1: ::libc::c_uint = 33;
-pub const R_TILEGX_SHAMT_Y0: ::libc::c_uint = 34;
-pub const R_TILEGX_SHAMT_Y1: ::libc::c_uint = 35;
-pub const R_TILEGX_IMM16_X0_HW0: ::libc::c_uint = 36;
-pub const R_TILEGX_IMM16_X1_HW0: ::libc::c_uint = 37;
-pub const R_TILEGX_IMM16_X0_HW1: ::libc::c_uint = 38;
-pub const R_TILEGX_IMM16_X1_HW1: ::libc::c_uint = 39;
-pub const R_TILEGX_IMM16_X0_HW2: ::libc::c_uint = 40;
-pub const R_TILEGX_IMM16_X1_HW2: ::libc::c_uint = 41;
-pub const R_TILEGX_IMM16_X0_HW3: ::libc::c_uint = 42;
-pub const R_TILEGX_IMM16_X1_HW3: ::libc::c_uint = 43;
-pub const R_TILEGX_IMM16_X0_HW0_LAST: ::libc::c_uint = 44;
-pub const R_TILEGX_IMM16_X1_HW0_LAST: ::libc::c_uint = 45;
-pub const R_TILEGX_IMM16_X0_HW1_LAST: ::libc::c_uint = 46;
-pub const R_TILEGX_IMM16_X1_HW1_LAST: ::libc::c_uint = 47;
-pub const R_TILEGX_IMM16_X0_HW2_LAST: ::libc::c_uint = 48;
-pub const R_TILEGX_IMM16_X1_HW2_LAST: ::libc::c_uint = 49;
-pub const R_TILEGX_IMM16_X0_HW0_PCREL: ::libc::c_uint = 50;
-pub const R_TILEGX_IMM16_X1_HW0_PCREL: ::libc::c_uint = 51;
-pub const R_TILEGX_IMM16_X0_HW1_PCREL: ::libc::c_uint = 52;
-pub const R_TILEGX_IMM16_X1_HW1_PCREL: ::libc::c_uint = 53;
-pub const R_TILEGX_IMM16_X0_HW2_PCREL: ::libc::c_uint = 54;
-pub const R_TILEGX_IMM16_X1_HW2_PCREL: ::libc::c_uint = 55;
-pub const R_TILEGX_IMM16_X0_HW3_PCREL: ::libc::c_uint = 56;
-pub const R_TILEGX_IMM16_X1_HW3_PCREL: ::libc::c_uint = 57;
-pub const R_TILEGX_IMM16_X0_HW0_LAST_PCREL: ::libc::c_uint = 58;
-pub const R_TILEGX_IMM16_X1_HW0_LAST_PCREL: ::libc::c_uint = 59;
-pub const R_TILEGX_IMM16_X0_HW1_LAST_PCREL: ::libc::c_uint = 60;
-pub const R_TILEGX_IMM16_X1_HW1_LAST_PCREL: ::libc::c_uint = 61;
-pub const R_TILEGX_IMM16_X0_HW2_LAST_PCREL: ::libc::c_uint = 62;
-pub const R_TILEGX_IMM16_X1_HW2_LAST_PCREL: ::libc::c_uint = 63;
-pub const R_TILEGX_IMM16_X0_HW0_GOT: ::libc::c_uint = 64;
-pub const R_TILEGX_IMM16_X1_HW0_GOT: ::libc::c_uint = 65;
-pub const R_TILEGX_IMM16_X0_HW0_PLT_PCREL: ::libc::c_uint = 66;
-pub const R_TILEGX_IMM16_X1_HW0_PLT_PCREL: ::libc::c_uint = 67;
-pub const R_TILEGX_IMM16_X0_HW1_PLT_PCREL: ::libc::c_uint = 68;
-pub const R_TILEGX_IMM16_X1_HW1_PLT_PCREL: ::libc::c_uint = 69;
-pub const R_TILEGX_IMM16_X0_HW2_PLT_PCREL: ::libc::c_uint = 70;
-pub const R_TILEGX_IMM16_X1_HW2_PLT_PCREL: ::libc::c_uint = 71;
-pub const R_TILEGX_IMM16_X0_HW0_LAST_GOT: ::libc::c_uint = 72;
-pub const R_TILEGX_IMM16_X1_HW0_LAST_GOT: ::libc::c_uint = 73;
-pub const R_TILEGX_IMM16_X0_HW1_LAST_GOT: ::libc::c_uint = 74;
-pub const R_TILEGX_IMM16_X1_HW1_LAST_GOT: ::libc::c_uint = 75;
-pub const R_TILEGX_IMM16_X0_HW3_PLT_PCREL: ::libc::c_uint = 76;
-pub const R_TILEGX_IMM16_X1_HW3_PLT_PCREL: ::libc::c_uint = 77;
-pub const R_TILEGX_IMM16_X0_HW0_TLS_GD: ::libc::c_uint = 78;
-pub const R_TILEGX_IMM16_X1_HW0_TLS_GD: ::libc::c_uint = 79;
-pub const R_TILEGX_IMM16_X0_HW0_TLS_LE: ::libc::c_uint = 80;
-pub const R_TILEGX_IMM16_X1_HW0_TLS_LE: ::libc::c_uint = 81;
-pub const R_TILEGX_IMM16_X0_HW0_LAST_TLS_LE: ::libc::c_uint = 82;
-pub const R_TILEGX_IMM16_X1_HW0_LAST_TLS_LE: ::libc::c_uint = 83;
-pub const R_TILEGX_IMM16_X0_HW1_LAST_TLS_LE: ::libc::c_uint = 84;
-pub const R_TILEGX_IMM16_X1_HW1_LAST_TLS_LE: ::libc::c_uint = 85;
-pub const R_TILEGX_IMM16_X0_HW0_LAST_TLS_GD: ::libc::c_uint = 86;
-pub const R_TILEGX_IMM16_X1_HW0_LAST_TLS_GD: ::libc::c_uint = 87;
-pub const R_TILEGX_IMM16_X0_HW1_LAST_TLS_GD: ::libc::c_uint = 88;
-pub const R_TILEGX_IMM16_X1_HW1_LAST_TLS_GD: ::libc::c_uint = 89;
-pub const R_TILEGX_IMM16_X0_HW0_TLS_IE: ::libc::c_uint = 92;
-pub const R_TILEGX_IMM16_X1_HW0_TLS_IE: ::libc::c_uint = 93;
-pub const R_TILEGX_IMM16_X0_HW0_LAST_PLT_PCREL: ::libc::c_uint = 94;
-pub const R_TILEGX_IMM16_X1_HW0_LAST_PLT_PCREL: ::libc::c_uint = 95;
-pub const R_TILEGX_IMM16_X0_HW1_LAST_PLT_PCREL: ::libc::c_uint = 96;
-pub const R_TILEGX_IMM16_X1_HW1_LAST_PLT_PCREL: ::libc::c_uint = 97;
-pub const R_TILEGX_IMM16_X0_HW2_LAST_PLT_PCREL: ::libc::c_uint = 98;
-pub const R_TILEGX_IMM16_X1_HW2_LAST_PLT_PCREL: ::libc::c_uint = 99;
-pub const R_TILEGX_IMM16_X0_HW0_LAST_TLS_IE: ::libc::c_uint = 100;
-pub const R_TILEGX_IMM16_X1_HW0_LAST_TLS_IE: ::libc::c_uint = 101;
-pub const R_TILEGX_IMM16_X0_HW1_LAST_TLS_IE: ::libc::c_uint = 102;
-pub const R_TILEGX_IMM16_X1_HW1_LAST_TLS_IE: ::libc::c_uint = 103;
-pub const R_TILEGX_TLS_DTPMOD64: ::libc::c_uint = 106;
-pub const R_TILEGX_TLS_DTPOFF64: ::libc::c_uint = 107;
-pub const R_TILEGX_TLS_TPOFF64: ::libc::c_uint = 108;
-pub const R_TILEGX_TLS_DTPMOD32: ::libc::c_uint = 109;
-pub const R_TILEGX_TLS_DTPOFF32: ::libc::c_uint = 110;
-pub const R_TILEGX_TLS_TPOFF32: ::libc::c_uint = 111;
-pub const R_TILEGX_TLS_GD_CALL: ::libc::c_uint = 112;
-pub const R_TILEGX_IMM8_X0_TLS_GD_ADD: ::libc::c_uint = 113;
-pub const R_TILEGX_IMM8_X1_TLS_GD_ADD: ::libc::c_uint = 114;
-pub const R_TILEGX_IMM8_Y0_TLS_GD_ADD: ::libc::c_uint = 115;
-pub const R_TILEGX_IMM8_Y1_TLS_GD_ADD: ::libc::c_uint = 116;
-pub const R_TILEGX_TLS_IE_LOAD: ::libc::c_uint = 117;
-pub const R_TILEGX_IMM8_X0_TLS_ADD: ::libc::c_uint = 118;
-pub const R_TILEGX_IMM8_X1_TLS_ADD: ::libc::c_uint = 119;
-pub const R_TILEGX_IMM8_Y0_TLS_ADD: ::libc::c_uint = 120;
-pub const R_TILEGX_IMM8_Y1_TLS_ADD: ::libc::c_uint = 121;
-pub const R_TILEGX_GNU_VTINHERIT: ::libc::c_uint = 128;
-pub const R_TILEGX_GNU_VTENTRY: ::libc::c_uint = 129;
-pub const R_TILEGX_NUM: ::libc::c_uint = 130;
-pub const R_BPF_NONE: ::libc::c_uint = 0;
-pub const R_BPF_MAP_FD: ::libc::c_uint = 1;
+#[repr(C)]
+pub struct __BindgenUnionField<T>(::std::marker::PhantomData<T>);
+impl<T> __BindgenUnionField<T> {
+    #[inline]
+    pub const fn new() -> Self {
+        __BindgenUnionField(::std::marker::PhantomData)
+    }
+    #[inline]
+    pub unsafe fn as_ref(&self) -> &T {
+        ::std::mem::transmute(self)
+    }
+    #[inline]
+    pub unsafe fn as_mut(&mut self) -> &mut T {
+        ::std::mem::transmute(self)
+    }
+}
+impl<T> ::std::default::Default for __BindgenUnionField<T> {
+    #[inline]
+    fn default() -> Self {
+        Self::new()
+    }
+}
+impl<T> ::std::clone::Clone for __BindgenUnionField<T> {
+    #[inline]
+    fn clone(&self) -> Self {
+        Self::new()
+    }
+}
+impl<T> ::std::marker::Copy for __BindgenUnionField<T> {}
+impl<T> ::std::fmt::Debug for __BindgenUnionField<T> {
+    fn fmt(&self, fmt: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        fmt.write_str("__BindgenUnionField")
+    }
+}
+impl<T> ::std::hash::Hash for __BindgenUnionField<T> {
+    fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {}
+}
+impl<T> ::std::cmp::PartialEq for __BindgenUnionField<T> {
+    fn eq(&self, _other: &__BindgenUnionField<T>) -> bool {
+        true
+    }
+}
+impl<T> ::std::cmp::Eq for __BindgenUnionField<T> {}
+pub const EI_NIDENT: u32 = 16;
+pub const EI_MAG0: u32 = 0;
+pub const ELFMAG0: u32 = 127;
+pub const EI_MAG1: u32 = 1;
+pub const ELFMAG1: u8 = 69u8;
+pub const EI_MAG2: u32 = 2;
+pub const ELFMAG2: u8 = 76u8;
+pub const EI_MAG3: u32 = 3;
+pub const ELFMAG3: u8 = 70u8;
+pub const ELFMAG: &'static [u8; 5usize] = b"\x7FELF\0";
+pub const EI_CLASS: u32 = 4;
+pub const ELFCLASSNONE: u32 = 0;
+pub const ELFCLASS32: u32 = 1;
+pub const ELFCLASS64: u32 = 2;
+pub const ELFCLASSNUM: u32 = 3;
+pub const EI_DATA: u32 = 5;
+pub const ELFDATANONE: u32 = 0;
+pub const ELFDATA2LSB: u32 = 1;
+pub const ELFDATA2MSB: u32 = 2;
+pub const ELFDATANUM: u32 = 3;
+pub const EI_VERSION: u32 = 6;
+pub const EI_OSABI: u32 = 7;
+pub const ELFOSABI_NONE: u32 = 0;
+pub const ELFOSABI_SYSV: u32 = 0;
+pub const ELFOSABI_HPUX: u32 = 1;
+pub const ELFOSABI_NETBSD: u32 = 2;
+pub const ELFOSABI_GNU: u32 = 3;
+pub const ELFOSABI_LINUX: u32 = 3;
+pub const ELFOSABI_SOLARIS: u32 = 6;
+pub const ELFOSABI_AIX: u32 = 7;
+pub const ELFOSABI_IRIX: u32 = 8;
+pub const ELFOSABI_FREEBSD: u32 = 9;
+pub const ELFOSABI_TRU64: u32 = 10;
+pub const ELFOSABI_MODESTO: u32 = 11;
+pub const ELFOSABI_OPENBSD: u32 = 12;
+pub const ELFOSABI_ARM_AEABI: u32 = 64;
+pub const ELFOSABI_ARM: u32 = 97;
+pub const ELFOSABI_STANDALONE: u32 = 255;
+pub const EI_ABIVERSION: u32 = 8;
+pub const EI_PAD: u32 = 9;
+pub const ET_NONE: u32 = 0;
+pub const ET_REL: u32 = 1;
+pub const ET_EXEC: u32 = 2;
+pub const ET_DYN: u32 = 3;
+pub const ET_CORE: u32 = 4;
+pub const ET_NUM: u32 = 5;
+pub const ET_LOOS: u32 = 65024;
+pub const ET_HIOS: u32 = 65279;
+pub const ET_LOPROC: u32 = 65280;
+pub const ET_HIPROC: u32 = 65535;
+pub const EM_NONE: u32 = 0;
+pub const EM_M32: u32 = 1;
+pub const EM_SPARC: u32 = 2;
+pub const EM_386: u32 = 3;
+pub const EM_68K: u32 = 4;
+pub const EM_88K: u32 = 5;
+pub const EM_IAMCU: u32 = 6;
+pub const EM_860: u32 = 7;
+pub const EM_MIPS: u32 = 8;
+pub const EM_S370: u32 = 9;
+pub const EM_MIPS_RS3_LE: u32 = 10;
+pub const EM_PARISC: u32 = 15;
+pub const EM_VPP500: u32 = 17;
+pub const EM_SPARC32PLUS: u32 = 18;
+pub const EM_960: u32 = 19;
+pub const EM_PPC: u32 = 20;
+pub const EM_PPC64: u32 = 21;
+pub const EM_S390: u32 = 22;
+pub const EM_SPU: u32 = 23;
+pub const EM_V800: u32 = 36;
+pub const EM_FR20: u32 = 37;
+pub const EM_RH32: u32 = 38;
+pub const EM_RCE: u32 = 39;
+pub const EM_ARM: u32 = 40;
+pub const EM_FAKE_ALPHA: u32 = 41;
+pub const EM_SH: u32 = 42;
+pub const EM_SPARCV9: u32 = 43;
+pub const EM_TRICORE: u32 = 44;
+pub const EM_ARC: u32 = 45;
+pub const EM_H8_300: u32 = 46;
+pub const EM_H8_300H: u32 = 47;
+pub const EM_H8S: u32 = 48;
+pub const EM_H8_500: u32 = 49;
+pub const EM_IA_64: u32 = 50;
+pub const EM_MIPS_X: u32 = 51;
+pub const EM_COLDFIRE: u32 = 52;
+pub const EM_68HC12: u32 = 53;
+pub const EM_MMA: u32 = 54;
+pub const EM_PCP: u32 = 55;
+pub const EM_NCPU: u32 = 56;
+pub const EM_NDR1: u32 = 57;
+pub const EM_STARCORE: u32 = 58;
+pub const EM_ME16: u32 = 59;
+pub const EM_ST100: u32 = 60;
+pub const EM_TINYJ: u32 = 61;
+pub const EM_X86_64: u32 = 62;
+pub const EM_PDSP: u32 = 63;
+pub const EM_PDP10: u32 = 64;
+pub const EM_PDP11: u32 = 65;
+pub const EM_FX66: u32 = 66;
+pub const EM_ST9PLUS: u32 = 67;
+pub const EM_ST7: u32 = 68;
+pub const EM_68HC16: u32 = 69;
+pub const EM_68HC11: u32 = 70;
+pub const EM_68HC08: u32 = 71;
+pub const EM_68HC05: u32 = 72;
+pub const EM_SVX: u32 = 73;
+pub const EM_ST19: u32 = 74;
+pub const EM_VAX: u32 = 75;
+pub const EM_CRIS: u32 = 76;
+pub const EM_JAVELIN: u32 = 77;
+pub const EM_FIREPATH: u32 = 78;
+pub const EM_ZSP: u32 = 79;
+pub const EM_MMIX: u32 = 80;
+pub const EM_HUANY: u32 = 81;
+pub const EM_PRISM: u32 = 82;
+pub const EM_AVR: u32 = 83;
+pub const EM_FR30: u32 = 84;
+pub const EM_D10V: u32 = 85;
+pub const EM_D30V: u32 = 86;
+pub const EM_V850: u32 = 87;
+pub const EM_M32R: u32 = 88;
+pub const EM_MN10300: u32 = 89;
+pub const EM_MN10200: u32 = 90;
+pub const EM_PJ: u32 = 91;
+pub const EM_OPENRISC: u32 = 92;
+pub const EM_ARC_COMPACT: u32 = 93;
+pub const EM_XTENSA: u32 = 94;
+pub const EM_VIDEOCORE: u32 = 95;
+pub const EM_TMM_GPP: u32 = 96;
+pub const EM_NS32K: u32 = 97;
+pub const EM_TPC: u32 = 98;
+pub const EM_SNP1K: u32 = 99;
+pub const EM_ST200: u32 = 100;
+pub const EM_IP2K: u32 = 101;
+pub const EM_MAX: u32 = 102;
+pub const EM_CR: u32 = 103;
+pub const EM_F2MC16: u32 = 104;
+pub const EM_MSP430: u32 = 105;
+pub const EM_BLACKFIN: u32 = 106;
+pub const EM_SE_C33: u32 = 107;
+pub const EM_SEP: u32 = 108;
+pub const EM_ARCA: u32 = 109;
+pub const EM_UNICORE: u32 = 110;
+pub const EM_EXCESS: u32 = 111;
+pub const EM_DXP: u32 = 112;
+pub const EM_ALTERA_NIOS2: u32 = 113;
+pub const EM_CRX: u32 = 114;
+pub const EM_XGATE: u32 = 115;
+pub const EM_C166: u32 = 116;
+pub const EM_M16C: u32 = 117;
+pub const EM_DSPIC30F: u32 = 118;
+pub const EM_CE: u32 = 119;
+pub const EM_M32C: u32 = 120;
+pub const EM_TSK3000: u32 = 131;
+pub const EM_RS08: u32 = 132;
+pub const EM_SHARC: u32 = 133;
+pub const EM_ECOG2: u32 = 134;
+pub const EM_SCORE7: u32 = 135;
+pub const EM_DSP24: u32 = 136;
+pub const EM_VIDEOCORE3: u32 = 137;
+pub const EM_LATTICEMICO32: u32 = 138;
+pub const EM_SE_C17: u32 = 139;
+pub const EM_TI_C6000: u32 = 140;
+pub const EM_TI_C2000: u32 = 141;
+pub const EM_TI_C5500: u32 = 142;
+pub const EM_TI_ARP32: u32 = 143;
+pub const EM_TI_PRU: u32 = 144;
+pub const EM_MMDSP_PLUS: u32 = 160;
+pub const EM_CYPRESS_M8C: u32 = 161;
+pub const EM_R32C: u32 = 162;
+pub const EM_TRIMEDIA: u32 = 163;
+pub const EM_QDSP6: u32 = 164;
+pub const EM_8051: u32 = 165;
+pub const EM_STXP7X: u32 = 166;
+pub const EM_NDS32: u32 = 167;
+pub const EM_ECOG1X: u32 = 168;
+pub const EM_MAXQ30: u32 = 169;
+pub const EM_XIMO16: u32 = 170;
+pub const EM_MANIK: u32 = 171;
+pub const EM_CRAYNV2: u32 = 172;
+pub const EM_RX: u32 = 173;
+pub const EM_METAG: u32 = 174;
+pub const EM_MCST_ELBRUS: u32 = 175;
+pub const EM_ECOG16: u32 = 176;
+pub const EM_CR16: u32 = 177;
+pub const EM_ETPU: u32 = 178;
+pub const EM_SLE9X: u32 = 179;
+pub const EM_L10M: u32 = 180;
+pub const EM_K10M: u32 = 181;
+pub const EM_AARCH64: u32 = 183;
+pub const EM_AVR32: u32 = 185;
+pub const EM_STM8: u32 = 186;
+pub const EM_TILE64: u32 = 187;
+pub const EM_TILEPRO: u32 = 188;
+pub const EM_MICROBLAZE: u32 = 189;
+pub const EM_CUDA: u32 = 190;
+pub const EM_TILEGX: u32 = 191;
+pub const EM_CLOUDSHIELD: u32 = 192;
+pub const EM_COREA_1ST: u32 = 193;
+pub const EM_COREA_2ND: u32 = 194;
+pub const EM_ARC_COMPACT2: u32 = 195;
+pub const EM_OPEN8: u32 = 196;
+pub const EM_RL78: u32 = 197;
+pub const EM_VIDEOCORE5: u32 = 198;
+pub const EM_78KOR: u32 = 199;
+pub const EM_56800EX: u32 = 200;
+pub const EM_BA1: u32 = 201;
+pub const EM_BA2: u32 = 202;
+pub const EM_XCORE: u32 = 203;
+pub const EM_MCHP_PIC: u32 = 204;
+pub const EM_KM32: u32 = 210;
+pub const EM_KMX32: u32 = 211;
+pub const EM_EMX16: u32 = 212;
+pub const EM_EMX8: u32 = 213;
+pub const EM_KVARC: u32 = 214;
+pub const EM_CDP: u32 = 215;
+pub const EM_COGE: u32 = 216;
+pub const EM_COOL: u32 = 217;
+pub const EM_NORC: u32 = 218;
+pub const EM_CSR_KALIMBA: u32 = 219;
+pub const EM_Z80: u32 = 220;
+pub const EM_VISIUM: u32 = 221;
+pub const EM_FT32: u32 = 222;
+pub const EM_MOXIE: u32 = 223;
+pub const EM_AMDGPU: u32 = 224;
+pub const EM_RISCV: u32 = 243;
+pub const EM_BPF: u32 = 247;
+pub const EM_NUM: u32 = 248;
+pub const EM_ARC_A5: u32 = 93;
+pub const EM_ALPHA: u32 = 36902;
+pub const EV_NONE: u32 = 0;
+pub const EV_CURRENT: u32 = 1;
+pub const EV_NUM: u32 = 2;
+pub const SHN_UNDEF: u32 = 0;
+pub const SHN_LORESERVE: u32 = 65280;
+pub const SHN_LOPROC: u32 = 65280;
+pub const SHN_BEFORE: u32 = 65280;
+pub const SHN_AFTER: u32 = 65281;
+pub const SHN_HIPROC: u32 = 65311;
+pub const SHN_LOOS: u32 = 65312;
+pub const SHN_HIOS: u32 = 65343;
+pub const SHN_ABS: u32 = 65521;
+pub const SHN_COMMON: u32 = 65522;
+pub const SHN_XINDEX: u32 = 65535;
+pub const SHN_HIRESERVE: u32 = 65535;
+pub const SHT_NULL: u32 = 0;
+pub const SHT_PROGBITS: u32 = 1;
+pub const SHT_SYMTAB: u32 = 2;
+pub const SHT_STRTAB: u32 = 3;
+pub const SHT_RELA: u32 = 4;
+pub const SHT_HASH: u32 = 5;
+pub const SHT_DYNAMIC: u32 = 6;
+pub const SHT_NOTE: u32 = 7;
+pub const SHT_NOBITS: u32 = 8;
+pub const SHT_REL: u32 = 9;
+pub const SHT_SHLIB: u32 = 10;
+pub const SHT_DYNSYM: u32 = 11;
+pub const SHT_INIT_ARRAY: u32 = 14;
+pub const SHT_FINI_ARRAY: u32 = 15;
+pub const SHT_PREINIT_ARRAY: u32 = 16;
+pub const SHT_GROUP: u32 = 17;
+pub const SHT_SYMTAB_SHNDX: u32 = 18;
+pub const SHT_NUM: u32 = 19;
+pub const SHT_LOOS: u32 = 1610612736;
+pub const SHT_GNU_ATTRIBUTES: u32 = 1879048181;
+pub const SHT_GNU_HASH: u32 = 1879048182;
+pub const SHT_GNU_LIBLIST: u32 = 1879048183;
+pub const SHT_CHECKSUM: u32 = 1879048184;
+pub const SHT_LOSUNW: u32 = 1879048186;
+pub const SHT_SUNW_move: u32 = 1879048186;
+pub const SHT_SUNW_COMDAT: u32 = 1879048187;
+pub const SHT_SUNW_syminfo: u32 = 1879048188;
+pub const SHT_GNU_verdef: u32 = 1879048189;
+pub const SHT_GNU_verneed: u32 = 1879048190;
+pub const SHT_GNU_versym: u32 = 1879048191;
+pub const SHT_HISUNW: u32 = 1879048191;
+pub const SHT_HIOS: u32 = 1879048191;
+pub const SHT_LOPROC: u32 = 1879048192;
+pub const SHT_HIPROC: u32 = 2147483647;
+pub const SHT_LOUSER: u32 = 2147483648;
+pub const SHT_HIUSER: u32 = 2415919103;
+pub const SHF_WRITE: u32 = 1;
+pub const SHF_ALLOC: u32 = 2;
+pub const SHF_EXECINSTR: u32 = 4;
+pub const SHF_MERGE: u32 = 16;
+pub const SHF_STRINGS: u32 = 32;
+pub const SHF_INFO_LINK: u32 = 64;
+pub const SHF_LINK_ORDER: u32 = 128;
+pub const SHF_OS_NONCONFORMING: u32 = 256;
+pub const SHF_GROUP: u32 = 512;
+pub const SHF_TLS: u32 = 1024;
+pub const SHF_COMPRESSED: u32 = 2048;
+pub const SHF_MASKOS: u32 = 267386880;
+pub const SHF_MASKPROC: u32 = 4026531840;
+pub const SHF_ORDERED: u32 = 1073741824;
+pub const SHF_EXCLUDE: u32 = 2147483648;
+pub const ELFCOMPRESS_ZLIB: u32 = 1;
+pub const ELFCOMPRESS_LOOS: u32 = 1610612736;
+pub const ELFCOMPRESS_HIOS: u32 = 1879048191;
+pub const ELFCOMPRESS_LOPROC: u32 = 1879048192;
+pub const ELFCOMPRESS_HIPROC: u32 = 2147483647;
+pub const SYMINFO_BT_SELF: u32 = 65535;
+pub const SYMINFO_BT_PARENT: u32 = 65534;
+pub const SYMINFO_BT_LOWRESERVE: u32 = 65280;
+pub const SYMINFO_FLG_DIRECT: u32 = 1;
+pub const SYMINFO_FLG_PASSTHRU: u32 = 2;
+pub const SYMINFO_FLG_COPY: u32 = 4;
+pub const SYMINFO_FLG_LAZYLOAD: u32 = 8;
+pub const SYMINFO_NONE: u32 = 0;
+pub const SYMINFO_CURRENT: u32 = 1;
+pub const SYMINFO_NUM: u32 = 2;
+pub const STB_LOCAL: u32 = 0;
+pub const STB_GLOBAL: u32 = 1;
+pub const STB_WEAK: u32 = 2;
+pub const STB_NUM: u32 = 3;
+pub const STB_LOOS: u32 = 10;
+pub const STB_GNU_UNIQUE: u32 = 10;
+pub const STB_HIOS: u32 = 12;
+pub const STB_LOPROC: u32 = 13;
+pub const STB_HIPROC: u32 = 15;
+pub const STT_NOTYPE: u32 = 0;
+pub const STT_OBJECT: u32 = 1;
+pub const STT_FUNC: u32 = 2;
+pub const STT_SECTION: u32 = 3;
+pub const STT_FILE: u32 = 4;
+pub const STT_COMMON: u32 = 5;
+pub const STT_TLS: u32 = 6;
+pub const STT_NUM: u32 = 7;
+pub const STT_LOOS: u32 = 10;
+pub const STT_GNU_IFUNC: u32 = 10;
+pub const STT_HIOS: u32 = 12;
+pub const STT_LOPROC: u32 = 13;
+pub const STT_HIPROC: u32 = 15;
+pub const STN_UNDEF: u32 = 0;
+pub const STV_DEFAULT: u32 = 0;
+pub const STV_INTERNAL: u32 = 1;
+pub const STV_HIDDEN: u32 = 2;
+pub const STV_PROTECTED: u32 = 3;
+pub const PN_XNUM: u32 = 65535;
+pub const PT_NULL: u32 = 0;
+pub const PT_LOAD: u32 = 1;
+pub const PT_DYNAMIC: u32 = 2;
+pub const PT_INTERP: u32 = 3;
+pub const PT_NOTE: u32 = 4;
+pub const PT_SHLIB: u32 = 5;
+pub const PT_PHDR: u32 = 6;
+pub const PT_TLS: u32 = 7;
+pub const PT_NUM: u32 = 8;
+pub const PT_LOOS: u32 = 1610612736;
+pub const PT_GNU_EH_FRAME: u32 = 1685382480;
+pub const PT_GNU_STACK: u32 = 1685382481;
+pub const PT_GNU_RELRO: u32 = 1685382482;
+pub const PT_LOSUNW: u32 = 1879048186;
+pub const PT_SUNWBSS: u32 = 1879048186;
+pub const PT_SUNWSTACK: u32 = 1879048187;
+pub const PT_HISUNW: u32 = 1879048191;
+pub const PT_HIOS: u32 = 1879048191;
+pub const PT_LOPROC: u32 = 1879048192;
+pub const PT_HIPROC: u32 = 2147483647;
+pub const PF_X: u32 = 1;
+pub const PF_W: u32 = 2;
+pub const PF_R: u32 = 4;
+pub const PF_MASKOS: u32 = 267386880;
+pub const PF_MASKPROC: u32 = 4026531840;
+pub const NT_PRSTATUS: u32 = 1;
+pub const NT_FPREGSET: u32 = 2;
+pub const NT_PRPSINFO: u32 = 3;
+pub const NT_PRXREG: u32 = 4;
+pub const NT_TASKSTRUCT: u32 = 4;
+pub const NT_PLATFORM: u32 = 5;
+pub const NT_AUXV: u32 = 6;
+pub const NT_GWINDOWS: u32 = 7;
+pub const NT_ASRS: u32 = 8;
+pub const NT_PSTATUS: u32 = 10;
+pub const NT_PSINFO: u32 = 13;
+pub const NT_PRCRED: u32 = 14;
+pub const NT_UTSNAME: u32 = 15;
+pub const NT_LWPSTATUS: u32 = 16;
+pub const NT_LWPSINFO: u32 = 17;
+pub const NT_PRFPXREG: u32 = 20;
+pub const NT_SIGINFO: u32 = 1397311305;
+pub const NT_FILE: u32 = 1179208773;
+pub const NT_PRXFPREG: u32 = 1189489535;
+pub const NT_PPC_VMX: u32 = 256;
+pub const NT_PPC_SPE: u32 = 257;
+pub const NT_PPC_VSX: u32 = 258;
+pub const NT_386_TLS: u32 = 512;
+pub const NT_PPC_TM_SPR: u32 = 268;
+pub const NT_386_IOPERM: u32 = 513;
+pub const NT_X86_XSTATE: u32 = 514;
+pub const NT_S390_HIGH_GPRS: u32 = 768;
+pub const NT_S390_TIMER: u32 = 769;
+pub const NT_S390_TODCMP: u32 = 770;
+pub const NT_S390_TODPREG: u32 = 771;
+pub const NT_S390_CTRS: u32 = 772;
+pub const NT_S390_PREFIX: u32 = 773;
+pub const NT_S390_LAST_BREAK: u32 = 774;
+pub const NT_S390_SYSTEM_CALL: u32 = 775;
+pub const NT_S390_TDB: u32 = 776;
+pub const NT_ARM_VFP: u32 = 1024;
+pub const NT_ARM_TLS: u32 = 1025;
+pub const NT_ARM_HW_BREAK: u32 = 1026;
+pub const NT_ARM_HW_WATCH: u32 = 1027;
+pub const NT_ARM_SYSTEM_CALL: u32 = 1028;
+pub const NT_VERSION: u32 = 1;
+pub const DT_NULL: u32 = 0;
+pub const DT_NEEDED: u32 = 1;
+pub const DT_PLTRELSZ: u32 = 2;
+pub const DT_PLTGOT: u32 = 3;
+pub const DT_HASH: u32 = 4;
+pub const DT_STRTAB: u32 = 5;
+pub const DT_SYMTAB: u32 = 6;
+pub const DT_RELA: u32 = 7;
+pub const DT_RELASZ: u32 = 8;
+pub const DT_RELAENT: u32 = 9;
+pub const DT_STRSZ: u32 = 10;
+pub const DT_SYMENT: u32 = 11;
+pub const DT_INIT: u32 = 12;
+pub const DT_FINI: u32 = 13;
+pub const DT_SONAME: u32 = 14;
+pub const DT_RPATH: u32 = 15;
+pub const DT_SYMBOLIC: u32 = 16;
+pub const DT_REL: u32 = 17;
+pub const DT_RELSZ: u32 = 18;
+pub const DT_RELENT: u32 = 19;
+pub const DT_PLTREL: u32 = 20;
+pub const DT_DEBUG: u32 = 21;
+pub const DT_TEXTREL: u32 = 22;
+pub const DT_JMPREL: u32 = 23;
+pub const DT_BIND_NOW: u32 = 24;
+pub const DT_INIT_ARRAY: u32 = 25;
+pub const DT_FINI_ARRAY: u32 = 26;
+pub const DT_INIT_ARRAYSZ: u32 = 27;
+pub const DT_FINI_ARRAYSZ: u32 = 28;
+pub const DT_RUNPATH: u32 = 29;
+pub const DT_FLAGS: u32 = 30;
+pub const DT_ENCODING: u32 = 32;
+pub const DT_PREINIT_ARRAY: u32 = 32;
+pub const DT_PREINIT_ARRAYSZ: u32 = 33;
+pub const DT_NUM: u32 = 34;
+pub const DT_LOOS: u32 = 1610612749;
+pub const DT_HIOS: u32 = 1879044096;
+pub const DT_LOPROC: u32 = 1879048192;
+pub const DT_HIPROC: u32 = 2147483647;
+pub const DT_VALRNGLO: u32 = 1879047424;
+pub const DT_GNU_PRELINKED: u32 = 1879047669;
+pub const DT_GNU_CONFLICTSZ: u32 = 1879047670;
+pub const DT_GNU_LIBLISTSZ: u32 = 1879047671;
+pub const DT_CHECKSUM: u32 = 1879047672;
+pub const DT_PLTPADSZ: u32 = 1879047673;
+pub const DT_MOVEENT: u32 = 1879047674;
+pub const DT_MOVESZ: u32 = 1879047675;
+pub const DT_FEATURE_1: u32 = 1879047676;
+pub const DT_POSFLAG_1: u32 = 1879047677;
+pub const DT_SYMINSZ: u32 = 1879047678;
+pub const DT_SYMINENT: u32 = 1879047679;
+pub const DT_VALRNGHI: u32 = 1879047679;
+pub const DT_VALNUM: u32 = 12;
+pub const DT_ADDRRNGLO: u32 = 1879047680;
+pub const DT_GNU_HASH: u32 = 1879047925;
+pub const DT_TLSDESC_PLT: u32 = 1879047926;
+pub const DT_TLSDESC_GOT: u32 = 1879047927;
+pub const DT_GNU_CONFLICT: u32 = 1879047928;
+pub const DT_GNU_LIBLIST: u32 = 1879047929;
+pub const DT_CONFIG: u32 = 1879047930;
+pub const DT_DEPAUDIT: u32 = 1879047931;
+pub const DT_AUDIT: u32 = 1879047932;
+pub const DT_PLTPAD: u32 = 1879047933;
+pub const DT_MOVETAB: u32 = 1879047934;
+pub const DT_SYMINFO: u32 = 1879047935;
+pub const DT_ADDRRNGHI: u32 = 1879047935;
+pub const DT_ADDRNUM: u32 = 11;
+pub const DT_VERSYM: u32 = 1879048176;
+pub const DT_RELACOUNT: u32 = 1879048185;
+pub const DT_RELCOUNT: u32 = 1879048186;
+pub const DT_FLAGS_1: u32 = 1879048187;
+pub const DT_VERDEF: u32 = 1879048188;
+pub const DT_VERDEFNUM: u32 = 1879048189;
+pub const DT_VERNEED: u32 = 1879048190;
+pub const DT_VERNEEDNUM: u32 = 1879048191;
+pub const DT_VERSIONTAGNUM: u32 = 16;
+pub const DT_AUXILIARY: u32 = 2147483645;
+pub const DT_FILTER: u32 = 2147483647;
+pub const DT_EXTRANUM: u32 = 3;
+pub const DF_ORIGIN: u32 = 1;
+pub const DF_SYMBOLIC: u32 = 2;
+pub const DF_TEXTREL: u32 = 4;
+pub const DF_BIND_NOW: u32 = 8;
+pub const DF_STATIC_TLS: u32 = 16;
+pub const DF_1_NOW: u32 = 1;
+pub const DF_1_GLOBAL: u32 = 2;
+pub const DF_1_GROUP: u32 = 4;
+pub const DF_1_NODELETE: u32 = 8;
+pub const DF_1_LOADFLTR: u32 = 16;
+pub const DF_1_INITFIRST: u32 = 32;
+pub const DF_1_NOOPEN: u32 = 64;
+pub const DF_1_ORIGIN: u32 = 128;
+pub const DF_1_DIRECT: u32 = 256;
+pub const DF_1_TRANS: u32 = 512;
+pub const DF_1_INTERPOSE: u32 = 1024;
+pub const DF_1_NODEFLIB: u32 = 2048;
+pub const DF_1_NODUMP: u32 = 4096;
+pub const DF_1_CONFALT: u32 = 8192;
+pub const DF_1_ENDFILTEE: u32 = 16384;
+pub const DF_1_DISPRELDNE: u32 = 32768;
+pub const DF_1_DISPRELPND: u32 = 65536;
+pub const DF_1_NODIRECT: u32 = 131072;
+pub const DF_1_IGNMULDEF: u32 = 262144;
+pub const DF_1_NOKSYMS: u32 = 524288;
+pub const DF_1_NOHDR: u32 = 1048576;
+pub const DF_1_EDITED: u32 = 2097152;
+pub const DF_1_NORELOC: u32 = 4194304;
+pub const DF_1_SYMINTPOSE: u32 = 8388608;
+pub const DF_1_GLOBAUDIT: u32 = 16777216;
+pub const DF_1_SINGLETON: u32 = 33554432;
+pub const DTF_1_PARINIT: u32 = 1;
+pub const DTF_1_CONFEXP: u32 = 2;
+pub const DF_P1_LAZYLOAD: u32 = 1;
+pub const DF_P1_GROUPPERM: u32 = 2;
+pub const VER_DEF_NONE: u32 = 0;
+pub const VER_DEF_CURRENT: u32 = 1;
+pub const VER_DEF_NUM: u32 = 2;
+pub const VER_FLG_BASE: u32 = 1;
+pub const VER_FLG_WEAK: u32 = 2;
+pub const VER_NDX_LOCAL: u32 = 0;
+pub const VER_NDX_GLOBAL: u32 = 1;
+pub const VER_NDX_LORESERVE: u32 = 65280;
+pub const VER_NDX_ELIMINATE: u32 = 65281;
+pub const VER_NEED_NONE: u32 = 0;
+pub const VER_NEED_CURRENT: u32 = 1;
+pub const VER_NEED_NUM: u32 = 2;
+pub const AT_NULL: u32 = 0;
+pub const AT_IGNORE: u32 = 1;
+pub const AT_EXECFD: u32 = 2;
+pub const AT_PHDR: u32 = 3;
+pub const AT_PHENT: u32 = 4;
+pub const AT_PHNUM: u32 = 5;
+pub const AT_PAGESZ: u32 = 6;
+pub const AT_BASE: u32 = 7;
+pub const AT_FLAGS: u32 = 8;
+pub const AT_ENTRY: u32 = 9;
+pub const AT_NOTELF: u32 = 10;
+pub const AT_UID: u32 = 11;
+pub const AT_EUID: u32 = 12;
+pub const AT_GID: u32 = 13;
+pub const AT_EGID: u32 = 14;
+pub const AT_CLKTCK: u32 = 17;
+pub const AT_PLATFORM: u32 = 15;
+pub const AT_HWCAP: u32 = 16;
+pub const AT_FPUCW: u32 = 18;
+pub const AT_DCACHEBSIZE: u32 = 19;
+pub const AT_ICACHEBSIZE: u32 = 20;
+pub const AT_UCACHEBSIZE: u32 = 21;
+pub const AT_IGNOREPPC: u32 = 22;
+pub const AT_SECURE: u32 = 23;
+pub const AT_BASE_PLATFORM: u32 = 24;
+pub const AT_RANDOM: u32 = 25;
+pub const AT_HWCAP2: u32 = 26;
+pub const AT_EXECFN: u32 = 31;
+pub const AT_SYSINFO: u32 = 32;
+pub const AT_SYSINFO_EHDR: u32 = 33;
+pub const AT_L1I_CACHESHAPE: u32 = 34;
+pub const AT_L1D_CACHESHAPE: u32 = 35;
+pub const AT_L2_CACHESHAPE: u32 = 36;
+pub const AT_L3_CACHESHAPE: u32 = 37;
+pub const ELF_NOTE_SOLARIS: &'static [u8; 13usize] = b"SUNW Solaris\0";
+pub const ELF_NOTE_GNU: &'static [u8; 4usize] = b"GNU\0";
+pub const ELF_NOTE_PAGESIZE_HINT: u32 = 1;
+pub const NT_GNU_ABI_TAG: u32 = 1;
+pub const ELF_NOTE_ABI: u32 = 1;
+pub const ELF_NOTE_OS_LINUX: u32 = 0;
+pub const ELF_NOTE_OS_GNU: u32 = 1;
+pub const ELF_NOTE_OS_SOLARIS2: u32 = 2;
+pub const ELF_NOTE_OS_FREEBSD: u32 = 3;
+pub const NT_GNU_HWCAP: u32 = 2;
+pub const NT_GNU_BUILD_ID: u32 = 3;
+pub const NT_GNU_GOLD_VERSION: u32 = 4;
+pub const EF_CPU32: u32 = 8454144;
+pub const R_68K_NONE: u32 = 0;
+pub const R_68K_32: u32 = 1;
+pub const R_68K_16: u32 = 2;
+pub const R_68K_8: u32 = 3;
+pub const R_68K_PC32: u32 = 4;
+pub const R_68K_PC16: u32 = 5;
+pub const R_68K_PC8: u32 = 6;
+pub const R_68K_GOT32: u32 = 7;
+pub const R_68K_GOT16: u32 = 8;
+pub const R_68K_GOT8: u32 = 9;
+pub const R_68K_GOT32O: u32 = 10;
+pub const R_68K_GOT16O: u32 = 11;
+pub const R_68K_GOT8O: u32 = 12;
+pub const R_68K_PLT32: u32 = 13;
+pub const R_68K_PLT16: u32 = 14;
+pub const R_68K_PLT8: u32 = 15;
+pub const R_68K_PLT32O: u32 = 16;
+pub const R_68K_PLT16O: u32 = 17;
+pub const R_68K_PLT8O: u32 = 18;
+pub const R_68K_COPY: u32 = 19;
+pub const R_68K_GLOB_DAT: u32 = 20;
+pub const R_68K_JMP_SLOT: u32 = 21;
+pub const R_68K_RELATIVE: u32 = 22;
+pub const R_68K_TLS_GD32: u32 = 25;
+pub const R_68K_TLS_GD16: u32 = 26;
+pub const R_68K_TLS_GD8: u32 = 27;
+pub const R_68K_TLS_LDM32: u32 = 28;
+pub const R_68K_TLS_LDM16: u32 = 29;
+pub const R_68K_TLS_LDM8: u32 = 30;
+pub const R_68K_TLS_LDO32: u32 = 31;
+pub const R_68K_TLS_LDO16: u32 = 32;
+pub const R_68K_TLS_LDO8: u32 = 33;
+pub const R_68K_TLS_IE32: u32 = 34;
+pub const R_68K_TLS_IE16: u32 = 35;
+pub const R_68K_TLS_IE8: u32 = 36;
+pub const R_68K_TLS_LE32: u32 = 37;
+pub const R_68K_TLS_LE16: u32 = 38;
+pub const R_68K_TLS_LE8: u32 = 39;
+pub const R_68K_TLS_DTPMOD32: u32 = 40;
+pub const R_68K_TLS_DTPREL32: u32 = 41;
+pub const R_68K_TLS_TPREL32: u32 = 42;
+pub const R_68K_NUM: u32 = 43;
+pub const R_386_NONE: u32 = 0;
+pub const R_386_32: u32 = 1;
+pub const R_386_PC32: u32 = 2;
+pub const R_386_GOT32: u32 = 3;
+pub const R_386_PLT32: u32 = 4;
+pub const R_386_COPY: u32 = 5;
+pub const R_386_GLOB_DAT: u32 = 6;
+pub const R_386_JMP_SLOT: u32 = 7;
+pub const R_386_RELATIVE: u32 = 8;
+pub const R_386_GOTOFF: u32 = 9;
+pub const R_386_GOTPC: u32 = 10;
+pub const R_386_32PLT: u32 = 11;
+pub const R_386_TLS_TPOFF: u32 = 14;
+pub const R_386_TLS_IE: u32 = 15;
+pub const R_386_TLS_GOTIE: u32 = 16;
+pub const R_386_TLS_LE: u32 = 17;
+pub const R_386_TLS_GD: u32 = 18;
+pub const R_386_TLS_LDM: u32 = 19;
+pub const R_386_16: u32 = 20;
+pub const R_386_PC16: u32 = 21;
+pub const R_386_8: u32 = 22;
+pub const R_386_PC8: u32 = 23;
+pub const R_386_TLS_GD_32: u32 = 24;
+pub const R_386_TLS_GD_PUSH: u32 = 25;
+pub const R_386_TLS_GD_CALL: u32 = 26;
+pub const R_386_TLS_GD_POP: u32 = 27;
+pub const R_386_TLS_LDM_32: u32 = 28;
+pub const R_386_TLS_LDM_PUSH: u32 = 29;
+pub const R_386_TLS_LDM_CALL: u32 = 30;
+pub const R_386_TLS_LDM_POP: u32 = 31;
+pub const R_386_TLS_LDO_32: u32 = 32;
+pub const R_386_TLS_IE_32: u32 = 33;
+pub const R_386_TLS_LE_32: u32 = 34;
+pub const R_386_TLS_DTPMOD32: u32 = 35;
+pub const R_386_TLS_DTPOFF32: u32 = 36;
+pub const R_386_TLS_TPOFF32: u32 = 37;
+pub const R_386_SIZE32: u32 = 38;
+pub const R_386_TLS_GOTDESC: u32 = 39;
+pub const R_386_TLS_DESC_CALL: u32 = 40;
+pub const R_386_TLS_DESC: u32 = 41;
+pub const R_386_IRELATIVE: u32 = 42;
+pub const R_386_GOT32X: u32 = 43;
+pub const R_386_NUM: u32 = 44;
+pub const STT_SPARC_REGISTER: u32 = 13;
+pub const EF_SPARCV9_MM: u32 = 3;
+pub const EF_SPARCV9_TSO: u32 = 0;
+pub const EF_SPARCV9_PSO: u32 = 1;
+pub const EF_SPARCV9_RMO: u32 = 2;
+pub const EF_SPARC_LEDATA: u32 = 8388608;
+pub const EF_SPARC_EXT_MASK: u32 = 16776960;
+pub const EF_SPARC_32PLUS: u32 = 256;
+pub const EF_SPARC_SUN_US1: u32 = 512;
+pub const EF_SPARC_HAL_R1: u32 = 1024;
+pub const EF_SPARC_SUN_US3: u32 = 2048;
+pub const R_SPARC_NONE: u32 = 0;
+pub const R_SPARC_8: u32 = 1;
+pub const R_SPARC_16: u32 = 2;
+pub const R_SPARC_32: u32 = 3;
+pub const R_SPARC_DISP8: u32 = 4;
+pub const R_SPARC_DISP16: u32 = 5;
+pub const R_SPARC_DISP32: u32 = 6;
+pub const R_SPARC_WDISP30: u32 = 7;
+pub const R_SPARC_WDISP22: u32 = 8;
+pub const R_SPARC_HI22: u32 = 9;
+pub const R_SPARC_22: u32 = 10;
+pub const R_SPARC_13: u32 = 11;
+pub const R_SPARC_LO10: u32 = 12;
+pub const R_SPARC_GOT10: u32 = 13;
+pub const R_SPARC_GOT13: u32 = 14;
+pub const R_SPARC_GOT22: u32 = 15;
+pub const R_SPARC_PC10: u32 = 16;
+pub const R_SPARC_PC22: u32 = 17;
+pub const R_SPARC_WPLT30: u32 = 18;
+pub const R_SPARC_COPY: u32 = 19;
+pub const R_SPARC_GLOB_DAT: u32 = 20;
+pub const R_SPARC_JMP_SLOT: u32 = 21;
+pub const R_SPARC_RELATIVE: u32 = 22;
+pub const R_SPARC_UA32: u32 = 23;
+pub const R_SPARC_PLT32: u32 = 24;
+pub const R_SPARC_HIPLT22: u32 = 25;
+pub const R_SPARC_LOPLT10: u32 = 26;
+pub const R_SPARC_PCPLT32: u32 = 27;
+pub const R_SPARC_PCPLT22: u32 = 28;
+pub const R_SPARC_PCPLT10: u32 = 29;
+pub const R_SPARC_10: u32 = 30;
+pub const R_SPARC_11: u32 = 31;
+pub const R_SPARC_64: u32 = 32;
+pub const R_SPARC_OLO10: u32 = 33;
+pub const R_SPARC_HH22: u32 = 34;
+pub const R_SPARC_HM10: u32 = 35;
+pub const R_SPARC_LM22: u32 = 36;
+pub const R_SPARC_PC_HH22: u32 = 37;
+pub const R_SPARC_PC_HM10: u32 = 38;
+pub const R_SPARC_PC_LM22: u32 = 39;
+pub const R_SPARC_WDISP16: u32 = 40;
+pub const R_SPARC_WDISP19: u32 = 41;
+pub const R_SPARC_GLOB_JMP: u32 = 42;
+pub const R_SPARC_7: u32 = 43;
+pub const R_SPARC_5: u32 = 44;
+pub const R_SPARC_6: u32 = 45;
+pub const R_SPARC_DISP64: u32 = 46;
+pub const R_SPARC_PLT64: u32 = 47;
+pub const R_SPARC_HIX22: u32 = 48;
+pub const R_SPARC_LOX10: u32 = 49;
+pub const R_SPARC_H44: u32 = 50;
+pub const R_SPARC_M44: u32 = 51;
+pub const R_SPARC_L44: u32 = 52;
+pub const R_SPARC_REGISTER: u32 = 53;
+pub const R_SPARC_UA64: u32 = 54;
+pub const R_SPARC_UA16: u32 = 55;
+pub const R_SPARC_TLS_GD_HI22: u32 = 56;
+pub const R_SPARC_TLS_GD_LO10: u32 = 57;
+pub const R_SPARC_TLS_GD_ADD: u32 = 58;
+pub const R_SPARC_TLS_GD_CALL: u32 = 59;
+pub const R_SPARC_TLS_LDM_HI22: u32 = 60;
+pub const R_SPARC_TLS_LDM_LO10: u32 = 61;
+pub const R_SPARC_TLS_LDM_ADD: u32 = 62;
+pub const R_SPARC_TLS_LDM_CALL: u32 = 63;
+pub const R_SPARC_TLS_LDO_HIX22: u32 = 64;
+pub const R_SPARC_TLS_LDO_LOX10: u32 = 65;
+pub const R_SPARC_TLS_LDO_ADD: u32 = 66;
+pub const R_SPARC_TLS_IE_HI22: u32 = 67;
+pub const R_SPARC_TLS_IE_LO10: u32 = 68;
+pub const R_SPARC_TLS_IE_LD: u32 = 69;
+pub const R_SPARC_TLS_IE_LDX: u32 = 70;
+pub const R_SPARC_TLS_IE_ADD: u32 = 71;
+pub const R_SPARC_TLS_LE_HIX22: u32 = 72;
+pub const R_SPARC_TLS_LE_LOX10: u32 = 73;
+pub const R_SPARC_TLS_DTPMOD32: u32 = 74;
+pub const R_SPARC_TLS_DTPMOD64: u32 = 75;
+pub const R_SPARC_TLS_DTPOFF32: u32 = 76;
+pub const R_SPARC_TLS_DTPOFF64: u32 = 77;
+pub const R_SPARC_TLS_TPOFF32: u32 = 78;
+pub const R_SPARC_TLS_TPOFF64: u32 = 79;
+pub const R_SPARC_GOTDATA_HIX22: u32 = 80;
+pub const R_SPARC_GOTDATA_LOX10: u32 = 81;
+pub const R_SPARC_GOTDATA_OP_HIX22: u32 = 82;
+pub const R_SPARC_GOTDATA_OP_LOX10: u32 = 83;
+pub const R_SPARC_GOTDATA_OP: u32 = 84;
+pub const R_SPARC_H34: u32 = 85;
+pub const R_SPARC_SIZE32: u32 = 86;
+pub const R_SPARC_SIZE64: u32 = 87;
+pub const R_SPARC_WDISP10: u32 = 88;
+pub const R_SPARC_JMP_IREL: u32 = 248;
+pub const R_SPARC_IRELATIVE: u32 = 249;
+pub const R_SPARC_GNU_VTINHERIT: u32 = 250;
+pub const R_SPARC_GNU_VTENTRY: u32 = 251;
+pub const R_SPARC_REV32: u32 = 252;
+pub const R_SPARC_NUM: u32 = 253;
+pub const DT_SPARC_REGISTER: u32 = 1879048193;
+pub const DT_SPARC_NUM: u32 = 2;
+pub const EF_MIPS_NOREORDER: u32 = 1;
+pub const EF_MIPS_PIC: u32 = 2;
+pub const EF_MIPS_CPIC: u32 = 4;
+pub const EF_MIPS_XGOT: u32 = 8;
+pub const EF_MIPS_64BIT_WHIRL: u32 = 16;
+pub const EF_MIPS_ABI2: u32 = 32;
+pub const EF_MIPS_ABI_ON32: u32 = 64;
+pub const EF_MIPS_FP64: u32 = 512;
+pub const EF_MIPS_NAN2008: u32 = 1024;
+pub const EF_MIPS_ARCH: u32 = 4026531840;
+pub const EF_MIPS_ARCH_1: u32 = 0;
+pub const EF_MIPS_ARCH_2: u32 = 268435456;
+pub const EF_MIPS_ARCH_3: u32 = 536870912;
+pub const EF_MIPS_ARCH_4: u32 = 805306368;
+pub const EF_MIPS_ARCH_5: u32 = 1073741824;
+pub const EF_MIPS_ARCH_32: u32 = 1342177280;
+pub const EF_MIPS_ARCH_64: u32 = 1610612736;
+pub const EF_MIPS_ARCH_32R2: u32 = 1879048192;
+pub const EF_MIPS_ARCH_64R2: u32 = 2147483648;
+pub const SHN_MIPS_ACOMMON: u32 = 65280;
+pub const SHN_MIPS_TEXT: u32 = 65281;
+pub const SHN_MIPS_DATA: u32 = 65282;
+pub const SHN_MIPS_SCOMMON: u32 = 65283;
+pub const SHN_MIPS_SUNDEFINED: u32 = 65284;
+pub const SHT_MIPS_LIBLIST: u32 = 1879048192;
+pub const SHT_MIPS_MSYM: u32 = 1879048193;
+pub const SHT_MIPS_CONFLICT: u32 = 1879048194;
+pub const SHT_MIPS_GPTAB: u32 = 1879048195;
+pub const SHT_MIPS_UCODE: u32 = 1879048196;
+pub const SHT_MIPS_DEBUG: u32 = 1879048197;
+pub const SHT_MIPS_REGINFO: u32 = 1879048198;
+pub const SHT_MIPS_PACKAGE: u32 = 1879048199;
+pub const SHT_MIPS_PACKSYM: u32 = 1879048200;
+pub const SHT_MIPS_RELD: u32 = 1879048201;
+pub const SHT_MIPS_IFACE: u32 = 1879048203;
+pub const SHT_MIPS_CONTENT: u32 = 1879048204;
+pub const SHT_MIPS_OPTIONS: u32 = 1879048205;
+pub const SHT_MIPS_SHDR: u32 = 1879048208;
+pub const SHT_MIPS_FDESC: u32 = 1879048209;
+pub const SHT_MIPS_EXTSYM: u32 = 1879048210;
+pub const SHT_MIPS_DENSE: u32 = 1879048211;
+pub const SHT_MIPS_PDESC: u32 = 1879048212;
+pub const SHT_MIPS_LOCSYM: u32 = 1879048213;
+pub const SHT_MIPS_AUXSYM: u32 = 1879048214;
+pub const SHT_MIPS_OPTSYM: u32 = 1879048215;
+pub const SHT_MIPS_LOCSTR: u32 = 1879048216;
+pub const SHT_MIPS_LINE: u32 = 1879048217;
+pub const SHT_MIPS_RFDESC: u32 = 1879048218;
+pub const SHT_MIPS_DELTASYM: u32 = 1879048219;
+pub const SHT_MIPS_DELTAINST: u32 = 1879048220;
+pub const SHT_MIPS_DELTACLASS: u32 = 1879048221;
+pub const SHT_MIPS_DWARF: u32 = 1879048222;
+pub const SHT_MIPS_DELTADECL: u32 = 1879048223;
+pub const SHT_MIPS_SYMBOL_LIB: u32 = 1879048224;
+pub const SHT_MIPS_EVENTS: u32 = 1879048225;
+pub const SHT_MIPS_TRANSLATE: u32 = 1879048226;
+pub const SHT_MIPS_PIXIE: u32 = 1879048227;
+pub const SHT_MIPS_XLATE: u32 = 1879048228;
+pub const SHT_MIPS_XLATE_DEBUG: u32 = 1879048229;
+pub const SHT_MIPS_WHIRL: u32 = 1879048230;
+pub const SHT_MIPS_EH_REGION: u32 = 1879048231;
+pub const SHT_MIPS_XLATE_OLD: u32 = 1879048232;
+pub const SHT_MIPS_PDR_EXCEPTION: u32 = 1879048233;
+pub const SHF_MIPS_GPREL: u32 = 268435456;
+pub const SHF_MIPS_MERGE: u32 = 536870912;
+pub const SHF_MIPS_ADDR: u32 = 1073741824;
+pub const SHF_MIPS_STRINGS: u32 = 2147483648;
+pub const SHF_MIPS_NOSTRIP: u32 = 134217728;
+pub const SHF_MIPS_LOCAL: u32 = 67108864;
+pub const SHF_MIPS_NAMES: u32 = 33554432;
+pub const SHF_MIPS_NODUPE: u32 = 16777216;
+pub const STO_MIPS_DEFAULT: u32 = 0;
+pub const STO_MIPS_INTERNAL: u32 = 1;
+pub const STO_MIPS_HIDDEN: u32 = 2;
+pub const STO_MIPS_PROTECTED: u32 = 3;
+pub const STO_MIPS_PLT: u32 = 8;
+pub const STO_MIPS_SC_ALIGN_UNUSED: u32 = 255;
+pub const STB_MIPS_SPLIT_COMMON: u32 = 13;
+pub const ODK_NULL: u32 = 0;
+pub const ODK_REGINFO: u32 = 1;
+pub const ODK_EXCEPTIONS: u32 = 2;
+pub const ODK_PAD: u32 = 3;
+pub const ODK_HWPATCH: u32 = 4;
+pub const ODK_FILL: u32 = 5;
+pub const ODK_TAGS: u32 = 6;
+pub const ODK_HWAND: u32 = 7;
+pub const ODK_HWOR: u32 = 8;
+pub const OEX_FPU_MIN: u32 = 31;
+pub const OEX_FPU_MAX: u32 = 7936;
+pub const OEX_PAGE0: u32 = 65536;
+pub const OEX_SMM: u32 = 131072;
+pub const OEX_FPDBUG: u32 = 262144;
+pub const OEX_PRECISEFP: u32 = 262144;
+pub const OEX_DISMISS: u32 = 524288;
+pub const OEX_FPU_INVAL: u32 = 16;
+pub const OEX_FPU_DIV0: u32 = 8;
+pub const OEX_FPU_OFLO: u32 = 4;
+pub const OEX_FPU_UFLO: u32 = 2;
+pub const OEX_FPU_INEX: u32 = 1;
+pub const OHW_R4KEOP: u32 = 1;
+pub const OHW_R8KPFETCH: u32 = 2;
+pub const OHW_R5KEOP: u32 = 4;
+pub const OHW_R5KCVTL: u32 = 8;
+pub const OPAD_PREFIX: u32 = 1;
+pub const OPAD_POSTFIX: u32 = 2;
+pub const OPAD_SYMBOL: u32 = 4;
+pub const OHWA0_R4KEOP_CHECKED: u32 = 1;
+pub const OHWA1_R4KEOP_CLEAN: u32 = 2;
+pub const R_MIPS_NONE: u32 = 0;
+pub const R_MIPS_16: u32 = 1;
+pub const R_MIPS_32: u32 = 2;
+pub const R_MIPS_REL32: u32 = 3;
+pub const R_MIPS_26: u32 = 4;
+pub const R_MIPS_HI16: u32 = 5;
+pub const R_MIPS_LO16: u32 = 6;
+pub const R_MIPS_GPREL16: u32 = 7;
+pub const R_MIPS_LITERAL: u32 = 8;
+pub const R_MIPS_GOT16: u32 = 9;
+pub const R_MIPS_PC16: u32 = 10;
+pub const R_MIPS_CALL16: u32 = 11;
+pub const R_MIPS_GPREL32: u32 = 12;
+pub const R_MIPS_SHIFT5: u32 = 16;
+pub const R_MIPS_SHIFT6: u32 = 17;
+pub const R_MIPS_64: u32 = 18;
+pub const R_MIPS_GOT_DISP: u32 = 19;
+pub const R_MIPS_GOT_PAGE: u32 = 20;
+pub const R_MIPS_GOT_OFST: u32 = 21;
+pub const R_MIPS_GOT_HI16: u32 = 22;
+pub const R_MIPS_GOT_LO16: u32 = 23;
+pub const R_MIPS_SUB: u32 = 24;
+pub const R_MIPS_INSERT_A: u32 = 25;
+pub const R_MIPS_INSERT_B: u32 = 26;
+pub const R_MIPS_DELETE: u32 = 27;
+pub const R_MIPS_HIGHER: u32 = 28;
+pub const R_MIPS_HIGHEST: u32 = 29;
+pub const R_MIPS_CALL_HI16: u32 = 30;
+pub const R_MIPS_CALL_LO16: u32 = 31;
+pub const R_MIPS_SCN_DISP: u32 = 32;
+pub const R_MIPS_REL16: u32 = 33;
+pub const R_MIPS_ADD_IMMEDIATE: u32 = 34;
+pub const R_MIPS_PJUMP: u32 = 35;
+pub const R_MIPS_RELGOT: u32 = 36;
+pub const R_MIPS_JALR: u32 = 37;
+pub const R_MIPS_TLS_DTPMOD32: u32 = 38;
+pub const R_MIPS_TLS_DTPREL32: u32 = 39;
+pub const R_MIPS_TLS_DTPMOD64: u32 = 40;
+pub const R_MIPS_TLS_DTPREL64: u32 = 41;
+pub const R_MIPS_TLS_GD: u32 = 42;
+pub const R_MIPS_TLS_LDM: u32 = 43;
+pub const R_MIPS_TLS_DTPREL_HI16: u32 = 44;
+pub const R_MIPS_TLS_DTPREL_LO16: u32 = 45;
+pub const R_MIPS_TLS_GOTTPREL: u32 = 46;
+pub const R_MIPS_TLS_TPREL32: u32 = 47;
+pub const R_MIPS_TLS_TPREL64: u32 = 48;
+pub const R_MIPS_TLS_TPREL_HI16: u32 = 49;
+pub const R_MIPS_TLS_TPREL_LO16: u32 = 50;
+pub const R_MIPS_GLOB_DAT: u32 = 51;
+pub const R_MIPS_COPY: u32 = 126;
+pub const R_MIPS_JUMP_SLOT: u32 = 127;
+pub const R_MIPS_NUM: u32 = 128;
+pub const PT_MIPS_REGINFO: u32 = 1879048192;
+pub const PT_MIPS_RTPROC: u32 = 1879048193;
+pub const PT_MIPS_OPTIONS: u32 = 1879048194;
+pub const PT_MIPS_ABIFLAGS: u32 = 1879048195;
+pub const PF_MIPS_LOCAL: u32 = 268435456;
+pub const DT_MIPS_RLD_VERSION: u32 = 1879048193;
+pub const DT_MIPS_TIME_STAMP: u32 = 1879048194;
+pub const DT_MIPS_ICHECKSUM: u32 = 1879048195;
+pub const DT_MIPS_IVERSION: u32 = 1879048196;
+pub const DT_MIPS_FLAGS: u32 = 1879048197;
+pub const DT_MIPS_BASE_ADDRESS: u32 = 1879048198;
+pub const DT_MIPS_MSYM: u32 = 1879048199;
+pub const DT_MIPS_CONFLICT: u32 = 1879048200;
+pub const DT_MIPS_LIBLIST: u32 = 1879048201;
+pub const DT_MIPS_LOCAL_GOTNO: u32 = 1879048202;
+pub const DT_MIPS_CONFLICTNO: u32 = 1879048203;
+pub const DT_MIPS_LIBLISTNO: u32 = 1879048208;
+pub const DT_MIPS_SYMTABNO: u32 = 1879048209;
+pub const DT_MIPS_UNREFEXTNO: u32 = 1879048210;
+pub const DT_MIPS_GOTSYM: u32 = 1879048211;
+pub const DT_MIPS_HIPAGENO: u32 = 1879048212;
+pub const DT_MIPS_RLD_MAP: u32 = 1879048214;
+pub const DT_MIPS_DELTA_CLASS: u32 = 1879048215;
+pub const DT_MIPS_DELTA_CLASS_NO: u32 = 1879048216;
+pub const DT_MIPS_DELTA_INSTANCE: u32 = 1879048217;
+pub const DT_MIPS_DELTA_INSTANCE_NO: u32 = 1879048218;
+pub const DT_MIPS_DELTA_RELOC: u32 = 1879048219;
+pub const DT_MIPS_DELTA_RELOC_NO: u32 = 1879048220;
+pub const DT_MIPS_DELTA_SYM: u32 = 1879048221;
+pub const DT_MIPS_DELTA_SYM_NO: u32 = 1879048222;
+pub const DT_MIPS_DELTA_CLASSSYM: u32 = 1879048224;
+pub const DT_MIPS_DELTA_CLASSSYM_NO: u32 = 1879048225;
+pub const DT_MIPS_CXX_FLAGS: u32 = 1879048226;
+pub const DT_MIPS_PIXIE_INIT: u32 = 1879048227;
+pub const DT_MIPS_SYMBOL_LIB: u32 = 1879048228;
+pub const DT_MIPS_LOCALPAGE_GOTIDX: u32 = 1879048229;
+pub const DT_MIPS_LOCAL_GOTIDX: u32 = 1879048230;
+pub const DT_MIPS_HIDDEN_GOTIDX: u32 = 1879048231;
+pub const DT_MIPS_PROTECTED_GOTIDX: u32 = 1879048232;
+pub const DT_MIPS_OPTIONS: u32 = 1879048233;
+pub const DT_MIPS_INTERFACE: u32 = 1879048234;
+pub const DT_MIPS_DYNSTR_ALIGN: u32 = 1879048235;
+pub const DT_MIPS_INTERFACE_SIZE: u32 = 1879048236;
+pub const DT_MIPS_RLD_TEXT_RESOLVE_ADDR: u32 = 1879048237;
+pub const DT_MIPS_PERF_SUFFIX: u32 = 1879048238;
+pub const DT_MIPS_COMPACT_SIZE: u32 = 1879048239;
+pub const DT_MIPS_GP_VALUE: u32 = 1879048240;
+pub const DT_MIPS_AUX_DYNAMIC: u32 = 1879048241;
+pub const DT_MIPS_PLTGOT: u32 = 1879048242;
+pub const DT_MIPS_RWPLT: u32 = 1879048244;
+pub const DT_MIPS_RLD_MAP_REL: u32 = 1879048245;
+pub const DT_MIPS_NUM: u32 = 54;
+pub const RHF_NONE: u32 = 0;
+pub const RHF_QUICKSTART: u32 = 1;
+pub const RHF_NOTPOT: u32 = 2;
+pub const RHF_NO_LIBRARY_REPLACEMENT: u32 = 4;
+pub const RHF_NO_MOVE: u32 = 8;
+pub const RHF_SGI_ONLY: u32 = 16;
+pub const RHF_GUARANTEE_INIT: u32 = 32;
+pub const RHF_DELTA_C_PLUS_PLUS: u32 = 64;
+pub const RHF_GUARANTEE_START_INIT: u32 = 128;
+pub const RHF_PIXIE: u32 = 256;
+pub const RHF_DEFAULT_DELAY_LOAD: u32 = 512;
+pub const RHF_REQUICKSTART: u32 = 1024;
+pub const RHF_REQUICKSTARTED: u32 = 2048;
+pub const RHF_CORD: u32 = 4096;
+pub const RHF_NO_UNRES_UNDEF: u32 = 8192;
+pub const RHF_RLD_ORDER_SAFE: u32 = 16384;
+pub const LL_NONE: u32 = 0;
+pub const LL_EXACT_MATCH: u32 = 1;
+pub const LL_IGNORE_INT_VER: u32 = 2;
+pub const LL_REQUIRE_MINOR: u32 = 4;
+pub const LL_EXPORTS: u32 = 8;
+pub const LL_DELAY_LOAD: u32 = 16;
+pub const LL_DELTA: u32 = 32;
+pub const MIPS_AFL_REG_NONE: u32 = 0;
+pub const MIPS_AFL_REG_32: u32 = 1;
+pub const MIPS_AFL_REG_64: u32 = 2;
+pub const MIPS_AFL_REG_128: u32 = 3;
+pub const MIPS_AFL_ASE_DSP: u32 = 1;
+pub const MIPS_AFL_ASE_DSPR2: u32 = 2;
+pub const MIPS_AFL_ASE_EVA: u32 = 4;
+pub const MIPS_AFL_ASE_MCU: u32 = 8;
+pub const MIPS_AFL_ASE_MDMX: u32 = 16;
+pub const MIPS_AFL_ASE_MIPS3D: u32 = 32;
+pub const MIPS_AFL_ASE_MT: u32 = 64;
+pub const MIPS_AFL_ASE_SMARTMIPS: u32 = 128;
+pub const MIPS_AFL_ASE_VIRT: u32 = 256;
+pub const MIPS_AFL_ASE_MSA: u32 = 512;
+pub const MIPS_AFL_ASE_MIPS16: u32 = 1024;
+pub const MIPS_AFL_ASE_MICROMIPS: u32 = 2048;
+pub const MIPS_AFL_ASE_XPA: u32 = 4096;
+pub const MIPS_AFL_ASE_MASK: u32 = 8191;
+pub const MIPS_AFL_EXT_XLR: u32 = 1;
+pub const MIPS_AFL_EXT_OCTEON2: u32 = 2;
+pub const MIPS_AFL_EXT_OCTEONP: u32 = 3;
+pub const MIPS_AFL_EXT_LOONGSON_3A: u32 = 4;
+pub const MIPS_AFL_EXT_OCTEON: u32 = 5;
+pub const MIPS_AFL_EXT_5900: u32 = 6;
+pub const MIPS_AFL_EXT_4650: u32 = 7;
+pub const MIPS_AFL_EXT_4010: u32 = 8;
+pub const MIPS_AFL_EXT_4100: u32 = 9;
+pub const MIPS_AFL_EXT_3900: u32 = 10;
+pub const MIPS_AFL_EXT_10000: u32 = 11;
+pub const MIPS_AFL_EXT_SB1: u32 = 12;
+pub const MIPS_AFL_EXT_4111: u32 = 13;
+pub const MIPS_AFL_EXT_4120: u32 = 14;
+pub const MIPS_AFL_EXT_5400: u32 = 15;
+pub const MIPS_AFL_EXT_5500: u32 = 16;
+pub const MIPS_AFL_EXT_LOONGSON_2E: u32 = 17;
+pub const MIPS_AFL_EXT_LOONGSON_2F: u32 = 18;
+pub const MIPS_AFL_FLAGS1_ODDSPREG: u32 = 1;
+pub const EF_PARISC_TRAPNIL: u32 = 65536;
+pub const EF_PARISC_EXT: u32 = 131072;
+pub const EF_PARISC_LSB: u32 = 262144;
+pub const EF_PARISC_WIDE: u32 = 524288;
+pub const EF_PARISC_NO_KABP: u32 = 1048576;
+pub const EF_PARISC_LAZYSWAP: u32 = 4194304;
+pub const EF_PARISC_ARCH: u32 = 65535;
+pub const EFA_PARISC_1_0: u32 = 523;
+pub const EFA_PARISC_1_1: u32 = 528;
+pub const EFA_PARISC_2_0: u32 = 532;
+pub const SHN_PARISC_ANSI_COMMON: u32 = 65280;
+pub const SHN_PARISC_HUGE_COMMON: u32 = 65281;
+pub const SHT_PARISC_EXT: u32 = 1879048192;
+pub const SHT_PARISC_UNWIND: u32 = 1879048193;
+pub const SHT_PARISC_DOC: u32 = 1879048194;
+pub const SHF_PARISC_SHORT: u32 = 536870912;
+pub const SHF_PARISC_HUGE: u32 = 1073741824;
+pub const SHF_PARISC_SBP: u32 = 2147483648;
+pub const STT_PARISC_MILLICODE: u32 = 13;
+pub const STT_HP_OPAQUE: u32 = 11;
+pub const STT_HP_STUB: u32 = 12;
+pub const R_PARISC_NONE: u32 = 0;
+pub const R_PARISC_DIR32: u32 = 1;
+pub const R_PARISC_DIR21L: u32 = 2;
+pub const R_PARISC_DIR17R: u32 = 3;
+pub const R_PARISC_DIR17F: u32 = 4;
+pub const R_PARISC_DIR14R: u32 = 6;
+pub const R_PARISC_PCREL32: u32 = 9;
+pub const R_PARISC_PCREL21L: u32 = 10;
+pub const R_PARISC_PCREL17R: u32 = 11;
+pub const R_PARISC_PCREL17F: u32 = 12;
+pub const R_PARISC_PCREL14R: u32 = 14;
+pub const R_PARISC_DPREL21L: u32 = 18;
+pub const R_PARISC_DPREL14R: u32 = 22;
+pub const R_PARISC_GPREL21L: u32 = 26;
+pub const R_PARISC_GPREL14R: u32 = 30;
+pub const R_PARISC_LTOFF21L: u32 = 34;
+pub const R_PARISC_LTOFF14R: u32 = 38;
+pub const R_PARISC_SECREL32: u32 = 41;
+pub const R_PARISC_SEGBASE: u32 = 48;
+pub const R_PARISC_SEGREL32: u32 = 49;
+pub const R_PARISC_PLTOFF21L: u32 = 50;
+pub const R_PARISC_PLTOFF14R: u32 = 54;
+pub const R_PARISC_LTOFF_FPTR32: u32 = 57;
+pub const R_PARISC_LTOFF_FPTR21L: u32 = 58;
+pub const R_PARISC_LTOFF_FPTR14R: u32 = 62;
+pub const R_PARISC_FPTR64: u32 = 64;
+pub const R_PARISC_PLABEL32: u32 = 65;
+pub const R_PARISC_PLABEL21L: u32 = 66;
+pub const R_PARISC_PLABEL14R: u32 = 70;
+pub const R_PARISC_PCREL64: u32 = 72;
+pub const R_PARISC_PCREL22F: u32 = 74;
+pub const R_PARISC_PCREL14WR: u32 = 75;
+pub const R_PARISC_PCREL14DR: u32 = 76;
+pub const R_PARISC_PCREL16F: u32 = 77;
+pub const R_PARISC_PCREL16WF: u32 = 78;
+pub const R_PARISC_PCREL16DF: u32 = 79;
+pub const R_PARISC_DIR64: u32 = 80;
+pub const R_PARISC_DIR14WR: u32 = 83;
+pub const R_PARISC_DIR14DR: u32 = 84;
+pub const R_PARISC_DIR16F: u32 = 85;
+pub const R_PARISC_DIR16WF: u32 = 86;
+pub const R_PARISC_DIR16DF: u32 = 87;
+pub const R_PARISC_GPREL64: u32 = 88;
+pub const R_PARISC_GPREL14WR: u32 = 91;
+pub const R_PARISC_GPREL14DR: u32 = 92;
+pub const R_PARISC_GPREL16F: u32 = 93;
+pub const R_PARISC_GPREL16WF: u32 = 94;
+pub const R_PARISC_GPREL16DF: u32 = 95;
+pub const R_PARISC_LTOFF64: u32 = 96;
+pub const R_PARISC_LTOFF14WR: u32 = 99;
+pub const R_PARISC_LTOFF14DR: u32 = 100;
+pub const R_PARISC_LTOFF16F: u32 = 101;
+pub const R_PARISC_LTOFF16WF: u32 = 102;
+pub const R_PARISC_LTOFF16DF: u32 = 103;
+pub const R_PARISC_SECREL64: u32 = 104;
+pub const R_PARISC_SEGREL64: u32 = 112;
+pub const R_PARISC_PLTOFF14WR: u32 = 115;
+pub const R_PARISC_PLTOFF14DR: u32 = 116;
+pub const R_PARISC_PLTOFF16F: u32 = 117;
+pub const R_PARISC_PLTOFF16WF: u32 = 118;
+pub const R_PARISC_PLTOFF16DF: u32 = 119;
+pub const R_PARISC_LTOFF_FPTR64: u32 = 120;
+pub const R_PARISC_LTOFF_FPTR14WR: u32 = 123;
+pub const R_PARISC_LTOFF_FPTR14DR: u32 = 124;
+pub const R_PARISC_LTOFF_FPTR16F: u32 = 125;
+pub const R_PARISC_LTOFF_FPTR16WF: u32 = 126;
+pub const R_PARISC_LTOFF_FPTR16DF: u32 = 127;
+pub const R_PARISC_LORESERVE: u32 = 128;
+pub const R_PARISC_COPY: u32 = 128;
+pub const R_PARISC_IPLT: u32 = 129;
+pub const R_PARISC_EPLT: u32 = 130;
+pub const R_PARISC_TPREL32: u32 = 153;
+pub const R_PARISC_TPREL21L: u32 = 154;
+pub const R_PARISC_TPREL14R: u32 = 158;
+pub const R_PARISC_LTOFF_TP21L: u32 = 162;
+pub const R_PARISC_LTOFF_TP14R: u32 = 166;
+pub const R_PARISC_LTOFF_TP14F: u32 = 167;
+pub const R_PARISC_TPREL64: u32 = 216;
+pub const R_PARISC_TPREL14WR: u32 = 219;
+pub const R_PARISC_TPREL14DR: u32 = 220;
+pub const R_PARISC_TPREL16F: u32 = 221;
+pub const R_PARISC_TPREL16WF: u32 = 222;
+pub const R_PARISC_TPREL16DF: u32 = 223;
+pub const R_PARISC_LTOFF_TP64: u32 = 224;
+pub const R_PARISC_LTOFF_TP14WR: u32 = 227;
+pub const R_PARISC_LTOFF_TP14DR: u32 = 228;
+pub const R_PARISC_LTOFF_TP16F: u32 = 229;
+pub const R_PARISC_LTOFF_TP16WF: u32 = 230;
+pub const R_PARISC_LTOFF_TP16DF: u32 = 231;
+pub const R_PARISC_GNU_VTENTRY: u32 = 232;
+pub const R_PARISC_GNU_VTINHERIT: u32 = 233;
+pub const R_PARISC_TLS_GD21L: u32 = 234;
+pub const R_PARISC_TLS_GD14R: u32 = 235;
+pub const R_PARISC_TLS_GDCALL: u32 = 236;
+pub const R_PARISC_TLS_LDM21L: u32 = 237;
+pub const R_PARISC_TLS_LDM14R: u32 = 238;
+pub const R_PARISC_TLS_LDMCALL: u32 = 239;
+pub const R_PARISC_TLS_LDO21L: u32 = 240;
+pub const R_PARISC_TLS_LDO14R: u32 = 241;
+pub const R_PARISC_TLS_DTPMOD32: u32 = 242;
+pub const R_PARISC_TLS_DTPMOD64: u32 = 243;
+pub const R_PARISC_TLS_DTPOFF32: u32 = 244;
+pub const R_PARISC_TLS_DTPOFF64: u32 = 245;
+pub const R_PARISC_TLS_LE21L: u32 = 154;
+pub const R_PARISC_TLS_LE14R: u32 = 158;
+pub const R_PARISC_TLS_IE21L: u32 = 162;
+pub const R_PARISC_TLS_IE14R: u32 = 166;
+pub const R_PARISC_TLS_TPREL32: u32 = 153;
+pub const R_PARISC_TLS_TPREL64: u32 = 216;
+pub const R_PARISC_HIRESERVE: u32 = 255;
+pub const PT_HP_TLS: u32 = 1610612736;
+pub const PT_HP_CORE_NONE: u32 = 1610612737;
+pub const PT_HP_CORE_VERSION: u32 = 1610612738;
+pub const PT_HP_CORE_KERNEL: u32 = 1610612739;
+pub const PT_HP_CORE_COMM: u32 = 1610612740;
+pub const PT_HP_CORE_PROC: u32 = 1610612741;
+pub const PT_HP_CORE_LOADABLE: u32 = 1610612742;
+pub const PT_HP_CORE_STACK: u32 = 1610612743;
+pub const PT_HP_CORE_SHM: u32 = 1610612744;
+pub const PT_HP_CORE_MMF: u32 = 1610612745;
+pub const PT_HP_PARALLEL: u32 = 1610612752;
+pub const PT_HP_FASTBIND: u32 = 1610612753;
+pub const PT_HP_OPT_ANNOT: u32 = 1610612754;
+pub const PT_HP_HSL_ANNOT: u32 = 1610612755;
+pub const PT_HP_STACK: u32 = 1610612756;
+pub const PT_PARISC_ARCHEXT: u32 = 1879048192;
+pub const PT_PARISC_UNWIND: u32 = 1879048193;
+pub const PF_PARISC_SBP: u32 = 134217728;
+pub const PF_HP_PAGE_SIZE: u32 = 1048576;
+pub const PF_HP_FAR_SHARED: u32 = 2097152;
+pub const PF_HP_NEAR_SHARED: u32 = 4194304;
+pub const PF_HP_CODE: u32 = 16777216;
+pub const PF_HP_MODIFY: u32 = 33554432;
+pub const PF_HP_LAZYSWAP: u32 = 67108864;
+pub const PF_HP_SBP: u32 = 134217728;
+pub const EF_ALPHA_32BIT: u32 = 1;
+pub const EF_ALPHA_CANRELAX: u32 = 2;
+pub const SHT_ALPHA_DEBUG: u32 = 1879048193;
+pub const SHT_ALPHA_REGINFO: u32 = 1879048194;
+pub const SHF_ALPHA_GPREL: u32 = 268435456;
+pub const STO_ALPHA_NOPV: u32 = 128;
+pub const STO_ALPHA_STD_GPLOAD: u32 = 136;
+pub const R_ALPHA_NONE: u32 = 0;
+pub const R_ALPHA_REFLONG: u32 = 1;
+pub const R_ALPHA_REFQUAD: u32 = 2;
+pub const R_ALPHA_GPREL32: u32 = 3;
+pub const R_ALPHA_LITERAL: u32 = 4;
+pub const R_ALPHA_LITUSE: u32 = 5;
+pub const R_ALPHA_GPDISP: u32 = 6;
+pub const R_ALPHA_BRADDR: u32 = 7;
+pub const R_ALPHA_HINT: u32 = 8;
+pub const R_ALPHA_SREL16: u32 = 9;
+pub const R_ALPHA_SREL32: u32 = 10;
+pub const R_ALPHA_SREL64: u32 = 11;
+pub const R_ALPHA_GPRELHIGH: u32 = 17;
+pub const R_ALPHA_GPRELLOW: u32 = 18;
+pub const R_ALPHA_GPREL16: u32 = 19;
+pub const R_ALPHA_COPY: u32 = 24;
+pub const R_ALPHA_GLOB_DAT: u32 = 25;
+pub const R_ALPHA_JMP_SLOT: u32 = 26;
+pub const R_ALPHA_RELATIVE: u32 = 27;
+pub const R_ALPHA_TLS_GD_HI: u32 = 28;
+pub const R_ALPHA_TLSGD: u32 = 29;
+pub const R_ALPHA_TLS_LDM: u32 = 30;
+pub const R_ALPHA_DTPMOD64: u32 = 31;
+pub const R_ALPHA_GOTDTPREL: u32 = 32;
+pub const R_ALPHA_DTPREL64: u32 = 33;
+pub const R_ALPHA_DTPRELHI: u32 = 34;
+pub const R_ALPHA_DTPRELLO: u32 = 35;
+pub const R_ALPHA_DTPREL16: u32 = 36;
+pub const R_ALPHA_GOTTPREL: u32 = 37;
+pub const R_ALPHA_TPREL64: u32 = 38;
+pub const R_ALPHA_TPRELHI: u32 = 39;
+pub const R_ALPHA_TPRELLO: u32 = 40;
+pub const R_ALPHA_TPREL16: u32 = 41;
+pub const R_ALPHA_NUM: u32 = 46;
+pub const LITUSE_ALPHA_ADDR: u32 = 0;
+pub const LITUSE_ALPHA_BASE: u32 = 1;
+pub const LITUSE_ALPHA_BYTOFF: u32 = 2;
+pub const LITUSE_ALPHA_JSR: u32 = 3;
+pub const LITUSE_ALPHA_TLS_GD: u32 = 4;
+pub const LITUSE_ALPHA_TLS_LDM: u32 = 5;
+pub const DT_ALPHA_PLTRO: u32 = 1879048192;
+pub const DT_ALPHA_NUM: u32 = 1;
+pub const EF_PPC_EMB: u32 = 2147483648;
+pub const EF_PPC_RELOCATABLE: u32 = 65536;
+pub const EF_PPC_RELOCATABLE_LIB: u32 = 32768;
+pub const R_PPC_NONE: u32 = 0;
+pub const R_PPC_ADDR32: u32 = 1;
+pub const R_PPC_ADDR24: u32 = 2;
+pub const R_PPC_ADDR16: u32 = 3;
+pub const R_PPC_ADDR16_LO: u32 = 4;
+pub const R_PPC_ADDR16_HI: u32 = 5;
+pub const R_PPC_ADDR16_HA: u32 = 6;
+pub const R_PPC_ADDR14: u32 = 7;
+pub const R_PPC_ADDR14_BRTAKEN: u32 = 8;
+pub const R_PPC_ADDR14_BRNTAKEN: u32 = 9;
+pub const R_PPC_REL24: u32 = 10;
+pub const R_PPC_REL14: u32 = 11;
+pub const R_PPC_REL14_BRTAKEN: u32 = 12;
+pub const R_PPC_REL14_BRNTAKEN: u32 = 13;
+pub const R_PPC_GOT16: u32 = 14;
+pub const R_PPC_GOT16_LO: u32 = 15;
+pub const R_PPC_GOT16_HI: u32 = 16;
+pub const R_PPC_GOT16_HA: u32 = 17;
+pub const R_PPC_PLTREL24: u32 = 18;
+pub const R_PPC_COPY: u32 = 19;
+pub const R_PPC_GLOB_DAT: u32 = 20;
+pub const R_PPC_JMP_SLOT: u32 = 21;
+pub const R_PPC_RELATIVE: u32 = 22;
+pub const R_PPC_LOCAL24PC: u32 = 23;
+pub const R_PPC_UADDR32: u32 = 24;
+pub const R_PPC_UADDR16: u32 = 25;
+pub const R_PPC_REL32: u32 = 26;
+pub const R_PPC_PLT32: u32 = 27;
+pub const R_PPC_PLTREL32: u32 = 28;
+pub const R_PPC_PLT16_LO: u32 = 29;
+pub const R_PPC_PLT16_HI: u32 = 30;
+pub const R_PPC_PLT16_HA: u32 = 31;
+pub const R_PPC_SDAREL16: u32 = 32;
+pub const R_PPC_SECTOFF: u32 = 33;
+pub const R_PPC_SECTOFF_LO: u32 = 34;
+pub const R_PPC_SECTOFF_HI: u32 = 35;
+pub const R_PPC_SECTOFF_HA: u32 = 36;
+pub const R_PPC_TLS: u32 = 67;
+pub const R_PPC_DTPMOD32: u32 = 68;
+pub const R_PPC_TPREL16: u32 = 69;
+pub const R_PPC_TPREL16_LO: u32 = 70;
+pub const R_PPC_TPREL16_HI: u32 = 71;
+pub const R_PPC_TPREL16_HA: u32 = 72;
+pub const R_PPC_TPREL32: u32 = 73;
+pub const R_PPC_DTPREL16: u32 = 74;
+pub const R_PPC_DTPREL16_LO: u32 = 75;
+pub const R_PPC_DTPREL16_HI: u32 = 76;
+pub const R_PPC_DTPREL16_HA: u32 = 77;
+pub const R_PPC_DTPREL32: u32 = 78;
+pub const R_PPC_GOT_TLSGD16: u32 = 79;
+pub const R_PPC_GOT_TLSGD16_LO: u32 = 80;
+pub const R_PPC_GOT_TLSGD16_HI: u32 = 81;
+pub const R_PPC_GOT_TLSGD16_HA: u32 = 82;
+pub const R_PPC_GOT_TLSLD16: u32 = 83;
+pub const R_PPC_GOT_TLSLD16_LO: u32 = 84;
+pub const R_PPC_GOT_TLSLD16_HI: u32 = 85;
+pub const R_PPC_GOT_TLSLD16_HA: u32 = 86;
+pub const R_PPC_GOT_TPREL16: u32 = 87;
+pub const R_PPC_GOT_TPREL16_LO: u32 = 88;
+pub const R_PPC_GOT_TPREL16_HI: u32 = 89;
+pub const R_PPC_GOT_TPREL16_HA: u32 = 90;
+pub const R_PPC_GOT_DTPREL16: u32 = 91;
+pub const R_PPC_GOT_DTPREL16_LO: u32 = 92;
+pub const R_PPC_GOT_DTPREL16_HI: u32 = 93;
+pub const R_PPC_GOT_DTPREL16_HA: u32 = 94;
+pub const R_PPC_TLSGD: u32 = 95;
+pub const R_PPC_TLSLD: u32 = 96;
+pub const R_PPC_EMB_NADDR32: u32 = 101;
+pub const R_PPC_EMB_NADDR16: u32 = 102;
+pub const R_PPC_EMB_NADDR16_LO: u32 = 103;
+pub const R_PPC_EMB_NADDR16_HI: u32 = 104;
+pub const R_PPC_EMB_NADDR16_HA: u32 = 105;
+pub const R_PPC_EMB_SDAI16: u32 = 106;
+pub const R_PPC_EMB_SDA2I16: u32 = 107;
+pub const R_PPC_EMB_SDA2REL: u32 = 108;
+pub const R_PPC_EMB_SDA21: u32 = 109;
+pub const R_PPC_EMB_MRKREF: u32 = 110;
+pub const R_PPC_EMB_RELSEC16: u32 = 111;
+pub const R_PPC_EMB_RELST_LO: u32 = 112;
+pub const R_PPC_EMB_RELST_HI: u32 = 113;
+pub const R_PPC_EMB_RELST_HA: u32 = 114;
+pub const R_PPC_EMB_BIT_FLD: u32 = 115;
+pub const R_PPC_EMB_RELSDA: u32 = 116;
+pub const R_PPC_DIAB_SDA21_LO: u32 = 180;
+pub const R_PPC_DIAB_SDA21_HI: u32 = 181;
+pub const R_PPC_DIAB_SDA21_HA: u32 = 182;
+pub const R_PPC_DIAB_RELSDA_LO: u32 = 183;
+pub const R_PPC_DIAB_RELSDA_HI: u32 = 184;
+pub const R_PPC_DIAB_RELSDA_HA: u32 = 185;
+pub const R_PPC_IRELATIVE: u32 = 248;
+pub const R_PPC_REL16: u32 = 249;
+pub const R_PPC_REL16_LO: u32 = 250;
+pub const R_PPC_REL16_HI: u32 = 251;
+pub const R_PPC_REL16_HA: u32 = 252;
+pub const R_PPC_TOC16: u32 = 255;
+pub const DT_PPC_GOT: u32 = 1879048192;
+pub const DT_PPC_OPT: u32 = 1879048193;
+pub const DT_PPC_NUM: u32 = 2;
+pub const PPC_OPT_TLS: u32 = 1;
+pub const R_PPC64_NONE: u32 = 0;
+pub const R_PPC64_ADDR32: u32 = 1;
+pub const R_PPC64_ADDR24: u32 = 2;
+pub const R_PPC64_ADDR16: u32 = 3;
+pub const R_PPC64_ADDR16_LO: u32 = 4;
+pub const R_PPC64_ADDR16_HI: u32 = 5;
+pub const R_PPC64_ADDR16_HA: u32 = 6;
+pub const R_PPC64_ADDR14: u32 = 7;
+pub const R_PPC64_ADDR14_BRTAKEN: u32 = 8;
+pub const R_PPC64_ADDR14_BRNTAKEN: u32 = 9;
+pub const R_PPC64_REL24: u32 = 10;
+pub const R_PPC64_REL14: u32 = 11;
+pub const R_PPC64_REL14_BRTAKEN: u32 = 12;
+pub const R_PPC64_REL14_BRNTAKEN: u32 = 13;
+pub const R_PPC64_GOT16: u32 = 14;
+pub const R_PPC64_GOT16_LO: u32 = 15;
+pub const R_PPC64_GOT16_HI: u32 = 16;
+pub const R_PPC64_GOT16_HA: u32 = 17;
+pub const R_PPC64_COPY: u32 = 19;
+pub const R_PPC64_GLOB_DAT: u32 = 20;
+pub const R_PPC64_JMP_SLOT: u32 = 21;
+pub const R_PPC64_RELATIVE: u32 = 22;
+pub const R_PPC64_UADDR32: u32 = 24;
+pub const R_PPC64_UADDR16: u32 = 25;
+pub const R_PPC64_REL32: u32 = 26;
+pub const R_PPC64_PLT32: u32 = 27;
+pub const R_PPC64_PLTREL32: u32 = 28;
+pub const R_PPC64_PLT16_LO: u32 = 29;
+pub const R_PPC64_PLT16_HI: u32 = 30;
+pub const R_PPC64_PLT16_HA: u32 = 31;
+pub const R_PPC64_SECTOFF: u32 = 33;
+pub const R_PPC64_SECTOFF_LO: u32 = 34;
+pub const R_PPC64_SECTOFF_HI: u32 = 35;
+pub const R_PPC64_SECTOFF_HA: u32 = 36;
+pub const R_PPC64_ADDR30: u32 = 37;
+pub const R_PPC64_ADDR64: u32 = 38;
+pub const R_PPC64_ADDR16_HIGHER: u32 = 39;
+pub const R_PPC64_ADDR16_HIGHERA: u32 = 40;
+pub const R_PPC64_ADDR16_HIGHEST: u32 = 41;
+pub const R_PPC64_ADDR16_HIGHESTA: u32 = 42;
+pub const R_PPC64_UADDR64: u32 = 43;
+pub const R_PPC64_REL64: u32 = 44;
+pub const R_PPC64_PLT64: u32 = 45;
+pub const R_PPC64_PLTREL64: u32 = 46;
+pub const R_PPC64_TOC16: u32 = 47;
+pub const R_PPC64_TOC16_LO: u32 = 48;
+pub const R_PPC64_TOC16_HI: u32 = 49;
+pub const R_PPC64_TOC16_HA: u32 = 50;
+pub const R_PPC64_TOC: u32 = 51;
+pub const R_PPC64_PLTGOT16: u32 = 52;
+pub const R_PPC64_PLTGOT16_LO: u32 = 53;
+pub const R_PPC64_PLTGOT16_HI: u32 = 54;
+pub const R_PPC64_PLTGOT16_HA: u32 = 55;
+pub const R_PPC64_ADDR16_DS: u32 = 56;
+pub const R_PPC64_ADDR16_LO_DS: u32 = 57;
+pub const R_PPC64_GOT16_DS: u32 = 58;
+pub const R_PPC64_GOT16_LO_DS: u32 = 59;
+pub const R_PPC64_PLT16_LO_DS: u32 = 60;
+pub const R_PPC64_SECTOFF_DS: u32 = 61;
+pub const R_PPC64_SECTOFF_LO_DS: u32 = 62;
+pub const R_PPC64_TOC16_DS: u32 = 63;
+pub const R_PPC64_TOC16_LO_DS: u32 = 64;
+pub const R_PPC64_PLTGOT16_DS: u32 = 65;
+pub const R_PPC64_PLTGOT16_LO_DS: u32 = 66;
+pub const R_PPC64_TLS: u32 = 67;
+pub const R_PPC64_DTPMOD64: u32 = 68;
+pub const R_PPC64_TPREL16: u32 = 69;
+pub const R_PPC64_TPREL16_LO: u32 = 70;
+pub const R_PPC64_TPREL16_HI: u32 = 71;
+pub const R_PPC64_TPREL16_HA: u32 = 72;
+pub const R_PPC64_TPREL64: u32 = 73;
+pub const R_PPC64_DTPREL16: u32 = 74;
+pub const R_PPC64_DTPREL16_LO: u32 = 75;
+pub const R_PPC64_DTPREL16_HI: u32 = 76;
+pub const R_PPC64_DTPREL16_HA: u32 = 77;
+pub const R_PPC64_DTPREL64: u32 = 78;
+pub const R_PPC64_GOT_TLSGD16: u32 = 79;
+pub const R_PPC64_GOT_TLSGD16_LO: u32 = 80;
+pub const R_PPC64_GOT_TLSGD16_HI: u32 = 81;
+pub const R_PPC64_GOT_TLSGD16_HA: u32 = 82;
+pub const R_PPC64_GOT_TLSLD16: u32 = 83;
+pub const R_PPC64_GOT_TLSLD16_LO: u32 = 84;
+pub const R_PPC64_GOT_TLSLD16_HI: u32 = 85;
+pub const R_PPC64_GOT_TLSLD16_HA: u32 = 86;
+pub const R_PPC64_GOT_TPREL16_DS: u32 = 87;
+pub const R_PPC64_GOT_TPREL16_LO_DS: u32 = 88;
+pub const R_PPC64_GOT_TPREL16_HI: u32 = 89;
+pub const R_PPC64_GOT_TPREL16_HA: u32 = 90;
+pub const R_PPC64_GOT_DTPREL16_DS: u32 = 91;
+pub const R_PPC64_GOT_DTPREL16_LO_DS: u32 = 92;
+pub const R_PPC64_GOT_DTPREL16_HI: u32 = 93;
+pub const R_PPC64_GOT_DTPREL16_HA: u32 = 94;
+pub const R_PPC64_TPREL16_DS: u32 = 95;
+pub const R_PPC64_TPREL16_LO_DS: u32 = 96;
+pub const R_PPC64_TPREL16_HIGHER: u32 = 97;
+pub const R_PPC64_TPREL16_HIGHERA: u32 = 98;
+pub const R_PPC64_TPREL16_HIGHEST: u32 = 99;
+pub const R_PPC64_TPREL16_HIGHESTA: u32 = 100;
+pub const R_PPC64_DTPREL16_DS: u32 = 101;
+pub const R_PPC64_DTPREL16_LO_DS: u32 = 102;
+pub const R_PPC64_DTPREL16_HIGHER: u32 = 103;
+pub const R_PPC64_DTPREL16_HIGHERA: u32 = 104;
+pub const R_PPC64_DTPREL16_HIGHEST: u32 = 105;
+pub const R_PPC64_DTPREL16_HIGHESTA: u32 = 106;
+pub const R_PPC64_TLSGD: u32 = 107;
+pub const R_PPC64_TLSLD: u32 = 108;
+pub const R_PPC64_TOCSAVE: u32 = 109;
+pub const R_PPC64_ADDR16_HIGH: u32 = 110;
+pub const R_PPC64_ADDR16_HIGHA: u32 = 111;
+pub const R_PPC64_TPREL16_HIGH: u32 = 112;
+pub const R_PPC64_TPREL16_HIGHA: u32 = 113;
+pub const R_PPC64_DTPREL16_HIGH: u32 = 114;
+pub const R_PPC64_DTPREL16_HIGHA: u32 = 115;
+pub const R_PPC64_JMP_IREL: u32 = 247;
+pub const R_PPC64_IRELATIVE: u32 = 248;
+pub const R_PPC64_REL16: u32 = 249;
+pub const R_PPC64_REL16_LO: u32 = 250;
+pub const R_PPC64_REL16_HI: u32 = 251;
+pub const R_PPC64_REL16_HA: u32 = 252;
+pub const EF_PPC64_ABI: u32 = 3;
+pub const DT_PPC64_GLINK: u32 = 1879048192;
+pub const DT_PPC64_OPD: u32 = 1879048193;
+pub const DT_PPC64_OPDSZ: u32 = 1879048194;
+pub const DT_PPC64_OPT: u32 = 1879048195;
+pub const DT_PPC64_NUM: u32 = 4;
+pub const PPC64_OPT_TLS: u32 = 1;
+pub const PPC64_OPT_MULTI_TOC: u32 = 2;
+pub const STO_PPC64_LOCAL_BIT: u32 = 5;
+pub const STO_PPC64_LOCAL_MASK: u32 = 224;
+pub const EF_ARM_RELEXEC: u32 = 1;
+pub const EF_ARM_HASENTRY: u32 = 2;
+pub const EF_ARM_INTERWORK: u32 = 4;
+pub const EF_ARM_APCS_26: u32 = 8;
+pub const EF_ARM_APCS_FLOAT: u32 = 16;
+pub const EF_ARM_PIC: u32 = 32;
+pub const EF_ARM_ALIGN8: u32 = 64;
+pub const EF_ARM_NEW_ABI: u32 = 128;
+pub const EF_ARM_OLD_ABI: u32 = 256;
+pub const EF_ARM_SOFT_FLOAT: u32 = 512;
+pub const EF_ARM_VFP_FLOAT: u32 = 1024;
+pub const EF_ARM_MAVERICK_FLOAT: u32 = 2048;
+pub const EF_ARM_ABI_FLOAT_SOFT: u32 = 512;
+pub const EF_ARM_ABI_FLOAT_HARD: u32 = 1024;
+pub const EF_ARM_SYMSARESORTED: u32 = 4;
+pub const EF_ARM_DYNSYMSUSESEGIDX: u32 = 8;
+pub const EF_ARM_MAPSYMSFIRST: u32 = 16;
+pub const EF_ARM_BE8: u32 = 8388608;
+pub const EF_ARM_LE8: u32 = 4194304;
+pub const EF_ARM_EABI_UNKNOWN: u32 = 0;
+pub const EF_ARM_EABI_VER1: u32 = 16777216;
+pub const EF_ARM_EABI_VER2: u32 = 33554432;
+pub const EF_ARM_EABI_VER3: u32 = 50331648;
+pub const EF_ARM_EABI_VER4: u32 = 67108864;
+pub const EF_ARM_EABI_VER5: u32 = 83886080;
+pub const STT_ARM_TFUNC: u32 = 13;
+pub const STT_ARM_16BIT: u32 = 15;
+pub const SHF_ARM_ENTRYSECT: u32 = 268435456;
+pub const SHF_ARM_COMDEF: u32 = 2147483648;
+pub const PF_ARM_SB: u32 = 268435456;
+pub const PF_ARM_PI: u32 = 536870912;
+pub const PF_ARM_ABS: u32 = 1073741824;
+pub const PT_ARM_EXIDX: u32 = 1879048193;
+pub const SHT_ARM_EXIDX: u32 = 1879048193;
+pub const SHT_ARM_PREEMPTMAP: u32 = 1879048194;
+pub const SHT_ARM_ATTRIBUTES: u32 = 1879048195;
+pub const R_AARCH64_NONE: u32 = 0;
+pub const R_AARCH64_P32_ABS32: u32 = 1;
+pub const R_AARCH64_P32_COPY: u32 = 180;
+pub const R_AARCH64_P32_GLOB_DAT: u32 = 181;
+pub const R_AARCH64_P32_JUMP_SLOT: u32 = 182;
+pub const R_AARCH64_P32_RELATIVE: u32 = 183;
+pub const R_AARCH64_P32_TLS_DTPMOD: u32 = 184;
+pub const R_AARCH64_P32_TLS_DTPREL: u32 = 185;
+pub const R_AARCH64_P32_TLS_TPREL: u32 = 186;
+pub const R_AARCH64_P32_TLSDESC: u32 = 187;
+pub const R_AARCH64_P32_IRELATIVE: u32 = 188;
+pub const R_AARCH64_ABS64: u32 = 257;
+pub const R_AARCH64_ABS32: u32 = 258;
+pub const R_AARCH64_ABS16: u32 = 259;
+pub const R_AARCH64_PREL64: u32 = 260;
+pub const R_AARCH64_PREL32: u32 = 261;
+pub const R_AARCH64_PREL16: u32 = 262;
+pub const R_AARCH64_MOVW_UABS_G0: u32 = 263;
+pub const R_AARCH64_MOVW_UABS_G0_NC: u32 = 264;
+pub const R_AARCH64_MOVW_UABS_G1: u32 = 265;
+pub const R_AARCH64_MOVW_UABS_G1_NC: u32 = 266;
+pub const R_AARCH64_MOVW_UABS_G2: u32 = 267;
+pub const R_AARCH64_MOVW_UABS_G2_NC: u32 = 268;
+pub const R_AARCH64_MOVW_UABS_G3: u32 = 269;
+pub const R_AARCH64_MOVW_SABS_G0: u32 = 270;
+pub const R_AARCH64_MOVW_SABS_G1: u32 = 271;
+pub const R_AARCH64_MOVW_SABS_G2: u32 = 272;
+pub const R_AARCH64_LD_PREL_LO19: u32 = 273;
+pub const R_AARCH64_ADR_PREL_LO21: u32 = 274;
+pub const R_AARCH64_ADR_PREL_PG_HI21: u32 = 275;
+pub const R_AARCH64_ADR_PREL_PG_HI21_NC: u32 = 276;
+pub const R_AARCH64_ADD_ABS_LO12_NC: u32 = 277;
+pub const R_AARCH64_LDST8_ABS_LO12_NC: u32 = 278;
+pub const R_AARCH64_TSTBR14: u32 = 279;
+pub const R_AARCH64_CONDBR19: u32 = 280;
+pub const R_AARCH64_JUMP26: u32 = 282;
+pub const R_AARCH64_CALL26: u32 = 283;
+pub const R_AARCH64_LDST16_ABS_LO12_NC: u32 = 284;
+pub const R_AARCH64_LDST32_ABS_LO12_NC: u32 = 285;
+pub const R_AARCH64_LDST64_ABS_LO12_NC: u32 = 286;
+pub const R_AARCH64_MOVW_PREL_G0: u32 = 287;
+pub const R_AARCH64_MOVW_PREL_G0_NC: u32 = 288;
+pub const R_AARCH64_MOVW_PREL_G1: u32 = 289;
+pub const R_AARCH64_MOVW_PREL_G1_NC: u32 = 290;
+pub const R_AARCH64_MOVW_PREL_G2: u32 = 291;
+pub const R_AARCH64_MOVW_PREL_G2_NC: u32 = 292;
+pub const R_AARCH64_MOVW_PREL_G3: u32 = 293;
+pub const R_AARCH64_LDST128_ABS_LO12_NC: u32 = 299;
+pub const R_AARCH64_MOVW_GOTOFF_G0: u32 = 300;
+pub const R_AARCH64_MOVW_GOTOFF_G0_NC: u32 = 301;
+pub const R_AARCH64_MOVW_GOTOFF_G1: u32 = 302;
+pub const R_AARCH64_MOVW_GOTOFF_G1_NC: u32 = 303;
+pub const R_AARCH64_MOVW_GOTOFF_G2: u32 = 304;
+pub const R_AARCH64_MOVW_GOTOFF_G2_NC: u32 = 305;
+pub const R_AARCH64_MOVW_GOTOFF_G3: u32 = 306;
+pub const R_AARCH64_GOTREL64: u32 = 307;
+pub const R_AARCH64_GOTREL32: u32 = 308;
+pub const R_AARCH64_GOT_LD_PREL19: u32 = 309;
+pub const R_AARCH64_LD64_GOTOFF_LO15: u32 = 310;
+pub const R_AARCH64_ADR_GOT_PAGE: u32 = 311;
+pub const R_AARCH64_LD64_GOT_LO12_NC: u32 = 312;
+pub const R_AARCH64_LD64_GOTPAGE_LO15: u32 = 313;
+pub const R_AARCH64_TLSGD_ADR_PREL21: u32 = 512;
+pub const R_AARCH64_TLSGD_ADR_PAGE21: u32 = 513;
+pub const R_AARCH64_TLSGD_ADD_LO12_NC: u32 = 514;
+pub const R_AARCH64_TLSGD_MOVW_G1: u32 = 515;
+pub const R_AARCH64_TLSGD_MOVW_G0_NC: u32 = 516;
+pub const R_AARCH64_TLSLD_ADR_PREL21: u32 = 517;
+pub const R_AARCH64_TLSLD_ADR_PAGE21: u32 = 518;
+pub const R_AARCH64_TLSLD_ADD_LO12_NC: u32 = 519;
+pub const R_AARCH64_TLSLD_MOVW_G1: u32 = 520;
+pub const R_AARCH64_TLSLD_MOVW_G0_NC: u32 = 521;
+pub const R_AARCH64_TLSLD_LD_PREL19: u32 = 522;
+pub const R_AARCH64_TLSLD_MOVW_DTPREL_G2: u32 = 523;
+pub const R_AARCH64_TLSLD_MOVW_DTPREL_G1: u32 = 524;
+pub const R_AARCH64_TLSLD_MOVW_DTPREL_G1_NC: u32 = 525;
+pub const R_AARCH64_TLSLD_MOVW_DTPREL_G0: u32 = 526;
+pub const R_AARCH64_TLSLD_MOVW_DTPREL_G0_NC: u32 = 527;
+pub const R_AARCH64_TLSLD_ADD_DTPREL_HI12: u32 = 528;
+pub const R_AARCH64_TLSLD_ADD_DTPREL_LO12: u32 = 529;
+pub const R_AARCH64_TLSLD_ADD_DTPREL_LO12_NC: u32 = 530;
+pub const R_AARCH64_TLSLD_LDST8_DTPREL_LO12: u32 = 531;
+pub const R_AARCH64_TLSLD_LDST8_DTPREL_LO12_NC: u32 = 532;
+pub const R_AARCH64_TLSLD_LDST16_DTPREL_LO12: u32 = 533;
+pub const R_AARCH64_TLSLD_LDST16_DTPREL_LO12_NC: u32 = 534;
+pub const R_AARCH64_TLSLD_LDST32_DTPREL_LO12: u32 = 535;
+pub const R_AARCH64_TLSLD_LDST32_DTPREL_LO12_NC: u32 = 536;
+pub const R_AARCH64_TLSLD_LDST64_DTPREL_LO12: u32 = 537;
+pub const R_AARCH64_TLSLD_LDST64_DTPREL_LO12_NC: u32 = 538;
+pub const R_AARCH64_TLSIE_MOVW_GOTTPREL_G1: u32 = 539;
+pub const R_AARCH64_TLSIE_MOVW_GOTTPREL_G0_NC: u32 = 540;
+pub const R_AARCH64_TLSIE_ADR_GOTTPREL_PAGE21: u32 = 541;
+pub const R_AARCH64_TLSIE_LD64_GOTTPREL_LO12_NC: u32 = 542;
+pub const R_AARCH64_TLSIE_LD_GOTTPREL_PREL19: u32 = 543;
+pub const R_AARCH64_TLSLE_MOVW_TPREL_G2: u32 = 544;
+pub const R_AARCH64_TLSLE_MOVW_TPREL_G1: u32 = 545;
+pub const R_AARCH64_TLSLE_MOVW_TPREL_G1_NC: u32 = 546;
+pub const R_AARCH64_TLSLE_MOVW_TPREL_G0: u32 = 547;
+pub const R_AARCH64_TLSLE_MOVW_TPREL_G0_NC: u32 = 548;
+pub const R_AARCH64_TLSLE_ADD_TPREL_HI12: u32 = 549;
+pub const R_AARCH64_TLSLE_ADD_TPREL_LO12: u32 = 550;
+pub const R_AARCH64_TLSLE_ADD_TPREL_LO12_NC: u32 = 551;
+pub const R_AARCH64_TLSLE_LDST8_TPREL_LO12: u32 = 552;
+pub const R_AARCH64_TLSLE_LDST8_TPREL_LO12_NC: u32 = 553;
+pub const R_AARCH64_TLSLE_LDST16_TPREL_LO12: u32 = 554;
+pub const R_AARCH64_TLSLE_LDST16_TPREL_LO12_NC: u32 = 555;
+pub const R_AARCH64_TLSLE_LDST32_TPREL_LO12: u32 = 556;
+pub const R_AARCH64_TLSLE_LDST32_TPREL_LO12_NC: u32 = 557;
+pub const R_AARCH64_TLSLE_LDST64_TPREL_LO12: u32 = 558;
+pub const R_AARCH64_TLSLE_LDST64_TPREL_LO12_NC: u32 = 559;
+pub const R_AARCH64_TLSDESC_LD_PREL19: u32 = 560;
+pub const R_AARCH64_TLSDESC_ADR_PREL21: u32 = 561;
+pub const R_AARCH64_TLSDESC_ADR_PAGE21: u32 = 562;
+pub const R_AARCH64_TLSDESC_LD64_LO12: u32 = 563;
+pub const R_AARCH64_TLSDESC_ADD_LO12: u32 = 564;
+pub const R_AARCH64_TLSDESC_OFF_G1: u32 = 565;
+pub const R_AARCH64_TLSDESC_OFF_G0_NC: u32 = 566;
+pub const R_AARCH64_TLSDESC_LDR: u32 = 567;
+pub const R_AARCH64_TLSDESC_ADD: u32 = 568;
+pub const R_AARCH64_TLSDESC_CALL: u32 = 569;
+pub const R_AARCH64_TLSLE_LDST128_TPREL_LO12: u32 = 570;
+pub const R_AARCH64_TLSLE_LDST128_TPREL_LO12_NC: u32 = 571;
+pub const R_AARCH64_TLSLD_LDST128_DTPREL_LO12: u32 = 572;
+pub const R_AARCH64_TLSLD_LDST128_DTPREL_LO12_NC: u32 = 573;
+pub const R_AARCH64_COPY: u32 = 1024;
+pub const R_AARCH64_GLOB_DAT: u32 = 1025;
+pub const R_AARCH64_JUMP_SLOT: u32 = 1026;
+pub const R_AARCH64_RELATIVE: u32 = 1027;
+pub const R_AARCH64_TLS_DTPMOD: u32 = 1028;
+pub const R_AARCH64_TLS_DTPREL: u32 = 1029;
+pub const R_AARCH64_TLS_TPREL: u32 = 1030;
+pub const R_AARCH64_TLSDESC: u32 = 1031;
+pub const R_AARCH64_IRELATIVE: u32 = 1032;
+pub const R_ARM_NONE: u32 = 0;
+pub const R_ARM_PC24: u32 = 1;
+pub const R_ARM_ABS32: u32 = 2;
+pub const R_ARM_REL32: u32 = 3;
+pub const R_ARM_PC13: u32 = 4;
+pub const R_ARM_ABS16: u32 = 5;
+pub const R_ARM_ABS12: u32 = 6;
+pub const R_ARM_THM_ABS5: u32 = 7;
+pub const R_ARM_ABS8: u32 = 8;
+pub const R_ARM_SBREL32: u32 = 9;
+pub const R_ARM_THM_PC22: u32 = 10;
+pub const R_ARM_THM_PC8: u32 = 11;
+pub const R_ARM_AMP_VCALL9: u32 = 12;
+pub const R_ARM_SWI24: u32 = 13;
+pub const R_ARM_TLS_DESC: u32 = 13;
+pub const R_ARM_THM_SWI8: u32 = 14;
+pub const R_ARM_XPC25: u32 = 15;
+pub const R_ARM_THM_XPC22: u32 = 16;
+pub const R_ARM_TLS_DTPMOD32: u32 = 17;
+pub const R_ARM_TLS_DTPOFF32: u32 = 18;
+pub const R_ARM_TLS_TPOFF32: u32 = 19;
+pub const R_ARM_COPY: u32 = 20;
+pub const R_ARM_GLOB_DAT: u32 = 21;
+pub const R_ARM_JUMP_SLOT: u32 = 22;
+pub const R_ARM_RELATIVE: u32 = 23;
+pub const R_ARM_GOTOFF: u32 = 24;
+pub const R_ARM_GOTPC: u32 = 25;
+pub const R_ARM_GOT32: u32 = 26;
+pub const R_ARM_PLT32: u32 = 27;
+pub const R_ARM_CALL: u32 = 28;
+pub const R_ARM_JUMP24: u32 = 29;
+pub const R_ARM_THM_JUMP24: u32 = 30;
+pub const R_ARM_BASE_ABS: u32 = 31;
+pub const R_ARM_ALU_PCREL_7_0: u32 = 32;
+pub const R_ARM_ALU_PCREL_15_8: u32 = 33;
+pub const R_ARM_ALU_PCREL_23_15: u32 = 34;
+pub const R_ARM_LDR_SBREL_11_0: u32 = 35;
+pub const R_ARM_ALU_SBREL_19_12: u32 = 36;
+pub const R_ARM_ALU_SBREL_27_20: u32 = 37;
+pub const R_ARM_TARGET1: u32 = 38;
+pub const R_ARM_SBREL31: u32 = 39;
+pub const R_ARM_V4BX: u32 = 40;
+pub const R_ARM_TARGET2: u32 = 41;
+pub const R_ARM_PREL31: u32 = 42;
+pub const R_ARM_MOVW_ABS_NC: u32 = 43;
+pub const R_ARM_MOVT_ABS: u32 = 44;
+pub const R_ARM_MOVW_PREL_NC: u32 = 45;
+pub const R_ARM_MOVT_PREL: u32 = 46;
+pub const R_ARM_THM_MOVW_ABS_NC: u32 = 47;
+pub const R_ARM_THM_MOVT_ABS: u32 = 48;
+pub const R_ARM_THM_MOVW_PREL_NC: u32 = 49;
+pub const R_ARM_THM_MOVT_PREL: u32 = 50;
+pub const R_ARM_THM_JUMP19: u32 = 51;
+pub const R_ARM_THM_JUMP6: u32 = 52;
+pub const R_ARM_THM_ALU_PREL_11_0: u32 = 53;
+pub const R_ARM_THM_PC12: u32 = 54;
+pub const R_ARM_ABS32_NOI: u32 = 55;
+pub const R_ARM_REL32_NOI: u32 = 56;
+pub const R_ARM_ALU_PC_G0_NC: u32 = 57;
+pub const R_ARM_ALU_PC_G0: u32 = 58;
+pub const R_ARM_ALU_PC_G1_NC: u32 = 59;
+pub const R_ARM_ALU_PC_G1: u32 = 60;
+pub const R_ARM_ALU_PC_G2: u32 = 61;
+pub const R_ARM_LDR_PC_G1: u32 = 62;
+pub const R_ARM_LDR_PC_G2: u32 = 63;
+pub const R_ARM_LDRS_PC_G0: u32 = 64;
+pub const R_ARM_LDRS_PC_G1: u32 = 65;
+pub const R_ARM_LDRS_PC_G2: u32 = 66;
+pub const R_ARM_LDC_PC_G0: u32 = 67;
+pub const R_ARM_LDC_PC_G1: u32 = 68;
+pub const R_ARM_LDC_PC_G2: u32 = 69;
+pub const R_ARM_ALU_SB_G0_NC: u32 = 70;
+pub const R_ARM_ALU_SB_G0: u32 = 71;
+pub const R_ARM_ALU_SB_G1_NC: u32 = 72;
+pub const R_ARM_ALU_SB_G1: u32 = 73;
+pub const R_ARM_ALU_SB_G2: u32 = 74;
+pub const R_ARM_LDR_SB_G0: u32 = 75;
+pub const R_ARM_LDR_SB_G1: u32 = 76;
+pub const R_ARM_LDR_SB_G2: u32 = 77;
+pub const R_ARM_LDRS_SB_G0: u32 = 78;
+pub const R_ARM_LDRS_SB_G1: u32 = 79;
+pub const R_ARM_LDRS_SB_G2: u32 = 80;
+pub const R_ARM_LDC_SB_G0: u32 = 81;
+pub const R_ARM_LDC_SB_G1: u32 = 82;
+pub const R_ARM_LDC_SB_G2: u32 = 83;
+pub const R_ARM_MOVW_BREL_NC: u32 = 84;
+pub const R_ARM_MOVT_BREL: u32 = 85;
+pub const R_ARM_MOVW_BREL: u32 = 86;
+pub const R_ARM_THM_MOVW_BREL_NC: u32 = 87;
+pub const R_ARM_THM_MOVT_BREL: u32 = 88;
+pub const R_ARM_THM_MOVW_BREL: u32 = 89;
+pub const R_ARM_TLS_GOTDESC: u32 = 90;
+pub const R_ARM_TLS_CALL: u32 = 91;
+pub const R_ARM_TLS_DESCSEQ: u32 = 92;
+pub const R_ARM_THM_TLS_CALL: u32 = 93;
+pub const R_ARM_PLT32_ABS: u32 = 94;
+pub const R_ARM_GOT_ABS: u32 = 95;
+pub const R_ARM_GOT_PREL: u32 = 96;
+pub const R_ARM_GOT_BREL12: u32 = 97;
+pub const R_ARM_GOTOFF12: u32 = 98;
+pub const R_ARM_GOTRELAX: u32 = 99;
+pub const R_ARM_GNU_VTENTRY: u32 = 100;
+pub const R_ARM_GNU_VTINHERIT: u32 = 101;
+pub const R_ARM_THM_PC11: u32 = 102;
+pub const R_ARM_THM_PC9: u32 = 103;
+pub const R_ARM_TLS_GD32: u32 = 104;
+pub const R_ARM_TLS_LDM32: u32 = 105;
+pub const R_ARM_TLS_LDO32: u32 = 106;
+pub const R_ARM_TLS_IE32: u32 = 107;
+pub const R_ARM_TLS_LE32: u32 = 108;
+pub const R_ARM_TLS_LDO12: u32 = 109;
+pub const R_ARM_TLS_LE12: u32 = 110;
+pub const R_ARM_TLS_IE12GP: u32 = 111;
+pub const R_ARM_ME_TOO: u32 = 128;
+pub const R_ARM_THM_TLS_DESCSEQ: u32 = 129;
+pub const R_ARM_THM_TLS_DESCSEQ16: u32 = 129;
+pub const R_ARM_THM_TLS_DESCSEQ32: u32 = 130;
+pub const R_ARM_THM_GOT_BREL12: u32 = 131;
+pub const R_ARM_IRELATIVE: u32 = 160;
+pub const R_ARM_RXPC25: u32 = 249;
+pub const R_ARM_RSBREL32: u32 = 250;
+pub const R_ARM_THM_RPC22: u32 = 251;
+pub const R_ARM_RREL32: u32 = 252;
+pub const R_ARM_RABS22: u32 = 253;
+pub const R_ARM_RPC24: u32 = 254;
+pub const R_ARM_RBASE: u32 = 255;
+pub const R_ARM_NUM: u32 = 256;
+pub const EF_IA_64_MASKOS: u32 = 15;
+pub const EF_IA_64_ABI64: u32 = 16;
+pub const EF_IA_64_ARCH: u32 = 4278190080;
+pub const PT_IA_64_ARCHEXT: u32 = 1879048192;
+pub const PT_IA_64_UNWIND: u32 = 1879048193;
+pub const PT_IA_64_HP_OPT_ANOT: u32 = 1610612754;
+pub const PT_IA_64_HP_HSL_ANOT: u32 = 1610612755;
+pub const PT_IA_64_HP_STACK: u32 = 1610612756;
+pub const PF_IA_64_NORECOV: u32 = 2147483648;
+pub const SHT_IA_64_EXT: u32 = 1879048192;
+pub const SHT_IA_64_UNWIND: u32 = 1879048193;
+pub const SHF_IA_64_SHORT: u32 = 268435456;
+pub const SHF_IA_64_NORECOV: u32 = 536870912;
+pub const DT_IA_64_PLT_RESERVE: u32 = 1879048192;
+pub const DT_IA_64_NUM: u32 = 1;
+pub const R_IA64_NONE: u32 = 0;
+pub const R_IA64_IMM14: u32 = 33;
+pub const R_IA64_IMM22: u32 = 34;
+pub const R_IA64_IMM64: u32 = 35;
+pub const R_IA64_DIR32MSB: u32 = 36;
+pub const R_IA64_DIR32LSB: u32 = 37;
+pub const R_IA64_DIR64MSB: u32 = 38;
+pub const R_IA64_DIR64LSB: u32 = 39;
+pub const R_IA64_GPREL22: u32 = 42;
+pub const R_IA64_GPREL64I: u32 = 43;
+pub const R_IA64_GPREL32MSB: u32 = 44;
+pub const R_IA64_GPREL32LSB: u32 = 45;
+pub const R_IA64_GPREL64MSB: u32 = 46;
+pub const R_IA64_GPREL64LSB: u32 = 47;
+pub const R_IA64_LTOFF22: u32 = 50;
+pub const R_IA64_LTOFF64I: u32 = 51;
+pub const R_IA64_PLTOFF22: u32 = 58;
+pub const R_IA64_PLTOFF64I: u32 = 59;
+pub const R_IA64_PLTOFF64MSB: u32 = 62;
+pub const R_IA64_PLTOFF64LSB: u32 = 63;
+pub const R_IA64_FPTR64I: u32 = 67;
+pub const R_IA64_FPTR32MSB: u32 = 68;
+pub const R_IA64_FPTR32LSB: u32 = 69;
+pub const R_IA64_FPTR64MSB: u32 = 70;
+pub const R_IA64_FPTR64LSB: u32 = 71;
+pub const R_IA64_PCREL60B: u32 = 72;
+pub const R_IA64_PCREL21B: u32 = 73;
+pub const R_IA64_PCREL21M: u32 = 74;
+pub const R_IA64_PCREL21F: u32 = 75;
+pub const R_IA64_PCREL32MSB: u32 = 76;
+pub const R_IA64_PCREL32LSB: u32 = 77;
+pub const R_IA64_PCREL64MSB: u32 = 78;
+pub const R_IA64_PCREL64LSB: u32 = 79;
+pub const R_IA64_LTOFF_FPTR22: u32 = 82;
+pub const R_IA64_LTOFF_FPTR64I: u32 = 83;
+pub const R_IA64_LTOFF_FPTR32MSB: u32 = 84;
+pub const R_IA64_LTOFF_FPTR32LSB: u32 = 85;
+pub const R_IA64_LTOFF_FPTR64MSB: u32 = 86;
+pub const R_IA64_LTOFF_FPTR64LSB: u32 = 87;
+pub const R_IA64_SEGREL32MSB: u32 = 92;
+pub const R_IA64_SEGREL32LSB: u32 = 93;
+pub const R_IA64_SEGREL64MSB: u32 = 94;
+pub const R_IA64_SEGREL64LSB: u32 = 95;
+pub const R_IA64_SECREL32MSB: u32 = 100;
+pub const R_IA64_SECREL32LSB: u32 = 101;
+pub const R_IA64_SECREL64MSB: u32 = 102;
+pub const R_IA64_SECREL64LSB: u32 = 103;
+pub const R_IA64_REL32MSB: u32 = 108;
+pub const R_IA64_REL32LSB: u32 = 109;
+pub const R_IA64_REL64MSB: u32 = 110;
+pub const R_IA64_REL64LSB: u32 = 111;
+pub const R_IA64_LTV32MSB: u32 = 116;
+pub const R_IA64_LTV32LSB: u32 = 117;
+pub const R_IA64_LTV64MSB: u32 = 118;
+pub const R_IA64_LTV64LSB: u32 = 119;
+pub const R_IA64_PCREL21BI: u32 = 121;
+pub const R_IA64_PCREL22: u32 = 122;
+pub const R_IA64_PCREL64I: u32 = 123;
+pub const R_IA64_IPLTMSB: u32 = 128;
+pub const R_IA64_IPLTLSB: u32 = 129;
+pub const R_IA64_COPY: u32 = 132;
+pub const R_IA64_SUB: u32 = 133;
+pub const R_IA64_LTOFF22X: u32 = 134;
+pub const R_IA64_LDXMOV: u32 = 135;
+pub const R_IA64_TPREL14: u32 = 145;
+pub const R_IA64_TPREL22: u32 = 146;
+pub const R_IA64_TPREL64I: u32 = 147;
+pub const R_IA64_TPREL64MSB: u32 = 150;
+pub const R_IA64_TPREL64LSB: u32 = 151;
+pub const R_IA64_LTOFF_TPREL22: u32 = 154;
+pub const R_IA64_DTPMOD64MSB: u32 = 166;
+pub const R_IA64_DTPMOD64LSB: u32 = 167;
+pub const R_IA64_LTOFF_DTPMOD22: u32 = 170;
+pub const R_IA64_DTPREL14: u32 = 177;
+pub const R_IA64_DTPREL22: u32 = 178;
+pub const R_IA64_DTPREL64I: u32 = 179;
+pub const R_IA64_DTPREL32MSB: u32 = 180;
+pub const R_IA64_DTPREL32LSB: u32 = 181;
+pub const R_IA64_DTPREL64MSB: u32 = 182;
+pub const R_IA64_DTPREL64LSB: u32 = 183;
+pub const R_IA64_LTOFF_DTPREL22: u32 = 186;
+pub const EF_SH_MACH_MASK: u32 = 31;
+pub const EF_SH_UNKNOWN: u32 = 0;
+pub const EF_SH1: u32 = 1;
+pub const EF_SH2: u32 = 2;
+pub const EF_SH3: u32 = 3;
+pub const EF_SH_DSP: u32 = 4;
+pub const EF_SH3_DSP: u32 = 5;
+pub const EF_SH4AL_DSP: u32 = 6;
+pub const EF_SH3E: u32 = 8;
+pub const EF_SH4: u32 = 9;
+pub const EF_SH2E: u32 = 11;
+pub const EF_SH4A: u32 = 12;
+pub const EF_SH2A: u32 = 13;
+pub const EF_SH4_NOFPU: u32 = 16;
+pub const EF_SH4A_NOFPU: u32 = 17;
+pub const EF_SH4_NOMMU_NOFPU: u32 = 18;
+pub const EF_SH2A_NOFPU: u32 = 19;
+pub const EF_SH3_NOMMU: u32 = 20;
+pub const EF_SH2A_SH4_NOFPU: u32 = 21;
+pub const EF_SH2A_SH3_NOFPU: u32 = 22;
+pub const EF_SH2A_SH4: u32 = 23;
+pub const EF_SH2A_SH3E: u32 = 24;
+pub const R_SH_NONE: u32 = 0;
+pub const R_SH_DIR32: u32 = 1;
+pub const R_SH_REL32: u32 = 2;
+pub const R_SH_DIR8WPN: u32 = 3;
+pub const R_SH_IND12W: u32 = 4;
+pub const R_SH_DIR8WPL: u32 = 5;
+pub const R_SH_DIR8WPZ: u32 = 6;
+pub const R_SH_DIR8BP: u32 = 7;
+pub const R_SH_DIR8W: u32 = 8;
+pub const R_SH_DIR8L: u32 = 9;
+pub const R_SH_SWITCH16: u32 = 25;
+pub const R_SH_SWITCH32: u32 = 26;
+pub const R_SH_USES: u32 = 27;
+pub const R_SH_COUNT: u32 = 28;
+pub const R_SH_ALIGN: u32 = 29;
+pub const R_SH_CODE: u32 = 30;
+pub const R_SH_DATA: u32 = 31;
+pub const R_SH_LABEL: u32 = 32;
+pub const R_SH_SWITCH8: u32 = 33;
+pub const R_SH_GNU_VTINHERIT: u32 = 34;
+pub const R_SH_GNU_VTENTRY: u32 = 35;
+pub const R_SH_TLS_GD_32: u32 = 144;
+pub const R_SH_TLS_LD_32: u32 = 145;
+pub const R_SH_TLS_LDO_32: u32 = 146;
+pub const R_SH_TLS_IE_32: u32 = 147;
+pub const R_SH_TLS_LE_32: u32 = 148;
+pub const R_SH_TLS_DTPMOD32: u32 = 149;
+pub const R_SH_TLS_DTPOFF32: u32 = 150;
+pub const R_SH_TLS_TPOFF32: u32 = 151;
+pub const R_SH_GOT32: u32 = 160;
+pub const R_SH_PLT32: u32 = 161;
+pub const R_SH_COPY: u32 = 162;
+pub const R_SH_GLOB_DAT: u32 = 163;
+pub const R_SH_JMP_SLOT: u32 = 164;
+pub const R_SH_RELATIVE: u32 = 165;
+pub const R_SH_GOTOFF: u32 = 166;
+pub const R_SH_GOTPC: u32 = 167;
+pub const R_SH_NUM: u32 = 256;
+pub const EF_S390_HIGH_GPRS: u32 = 1;
+pub const R_390_NONE: u32 = 0;
+pub const R_390_8: u32 = 1;
+pub const R_390_12: u32 = 2;
+pub const R_390_16: u32 = 3;
+pub const R_390_32: u32 = 4;
+pub const R_390_PC32: u32 = 5;
+pub const R_390_GOT12: u32 = 6;
+pub const R_390_GOT32: u32 = 7;
+pub const R_390_PLT32: u32 = 8;
+pub const R_390_COPY: u32 = 9;
+pub const R_390_GLOB_DAT: u32 = 10;
+pub const R_390_JMP_SLOT: u32 = 11;
+pub const R_390_RELATIVE: u32 = 12;
+pub const R_390_GOTOFF32: u32 = 13;
+pub const R_390_GOTPC: u32 = 14;
+pub const R_390_GOT16: u32 = 15;
+pub const R_390_PC16: u32 = 16;
+pub const R_390_PC16DBL: u32 = 17;
+pub const R_390_PLT16DBL: u32 = 18;
+pub const R_390_PC32DBL: u32 = 19;
+pub const R_390_PLT32DBL: u32 = 20;
+pub const R_390_GOTPCDBL: u32 = 21;
+pub const R_390_64: u32 = 22;
+pub const R_390_PC64: u32 = 23;
+pub const R_390_GOT64: u32 = 24;
+pub const R_390_PLT64: u32 = 25;
+pub const R_390_GOTENT: u32 = 26;
+pub const R_390_GOTOFF16: u32 = 27;
+pub const R_390_GOTOFF64: u32 = 28;
+pub const R_390_GOTPLT12: u32 = 29;
+pub const R_390_GOTPLT16: u32 = 30;
+pub const R_390_GOTPLT32: u32 = 31;
+pub const R_390_GOTPLT64: u32 = 32;
+pub const R_390_GOTPLTENT: u32 = 33;
+pub const R_390_PLTOFF16: u32 = 34;
+pub const R_390_PLTOFF32: u32 = 35;
+pub const R_390_PLTOFF64: u32 = 36;
+pub const R_390_TLS_LOAD: u32 = 37;
+pub const R_390_TLS_GDCALL: u32 = 38;
+pub const R_390_TLS_LDCALL: u32 = 39;
+pub const R_390_TLS_GD32: u32 = 40;
+pub const R_390_TLS_GD64: u32 = 41;
+pub const R_390_TLS_GOTIE12: u32 = 42;
+pub const R_390_TLS_GOTIE32: u32 = 43;
+pub const R_390_TLS_GOTIE64: u32 = 44;
+pub const R_390_TLS_LDM32: u32 = 45;
+pub const R_390_TLS_LDM64: u32 = 46;
+pub const R_390_TLS_IE32: u32 = 47;
+pub const R_390_TLS_IE64: u32 = 48;
+pub const R_390_TLS_IEENT: u32 = 49;
+pub const R_390_TLS_LE32: u32 = 50;
+pub const R_390_TLS_LE64: u32 = 51;
+pub const R_390_TLS_LDO32: u32 = 52;
+pub const R_390_TLS_LDO64: u32 = 53;
+pub const R_390_TLS_DTPMOD: u32 = 54;
+pub const R_390_TLS_DTPOFF: u32 = 55;
+pub const R_390_TLS_TPOFF: u32 = 56;
+pub const R_390_20: u32 = 57;
+pub const R_390_GOT20: u32 = 58;
+pub const R_390_GOTPLT20: u32 = 59;
+pub const R_390_TLS_GOTIE20: u32 = 60;
+pub const R_390_IRELATIVE: u32 = 61;
+pub const R_390_NUM: u32 = 62;
+pub const R_CRIS_NONE: u32 = 0;
+pub const R_CRIS_8: u32 = 1;
+pub const R_CRIS_16: u32 = 2;
+pub const R_CRIS_32: u32 = 3;
+pub const R_CRIS_8_PCREL: u32 = 4;
+pub const R_CRIS_16_PCREL: u32 = 5;
+pub const R_CRIS_32_PCREL: u32 = 6;
+pub const R_CRIS_GNU_VTINHERIT: u32 = 7;
+pub const R_CRIS_GNU_VTENTRY: u32 = 8;
+pub const R_CRIS_COPY: u32 = 9;
+pub const R_CRIS_GLOB_DAT: u32 = 10;
+pub const R_CRIS_JUMP_SLOT: u32 = 11;
+pub const R_CRIS_RELATIVE: u32 = 12;
+pub const R_CRIS_16_GOT: u32 = 13;
+pub const R_CRIS_32_GOT: u32 = 14;
+pub const R_CRIS_16_GOTPLT: u32 = 15;
+pub const R_CRIS_32_GOTPLT: u32 = 16;
+pub const R_CRIS_32_GOTREL: u32 = 17;
+pub const R_CRIS_32_PLT_GOTREL: u32 = 18;
+pub const R_CRIS_32_PLT_PCREL: u32 = 19;
+pub const R_CRIS_NUM: u32 = 20;
+pub const R_X86_64_NONE: u32 = 0;
+pub const R_X86_64_64: u32 = 1;
+pub const R_X86_64_PC32: u32 = 2;
+pub const R_X86_64_GOT32: u32 = 3;
+pub const R_X86_64_PLT32: u32 = 4;
+pub const R_X86_64_COPY: u32 = 5;
+pub const R_X86_64_GLOB_DAT: u32 = 6;
+pub const R_X86_64_JUMP_SLOT: u32 = 7;
+pub const R_X86_64_RELATIVE: u32 = 8;
+pub const R_X86_64_GOTPCREL: u32 = 9;
+pub const R_X86_64_32: u32 = 10;
+pub const R_X86_64_32S: u32 = 11;
+pub const R_X86_64_16: u32 = 12;
+pub const R_X86_64_PC16: u32 = 13;
+pub const R_X86_64_8: u32 = 14;
+pub const R_X86_64_PC8: u32 = 15;
+pub const R_X86_64_DTPMOD64: u32 = 16;
+pub const R_X86_64_DTPOFF64: u32 = 17;
+pub const R_X86_64_TPOFF64: u32 = 18;
+pub const R_X86_64_TLSGD: u32 = 19;
+pub const R_X86_64_TLSLD: u32 = 20;
+pub const R_X86_64_DTPOFF32: u32 = 21;
+pub const R_X86_64_GOTTPOFF: u32 = 22;
+pub const R_X86_64_TPOFF32: u32 = 23;
+pub const R_X86_64_PC64: u32 = 24;
+pub const R_X86_64_GOTOFF64: u32 = 25;
+pub const R_X86_64_GOTPC32: u32 = 26;
+pub const R_X86_64_GOT64: u32 = 27;
+pub const R_X86_64_GOTPCREL64: u32 = 28;
+pub const R_X86_64_GOTPC64: u32 = 29;
+pub const R_X86_64_GOTPLT64: u32 = 30;
+pub const R_X86_64_PLTOFF64: u32 = 31;
+pub const R_X86_64_SIZE32: u32 = 32;
+pub const R_X86_64_SIZE64: u32 = 33;
+pub const R_X86_64_GOTPC32_TLSDESC: u32 = 34;
+pub const R_X86_64_TLSDESC_CALL: u32 = 35;
+pub const R_X86_64_TLSDESC: u32 = 36;
+pub const R_X86_64_IRELATIVE: u32 = 37;
+pub const R_X86_64_RELATIVE64: u32 = 38;
+pub const R_X86_64_GOTPCRELX: u32 = 41;
+pub const R_X86_64_REX_GOTPCRELX: u32 = 42;
+pub const R_X86_64_NUM: u32 = 43;
+pub const R_MN10300_NONE: u32 = 0;
+pub const R_MN10300_32: u32 = 1;
+pub const R_MN10300_16: u32 = 2;
+pub const R_MN10300_8: u32 = 3;
+pub const R_MN10300_PCREL32: u32 = 4;
+pub const R_MN10300_PCREL16: u32 = 5;
+pub const R_MN10300_PCREL8: u32 = 6;
+pub const R_MN10300_GNU_VTINHERIT: u32 = 7;
+pub const R_MN10300_GNU_VTENTRY: u32 = 8;
+pub const R_MN10300_24: u32 = 9;
+pub const R_MN10300_GOTPC32: u32 = 10;
+pub const R_MN10300_GOTPC16: u32 = 11;
+pub const R_MN10300_GOTOFF32: u32 = 12;
+pub const R_MN10300_GOTOFF24: u32 = 13;
+pub const R_MN10300_GOTOFF16: u32 = 14;
+pub const R_MN10300_PLT32: u32 = 15;
+pub const R_MN10300_PLT16: u32 = 16;
+pub const R_MN10300_GOT32: u32 = 17;
+pub const R_MN10300_GOT24: u32 = 18;
+pub const R_MN10300_GOT16: u32 = 19;
+pub const R_MN10300_COPY: u32 = 20;
+pub const R_MN10300_GLOB_DAT: u32 = 21;
+pub const R_MN10300_JMP_SLOT: u32 = 22;
+pub const R_MN10300_RELATIVE: u32 = 23;
+pub const R_MN10300_TLS_GD: u32 = 24;
+pub const R_MN10300_TLS_LD: u32 = 25;
+pub const R_MN10300_TLS_LDO: u32 = 26;
+pub const R_MN10300_TLS_GOTIE: u32 = 27;
+pub const R_MN10300_TLS_IE: u32 = 28;
+pub const R_MN10300_TLS_LE: u32 = 29;
+pub const R_MN10300_TLS_DTPMOD: u32 = 30;
+pub const R_MN10300_TLS_DTPOFF: u32 = 31;
+pub const R_MN10300_TLS_TPOFF: u32 = 32;
+pub const R_MN10300_SYM_DIFF: u32 = 33;
+pub const R_MN10300_ALIGN: u32 = 34;
+pub const R_MN10300_NUM: u32 = 35;
+pub const R_M32R_NONE: u32 = 0;
+pub const R_M32R_16: u32 = 1;
+pub const R_M32R_32: u32 = 2;
+pub const R_M32R_24: u32 = 3;
+pub const R_M32R_10_PCREL: u32 = 4;
+pub const R_M32R_18_PCREL: u32 = 5;
+pub const R_M32R_26_PCREL: u32 = 6;
+pub const R_M32R_HI16_ULO: u32 = 7;
+pub const R_M32R_HI16_SLO: u32 = 8;
+pub const R_M32R_LO16: u32 = 9;
+pub const R_M32R_SDA16: u32 = 10;
+pub const R_M32R_GNU_VTINHERIT: u32 = 11;
+pub const R_M32R_GNU_VTENTRY: u32 = 12;
+pub const R_M32R_16_RELA: u32 = 33;
+pub const R_M32R_32_RELA: u32 = 34;
+pub const R_M32R_24_RELA: u32 = 35;
+pub const R_M32R_10_PCREL_RELA: u32 = 36;
+pub const R_M32R_18_PCREL_RELA: u32 = 37;
+pub const R_M32R_26_PCREL_RELA: u32 = 38;
+pub const R_M32R_HI16_ULO_RELA: u32 = 39;
+pub const R_M32R_HI16_SLO_RELA: u32 = 40;
+pub const R_M32R_LO16_RELA: u32 = 41;
+pub const R_M32R_SDA16_RELA: u32 = 42;
+pub const R_M32R_RELA_GNU_VTINHERIT: u32 = 43;
+pub const R_M32R_RELA_GNU_VTENTRY: u32 = 44;
+pub const R_M32R_REL32: u32 = 45;
+pub const R_M32R_GOT24: u32 = 48;
+pub const R_M32R_26_PLTREL: u32 = 49;
+pub const R_M32R_COPY: u32 = 50;
+pub const R_M32R_GLOB_DAT: u32 = 51;
+pub const R_M32R_JMP_SLOT: u32 = 52;
+pub const R_M32R_RELATIVE: u32 = 53;
+pub const R_M32R_GOTOFF: u32 = 54;
+pub const R_M32R_GOTPC24: u32 = 55;
+pub const R_M32R_GOT16_HI_ULO: u32 = 56;
+pub const R_M32R_GOT16_HI_SLO: u32 = 57;
+pub const R_M32R_GOT16_LO: u32 = 58;
+pub const R_M32R_GOTPC_HI_ULO: u32 = 59;
+pub const R_M32R_GOTPC_HI_SLO: u32 = 60;
+pub const R_M32R_GOTPC_LO: u32 = 61;
+pub const R_M32R_GOTOFF_HI_ULO: u32 = 62;
+pub const R_M32R_GOTOFF_HI_SLO: u32 = 63;
+pub const R_M32R_GOTOFF_LO: u32 = 64;
+pub const R_M32R_NUM: u32 = 256;
+pub const R_MICROBLAZE_NONE: u32 = 0;
+pub const R_MICROBLAZE_32: u32 = 1;
+pub const R_MICROBLAZE_32_PCREL: u32 = 2;
+pub const R_MICROBLAZE_64_PCREL: u32 = 3;
+pub const R_MICROBLAZE_32_PCREL_LO: u32 = 4;
+pub const R_MICROBLAZE_64: u32 = 5;
+pub const R_MICROBLAZE_32_LO: u32 = 6;
+pub const R_MICROBLAZE_SRO32: u32 = 7;
+pub const R_MICROBLAZE_SRW32: u32 = 8;
+pub const R_MICROBLAZE_64_NONE: u32 = 9;
+pub const R_MICROBLAZE_32_SYM_OP_SYM: u32 = 10;
+pub const R_MICROBLAZE_GNU_VTINHERIT: u32 = 11;
+pub const R_MICROBLAZE_GNU_VTENTRY: u32 = 12;
+pub const R_MICROBLAZE_GOTPC_64: u32 = 13;
+pub const R_MICROBLAZE_GOT_64: u32 = 14;
+pub const R_MICROBLAZE_PLT_64: u32 = 15;
+pub const R_MICROBLAZE_REL: u32 = 16;
+pub const R_MICROBLAZE_JUMP_SLOT: u32 = 17;
+pub const R_MICROBLAZE_GLOB_DAT: u32 = 18;
+pub const R_MICROBLAZE_GOTOFF_64: u32 = 19;
+pub const R_MICROBLAZE_GOTOFF_32: u32 = 20;
+pub const R_MICROBLAZE_COPY: u32 = 21;
+pub const R_MICROBLAZE_TLS: u32 = 22;
+pub const R_MICROBLAZE_TLSGD: u32 = 23;
+pub const R_MICROBLAZE_TLSLD: u32 = 24;
+pub const R_MICROBLAZE_TLSDTPMOD32: u32 = 25;
+pub const R_MICROBLAZE_TLSDTPREL32: u32 = 26;
+pub const R_MICROBLAZE_TLSDTPREL64: u32 = 27;
+pub const R_MICROBLAZE_TLSGOTTPREL32: u32 = 28;
+pub const R_MICROBLAZE_TLSTPREL32: u32 = 29;
+pub const DT_NIOS2_GP: u32 = 1879048194;
+pub const R_NIOS2_NONE: u32 = 0;
+pub const R_NIOS2_S16: u32 = 1;
+pub const R_NIOS2_U16: u32 = 2;
+pub const R_NIOS2_PCREL16: u32 = 3;
+pub const R_NIOS2_CALL26: u32 = 4;
+pub const R_NIOS2_IMM5: u32 = 5;
+pub const R_NIOS2_CACHE_OPX: u32 = 6;
+pub const R_NIOS2_IMM6: u32 = 7;
+pub const R_NIOS2_IMM8: u32 = 8;
+pub const R_NIOS2_HI16: u32 = 9;
+pub const R_NIOS2_LO16: u32 = 10;
+pub const R_NIOS2_HIADJ16: u32 = 11;
+pub const R_NIOS2_BFD_RELOC_32: u32 = 12;
+pub const R_NIOS2_BFD_RELOC_16: u32 = 13;
+pub const R_NIOS2_BFD_RELOC_8: u32 = 14;
+pub const R_NIOS2_GPREL: u32 = 15;
+pub const R_NIOS2_GNU_VTINHERIT: u32 = 16;
+pub const R_NIOS2_GNU_VTENTRY: u32 = 17;
+pub const R_NIOS2_UJMP: u32 = 18;
+pub const R_NIOS2_CJMP: u32 = 19;
+pub const R_NIOS2_CALLR: u32 = 20;
+pub const R_NIOS2_ALIGN: u32 = 21;
+pub const R_NIOS2_GOT16: u32 = 22;
+pub const R_NIOS2_CALL16: u32 = 23;
+pub const R_NIOS2_GOTOFF_LO: u32 = 24;
+pub const R_NIOS2_GOTOFF_HA: u32 = 25;
+pub const R_NIOS2_PCREL_LO: u32 = 26;
+pub const R_NIOS2_PCREL_HA: u32 = 27;
+pub const R_NIOS2_TLS_GD16: u32 = 28;
+pub const R_NIOS2_TLS_LDM16: u32 = 29;
+pub const R_NIOS2_TLS_LDO16: u32 = 30;
+pub const R_NIOS2_TLS_IE16: u32 = 31;
+pub const R_NIOS2_TLS_LE16: u32 = 32;
+pub const R_NIOS2_TLS_DTPMOD: u32 = 33;
+pub const R_NIOS2_TLS_DTPREL: u32 = 34;
+pub const R_NIOS2_TLS_TPREL: u32 = 35;
+pub const R_NIOS2_COPY: u32 = 36;
+pub const R_NIOS2_GLOB_DAT: u32 = 37;
+pub const R_NIOS2_JUMP_SLOT: u32 = 38;
+pub const R_NIOS2_RELATIVE: u32 = 39;
+pub const R_NIOS2_GOTOFF: u32 = 40;
+pub const R_NIOS2_CALL26_NOAT: u32 = 41;
+pub const R_NIOS2_GOT_LO: u32 = 42;
+pub const R_NIOS2_GOT_HA: u32 = 43;
+pub const R_NIOS2_CALL_LO: u32 = 44;
+pub const R_NIOS2_CALL_HA: u32 = 45;
+pub const R_TILEPRO_NONE: u32 = 0;
+pub const R_TILEPRO_32: u32 = 1;
+pub const R_TILEPRO_16: u32 = 2;
+pub const R_TILEPRO_8: u32 = 3;
+pub const R_TILEPRO_32_PCREL: u32 = 4;
+pub const R_TILEPRO_16_PCREL: u32 = 5;
+pub const R_TILEPRO_8_PCREL: u32 = 6;
+pub const R_TILEPRO_LO16: u32 = 7;
+pub const R_TILEPRO_HI16: u32 = 8;
+pub const R_TILEPRO_HA16: u32 = 9;
+pub const R_TILEPRO_COPY: u32 = 10;
+pub const R_TILEPRO_GLOB_DAT: u32 = 11;
+pub const R_TILEPRO_JMP_SLOT: u32 = 12;
+pub const R_TILEPRO_RELATIVE: u32 = 13;
+pub const R_TILEPRO_BROFF_X1: u32 = 14;
+pub const R_TILEPRO_JOFFLONG_X1: u32 = 15;
+pub const R_TILEPRO_JOFFLONG_X1_PLT: u32 = 16;
+pub const R_TILEPRO_IMM8_X0: u32 = 17;
+pub const R_TILEPRO_IMM8_Y0: u32 = 18;
+pub const R_TILEPRO_IMM8_X1: u32 = 19;
+pub const R_TILEPRO_IMM8_Y1: u32 = 20;
+pub const R_TILEPRO_MT_IMM15_X1: u32 = 21;
+pub const R_TILEPRO_MF_IMM15_X1: u32 = 22;
+pub const R_TILEPRO_IMM16_X0: u32 = 23;
+pub const R_TILEPRO_IMM16_X1: u32 = 24;
+pub const R_TILEPRO_IMM16_X0_LO: u32 = 25;
+pub const R_TILEPRO_IMM16_X1_LO: u32 = 26;
+pub const R_TILEPRO_IMM16_X0_HI: u32 = 27;
+pub const R_TILEPRO_IMM16_X1_HI: u32 = 28;
+pub const R_TILEPRO_IMM16_X0_HA: u32 = 29;
+pub const R_TILEPRO_IMM16_X1_HA: u32 = 30;
+pub const R_TILEPRO_IMM16_X0_PCREL: u32 = 31;
+pub const R_TILEPRO_IMM16_X1_PCREL: u32 = 32;
+pub const R_TILEPRO_IMM16_X0_LO_PCREL: u32 = 33;
+pub const R_TILEPRO_IMM16_X1_LO_PCREL: u32 = 34;
+pub const R_TILEPRO_IMM16_X0_HI_PCREL: u32 = 35;
+pub const R_TILEPRO_IMM16_X1_HI_PCREL: u32 = 36;
+pub const R_TILEPRO_IMM16_X0_HA_PCREL: u32 = 37;
+pub const R_TILEPRO_IMM16_X1_HA_PCREL: u32 = 38;
+pub const R_TILEPRO_IMM16_X0_GOT: u32 = 39;
+pub const R_TILEPRO_IMM16_X1_GOT: u32 = 40;
+pub const R_TILEPRO_IMM16_X0_GOT_LO: u32 = 41;
+pub const R_TILEPRO_IMM16_X1_GOT_LO: u32 = 42;
+pub const R_TILEPRO_IMM16_X0_GOT_HI: u32 = 43;
+pub const R_TILEPRO_IMM16_X1_GOT_HI: u32 = 44;
+pub const R_TILEPRO_IMM16_X0_GOT_HA: u32 = 45;
+pub const R_TILEPRO_IMM16_X1_GOT_HA: u32 = 46;
+pub const R_TILEPRO_MMSTART_X0: u32 = 47;
+pub const R_TILEPRO_MMEND_X0: u32 = 48;
+pub const R_TILEPRO_MMSTART_X1: u32 = 49;
+pub const R_TILEPRO_MMEND_X1: u32 = 50;
+pub const R_TILEPRO_SHAMT_X0: u32 = 51;
+pub const R_TILEPRO_SHAMT_X1: u32 = 52;
+pub const R_TILEPRO_SHAMT_Y0: u32 = 53;
+pub const R_TILEPRO_SHAMT_Y1: u32 = 54;
+pub const R_TILEPRO_DEST_IMM8_X1: u32 = 55;
+pub const R_TILEPRO_TLS_GD_CALL: u32 = 60;
+pub const R_TILEPRO_IMM8_X0_TLS_GD_ADD: u32 = 61;
+pub const R_TILEPRO_IMM8_X1_TLS_GD_ADD: u32 = 62;
+pub const R_TILEPRO_IMM8_Y0_TLS_GD_ADD: u32 = 63;
+pub const R_TILEPRO_IMM8_Y1_TLS_GD_ADD: u32 = 64;
+pub const R_TILEPRO_TLS_IE_LOAD: u32 = 65;
+pub const R_TILEPRO_IMM16_X0_TLS_GD: u32 = 66;
+pub const R_TILEPRO_IMM16_X1_TLS_GD: u32 = 67;
+pub const R_TILEPRO_IMM16_X0_TLS_GD_LO: u32 = 68;
+pub const R_TILEPRO_IMM16_X1_TLS_GD_LO: u32 = 69;
+pub const R_TILEPRO_IMM16_X0_TLS_GD_HI: u32 = 70;
+pub const R_TILEPRO_IMM16_X1_TLS_GD_HI: u32 = 71;
+pub const R_TILEPRO_IMM16_X0_TLS_GD_HA: u32 = 72;
+pub const R_TILEPRO_IMM16_X1_TLS_GD_HA: u32 = 73;
+pub const R_TILEPRO_IMM16_X0_TLS_IE: u32 = 74;
+pub const R_TILEPRO_IMM16_X1_TLS_IE: u32 = 75;
+pub const R_TILEPRO_IMM16_X0_TLS_IE_LO: u32 = 76;
+pub const R_TILEPRO_IMM16_X1_TLS_IE_LO: u32 = 77;
+pub const R_TILEPRO_IMM16_X0_TLS_IE_HI: u32 = 78;
+pub const R_TILEPRO_IMM16_X1_TLS_IE_HI: u32 = 79;
+pub const R_TILEPRO_IMM16_X0_TLS_IE_HA: u32 = 80;
+pub const R_TILEPRO_IMM16_X1_TLS_IE_HA: u32 = 81;
+pub const R_TILEPRO_TLS_DTPMOD32: u32 = 82;
+pub const R_TILEPRO_TLS_DTPOFF32: u32 = 83;
+pub const R_TILEPRO_TLS_TPOFF32: u32 = 84;
+pub const R_TILEPRO_IMM16_X0_TLS_LE: u32 = 85;
+pub const R_TILEPRO_IMM16_X1_TLS_LE: u32 = 86;
+pub const R_TILEPRO_IMM16_X0_TLS_LE_LO: u32 = 87;
+pub const R_TILEPRO_IMM16_X1_TLS_LE_LO: u32 = 88;
+pub const R_TILEPRO_IMM16_X0_TLS_LE_HI: u32 = 89;
+pub const R_TILEPRO_IMM16_X1_TLS_LE_HI: u32 = 90;
+pub const R_TILEPRO_IMM16_X0_TLS_LE_HA: u32 = 91;
+pub const R_TILEPRO_IMM16_X1_TLS_LE_HA: u32 = 92;
+pub const R_TILEPRO_GNU_VTINHERIT: u32 = 128;
+pub const R_TILEPRO_GNU_VTENTRY: u32 = 129;
+pub const R_TILEPRO_NUM: u32 = 130;
+pub const R_TILEGX_NONE: u32 = 0;
+pub const R_TILEGX_64: u32 = 1;
+pub const R_TILEGX_32: u32 = 2;
+pub const R_TILEGX_16: u32 = 3;
+pub const R_TILEGX_8: u32 = 4;
+pub const R_TILEGX_64_PCREL: u32 = 5;
+pub const R_TILEGX_32_PCREL: u32 = 6;
+pub const R_TILEGX_16_PCREL: u32 = 7;
+pub const R_TILEGX_8_PCREL: u32 = 8;
+pub const R_TILEGX_HW0: u32 = 9;
+pub const R_TILEGX_HW1: u32 = 10;
+pub const R_TILEGX_HW2: u32 = 11;
+pub const R_TILEGX_HW3: u32 = 12;
+pub const R_TILEGX_HW0_LAST: u32 = 13;
+pub const R_TILEGX_HW1_LAST: u32 = 14;
+pub const R_TILEGX_HW2_LAST: u32 = 15;
+pub const R_TILEGX_COPY: u32 = 16;
+pub const R_TILEGX_GLOB_DAT: u32 = 17;
+pub const R_TILEGX_JMP_SLOT: u32 = 18;
+pub const R_TILEGX_RELATIVE: u32 = 19;
+pub const R_TILEGX_BROFF_X1: u32 = 20;
+pub const R_TILEGX_JUMPOFF_X1: u32 = 21;
+pub const R_TILEGX_JUMPOFF_X1_PLT: u32 = 22;
+pub const R_TILEGX_IMM8_X0: u32 = 23;
+pub const R_TILEGX_IMM8_Y0: u32 = 24;
+pub const R_TILEGX_IMM8_X1: u32 = 25;
+pub const R_TILEGX_IMM8_Y1: u32 = 26;
+pub const R_TILEGX_DEST_IMM8_X1: u32 = 27;
+pub const R_TILEGX_MT_IMM14_X1: u32 = 28;
+pub const R_TILEGX_MF_IMM14_X1: u32 = 29;
+pub const R_TILEGX_MMSTART_X0: u32 = 30;
+pub const R_TILEGX_MMEND_X0: u32 = 31;
+pub const R_TILEGX_SHAMT_X0: u32 = 32;
+pub const R_TILEGX_SHAMT_X1: u32 = 33;
+pub const R_TILEGX_SHAMT_Y0: u32 = 34;
+pub const R_TILEGX_SHAMT_Y1: u32 = 35;
+pub const R_TILEGX_IMM16_X0_HW0: u32 = 36;
+pub const R_TILEGX_IMM16_X1_HW0: u32 = 37;
+pub const R_TILEGX_IMM16_X0_HW1: u32 = 38;
+pub const R_TILEGX_IMM16_X1_HW1: u32 = 39;
+pub const R_TILEGX_IMM16_X0_HW2: u32 = 40;
+pub const R_TILEGX_IMM16_X1_HW2: u32 = 41;
+pub const R_TILEGX_IMM16_X0_HW3: u32 = 42;
+pub const R_TILEGX_IMM16_X1_HW3: u32 = 43;
+pub const R_TILEGX_IMM16_X0_HW0_LAST: u32 = 44;
+pub const R_TILEGX_IMM16_X1_HW0_LAST: u32 = 45;
+pub const R_TILEGX_IMM16_X0_HW1_LAST: u32 = 46;
+pub const R_TILEGX_IMM16_X1_HW1_LAST: u32 = 47;
+pub const R_TILEGX_IMM16_X0_HW2_LAST: u32 = 48;
+pub const R_TILEGX_IMM16_X1_HW2_LAST: u32 = 49;
+pub const R_TILEGX_IMM16_X0_HW0_PCREL: u32 = 50;
+pub const R_TILEGX_IMM16_X1_HW0_PCREL: u32 = 51;
+pub const R_TILEGX_IMM16_X0_HW1_PCREL: u32 = 52;
+pub const R_TILEGX_IMM16_X1_HW1_PCREL: u32 = 53;
+pub const R_TILEGX_IMM16_X0_HW2_PCREL: u32 = 54;
+pub const R_TILEGX_IMM16_X1_HW2_PCREL: u32 = 55;
+pub const R_TILEGX_IMM16_X0_HW3_PCREL: u32 = 56;
+pub const R_TILEGX_IMM16_X1_HW3_PCREL: u32 = 57;
+pub const R_TILEGX_IMM16_X0_HW0_LAST_PCREL: u32 = 58;
+pub const R_TILEGX_IMM16_X1_HW0_LAST_PCREL: u32 = 59;
+pub const R_TILEGX_IMM16_X0_HW1_LAST_PCREL: u32 = 60;
+pub const R_TILEGX_IMM16_X1_HW1_LAST_PCREL: u32 = 61;
+pub const R_TILEGX_IMM16_X0_HW2_LAST_PCREL: u32 = 62;
+pub const R_TILEGX_IMM16_X1_HW2_LAST_PCREL: u32 = 63;
+pub const R_TILEGX_IMM16_X0_HW0_GOT: u32 = 64;
+pub const R_TILEGX_IMM16_X1_HW0_GOT: u32 = 65;
+pub const R_TILEGX_IMM16_X0_HW0_PLT_PCREL: u32 = 66;
+pub const R_TILEGX_IMM16_X1_HW0_PLT_PCREL: u32 = 67;
+pub const R_TILEGX_IMM16_X0_HW1_PLT_PCREL: u32 = 68;
+pub const R_TILEGX_IMM16_X1_HW1_PLT_PCREL: u32 = 69;
+pub const R_TILEGX_IMM16_X0_HW2_PLT_PCREL: u32 = 70;
+pub const R_TILEGX_IMM16_X1_HW2_PLT_PCREL: u32 = 71;
+pub const R_TILEGX_IMM16_X0_HW0_LAST_GOT: u32 = 72;
+pub const R_TILEGX_IMM16_X1_HW0_LAST_GOT: u32 = 73;
+pub const R_TILEGX_IMM16_X0_HW1_LAST_GOT: u32 = 74;
+pub const R_TILEGX_IMM16_X1_HW1_LAST_GOT: u32 = 75;
+pub const R_TILEGX_IMM16_X0_HW3_PLT_PCREL: u32 = 76;
+pub const R_TILEGX_IMM16_X1_HW3_PLT_PCREL: u32 = 77;
+pub const R_TILEGX_IMM16_X0_HW0_TLS_GD: u32 = 78;
+pub const R_TILEGX_IMM16_X1_HW0_TLS_GD: u32 = 79;
+pub const R_TILEGX_IMM16_X0_HW0_TLS_LE: u32 = 80;
+pub const R_TILEGX_IMM16_X1_HW0_TLS_LE: u32 = 81;
+pub const R_TILEGX_IMM16_X0_HW0_LAST_TLS_LE: u32 = 82;
+pub const R_TILEGX_IMM16_X1_HW0_LAST_TLS_LE: u32 = 83;
+pub const R_TILEGX_IMM16_X0_HW1_LAST_TLS_LE: u32 = 84;
+pub const R_TILEGX_IMM16_X1_HW1_LAST_TLS_LE: u32 = 85;
+pub const R_TILEGX_IMM16_X0_HW0_LAST_TLS_GD: u32 = 86;
+pub const R_TILEGX_IMM16_X1_HW0_LAST_TLS_GD: u32 = 87;
+pub const R_TILEGX_IMM16_X0_HW1_LAST_TLS_GD: u32 = 88;
+pub const R_TILEGX_IMM16_X1_HW1_LAST_TLS_GD: u32 = 89;
+pub const R_TILEGX_IMM16_X0_HW0_TLS_IE: u32 = 92;
+pub const R_TILEGX_IMM16_X1_HW0_TLS_IE: u32 = 93;
+pub const R_TILEGX_IMM16_X0_HW0_LAST_PLT_PCREL: u32 = 94;
+pub const R_TILEGX_IMM16_X1_HW0_LAST_PLT_PCREL: u32 = 95;
+pub const R_TILEGX_IMM16_X0_HW1_LAST_PLT_PCREL: u32 = 96;
+pub const R_TILEGX_IMM16_X1_HW1_LAST_PLT_PCREL: u32 = 97;
+pub const R_TILEGX_IMM16_X0_HW2_LAST_PLT_PCREL: u32 = 98;
+pub const R_TILEGX_IMM16_X1_HW2_LAST_PLT_PCREL: u32 = 99;
+pub const R_TILEGX_IMM16_X0_HW0_LAST_TLS_IE: u32 = 100;
+pub const R_TILEGX_IMM16_X1_HW0_LAST_TLS_IE: u32 = 101;
+pub const R_TILEGX_IMM16_X0_HW1_LAST_TLS_IE: u32 = 102;
+pub const R_TILEGX_IMM16_X1_HW1_LAST_TLS_IE: u32 = 103;
+pub const R_TILEGX_TLS_DTPMOD64: u32 = 106;
+pub const R_TILEGX_TLS_DTPOFF64: u32 = 107;
+pub const R_TILEGX_TLS_TPOFF64: u32 = 108;
+pub const R_TILEGX_TLS_DTPMOD32: u32 = 109;
+pub const R_TILEGX_TLS_DTPOFF32: u32 = 110;
+pub const R_TILEGX_TLS_TPOFF32: u32 = 111;
+pub const R_TILEGX_TLS_GD_CALL: u32 = 112;
+pub const R_TILEGX_IMM8_X0_TLS_GD_ADD: u32 = 113;
+pub const R_TILEGX_IMM8_X1_TLS_GD_ADD: u32 = 114;
+pub const R_TILEGX_IMM8_Y0_TLS_GD_ADD: u32 = 115;
+pub const R_TILEGX_IMM8_Y1_TLS_GD_ADD: u32 = 116;
+pub const R_TILEGX_TLS_IE_LOAD: u32 = 117;
+pub const R_TILEGX_IMM8_X0_TLS_ADD: u32 = 118;
+pub const R_TILEGX_IMM8_X1_TLS_ADD: u32 = 119;
+pub const R_TILEGX_IMM8_Y0_TLS_ADD: u32 = 120;
+pub const R_TILEGX_IMM8_Y1_TLS_ADD: u32 = 121;
+pub const R_TILEGX_GNU_VTINHERIT: u32 = 128;
+pub const R_TILEGX_GNU_VTENTRY: u32 = 129;
+pub const R_TILEGX_NUM: u32 = 130;
+pub const R_BPF_NONE: u32 = 0;
+pub const R_BPF_MAP_FD: u32 = 1;
 pub type Elf32_Half = u16;
 pub type Elf64_Half = u16;
 pub type Elf32_Word = u32;
@@ -2453,7 +2496,6 @@ pub type Elf64_Section = u16;
 pub type Elf32_Versym = Elf32_Half;
 pub type Elf64_Versym = Elf64_Half;
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Ehdr {
     pub e_ident: [::libc::c_uchar; 16usize],
     pub e_type: Elf32_Half,
@@ -2472,86 +2514,163 @@ pub struct Elf32_Ehdr {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Ehdr() {
-    assert_eq!(::std::mem::size_of::<Elf32_Ehdr>() , 52usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Ehdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Ehdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Ehdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_ident as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_ident ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_type as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_machine as * const _
-                as usize } , 18usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_machine ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_version as * const _
-                as usize } , 20usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_version ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_entry as * const _ as
-                usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_entry ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_phoff as * const _ as
-                usize } , 28usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_phoff ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_shoff as * const _ as
-                usize } , 32usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_shoff ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_flags as * const _ as
-                usize } , 36usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_flags ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_ehsize as * const _ as
-                usize } , 40usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_ehsize ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_phentsize as * const _
-                as usize } , 42usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_phentsize ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_phnum as * const _ as
-                usize } , 44usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_phnum ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_shentsize as * const _
-                as usize } , 46usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_shentsize ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_shnum as * const _ as
-                usize } , 48usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_shnum ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Ehdr ) ) . e_shstrndx as * const _
-                as usize } , 50usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Ehdr ) , "::" ,
-                stringify ! ( e_shstrndx ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Ehdr>(),
+        52usize,
+        concat!("Size of: ", stringify!(Elf32_Ehdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Ehdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Ehdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_ident as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_ident)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_type as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_machine as *const _ as usize },
+        18usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_machine)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_version as *const _ as usize },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_entry as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_entry)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_phoff as *const _ as usize },
+        28usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_phoff)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_shoff as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_shoff)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_flags as *const _ as usize },
+        36usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_ehsize as *const _ as usize },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_ehsize)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_phentsize as *const _ as usize },
+        42usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_phentsize)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_phnum as *const _ as usize },
+        44usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_phnum)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_shentsize as *const _ as usize },
+        46usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_shentsize)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_shnum as *const _ as usize },
+        48usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_shnum)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Ehdr>())).e_shstrndx as *const _ as usize },
+        50usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Ehdr),
+            "::",
+            stringify!(e_shstrndx)
+        )
+    );
 }
-impl Clone for Elf32_Ehdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Ehdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Ehdr {{ e_ident: {:?} }}", self.e_ident)
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Ehdr {
     pub e_ident: [::libc::c_uchar; 16usize],
     pub e_type: Elf64_Half,
@@ -2570,86 +2689,163 @@ pub struct Elf64_Ehdr {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Ehdr() {
-    assert_eq!(::std::mem::size_of::<Elf64_Ehdr>() , 64usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Ehdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Ehdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Ehdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_ident as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_ident ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_type as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_machine as * const _
-                as usize } , 18usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_machine ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_version as * const _
-                as usize } , 20usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_version ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_entry as * const _ as
-                usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_entry ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_phoff as * const _ as
-                usize } , 32usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_phoff ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_shoff as * const _ as
-                usize } , 40usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_shoff ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_flags as * const _ as
-                usize } , 48usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_flags ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_ehsize as * const _ as
-                usize } , 52usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_ehsize ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_phentsize as * const _
-                as usize } , 54usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_phentsize ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_phnum as * const _ as
-                usize } , 56usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_phnum ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_shentsize as * const _
-                as usize } , 58usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_shentsize ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_shnum as * const _ as
-                usize } , 60usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_shnum ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Ehdr ) ) . e_shstrndx as * const _
-                as usize } , 62usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Ehdr ) , "::" ,
-                stringify ! ( e_shstrndx ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Ehdr>(),
+        64usize,
+        concat!("Size of: ", stringify!(Elf64_Ehdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Ehdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Ehdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_ident as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_ident)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_type as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_machine as *const _ as usize },
+        18usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_machine)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_version as *const _ as usize },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_entry as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_entry)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_phoff as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_phoff)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_shoff as *const _ as usize },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_shoff)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_flags as *const _ as usize },
+        48usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_ehsize as *const _ as usize },
+        52usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_ehsize)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_phentsize as *const _ as usize },
+        54usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_phentsize)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_phnum as *const _ as usize },
+        56usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_phnum)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_shentsize as *const _ as usize },
+        58usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_shentsize)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_shnum as *const _ as usize },
+        60usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_shnum)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Ehdr>())).e_shstrndx as *const _ as usize },
+        62usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Ehdr),
+            "::",
+            stringify!(e_shstrndx)
+        )
+    );
 }
-impl Clone for Elf64_Ehdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Ehdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Ehdr {{ e_ident: {:?} }}", self.e_ident)
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Shdr {
     pub sh_name: Elf32_Word,
     pub sh_type: Elf32_Word,
@@ -2664,66 +2860,123 @@ pub struct Elf32_Shdr {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Shdr() {
-    assert_eq!(::std::mem::size_of::<Elf32_Shdr>() , 40usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Shdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Shdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Shdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Shdr ) ) . sh_name as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Shdr ) , "::" ,
-                stringify ! ( sh_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Shdr ) ) . sh_type as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Shdr ) , "::" ,
-                stringify ! ( sh_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Shdr ) ) . sh_flags as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Shdr ) , "::" ,
-                stringify ! ( sh_flags ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Shdr ) ) . sh_addr as * const _ as
-                usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Shdr ) , "::" ,
-                stringify ! ( sh_addr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Shdr ) ) . sh_offset as * const _
-                as usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Shdr ) , "::" ,
-                stringify ! ( sh_offset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Shdr ) ) . sh_size as * const _ as
-                usize } , 20usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Shdr ) , "::" ,
-                stringify ! ( sh_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Shdr ) ) . sh_link as * const _ as
-                usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Shdr ) , "::" ,
-                stringify ! ( sh_link ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Shdr ) ) . sh_info as * const _ as
-                usize } , 28usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Shdr ) , "::" ,
-                stringify ! ( sh_info ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Shdr ) ) . sh_addralign as * const
-                _ as usize } , 32usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Shdr ) , "::" ,
-                stringify ! ( sh_addralign ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Shdr ) ) . sh_entsize as * const _
-                as usize } , 36usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Shdr ) , "::" ,
-                stringify ! ( sh_entsize ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Shdr>(),
+        40usize,
+        concat!("Size of: ", stringify!(Elf32_Shdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Shdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Shdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Shdr>())).sh_name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Shdr),
+            "::",
+            stringify!(sh_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Shdr>())).sh_type as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Shdr),
+            "::",
+            stringify!(sh_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Shdr>())).sh_flags as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Shdr),
+            "::",
+            stringify!(sh_flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Shdr>())).sh_addr as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Shdr),
+            "::",
+            stringify!(sh_addr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Shdr>())).sh_offset as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Shdr),
+            "::",
+            stringify!(sh_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Shdr>())).sh_size as *const _ as usize },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Shdr),
+            "::",
+            stringify!(sh_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Shdr>())).sh_link as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Shdr),
+            "::",
+            stringify!(sh_link)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Shdr>())).sh_info as *const _ as usize },
+        28usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Shdr),
+            "::",
+            stringify!(sh_info)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Shdr>())).sh_addralign as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Shdr),
+            "::",
+            stringify!(sh_addralign)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Shdr>())).sh_entsize as *const _ as usize },
+        36usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Shdr),
+            "::",
+            stringify!(sh_entsize)
+        )
+    );
 }
-impl Clone for Elf32_Shdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Shdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Shdr {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Shdr {
     pub sh_name: Elf64_Word,
     pub sh_type: Elf64_Word,
@@ -2738,66 +2991,123 @@ pub struct Elf64_Shdr {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Shdr() {
-    assert_eq!(::std::mem::size_of::<Elf64_Shdr>() , 64usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Shdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Shdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Shdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Shdr ) ) . sh_name as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Shdr ) , "::" ,
-                stringify ! ( sh_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Shdr ) ) . sh_type as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Shdr ) , "::" ,
-                stringify ! ( sh_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Shdr ) ) . sh_flags as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Shdr ) , "::" ,
-                stringify ! ( sh_flags ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Shdr ) ) . sh_addr as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Shdr ) , "::" ,
-                stringify ! ( sh_addr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Shdr ) ) . sh_offset as * const _
-                as usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Shdr ) , "::" ,
-                stringify ! ( sh_offset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Shdr ) ) . sh_size as * const _ as
-                usize } , 32usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Shdr ) , "::" ,
-                stringify ! ( sh_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Shdr ) ) . sh_link as * const _ as
-                usize } , 40usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Shdr ) , "::" ,
-                stringify ! ( sh_link ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Shdr ) ) . sh_info as * const _ as
-                usize } , 44usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Shdr ) , "::" ,
-                stringify ! ( sh_info ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Shdr ) ) . sh_addralign as * const
-                _ as usize } , 48usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Shdr ) , "::" ,
-                stringify ! ( sh_addralign ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Shdr ) ) . sh_entsize as * const _
-                as usize } , 56usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Shdr ) , "::" ,
-                stringify ! ( sh_entsize ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Shdr>(),
+        64usize,
+        concat!("Size of: ", stringify!(Elf64_Shdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Shdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Shdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Shdr>())).sh_name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Shdr),
+            "::",
+            stringify!(sh_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Shdr>())).sh_type as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Shdr),
+            "::",
+            stringify!(sh_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Shdr>())).sh_flags as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Shdr),
+            "::",
+            stringify!(sh_flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Shdr>())).sh_addr as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Shdr),
+            "::",
+            stringify!(sh_addr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Shdr>())).sh_offset as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Shdr),
+            "::",
+            stringify!(sh_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Shdr>())).sh_size as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Shdr),
+            "::",
+            stringify!(sh_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Shdr>())).sh_link as *const _ as usize },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Shdr),
+            "::",
+            stringify!(sh_link)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Shdr>())).sh_info as *const _ as usize },
+        44usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Shdr),
+            "::",
+            stringify!(sh_info)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Shdr>())).sh_addralign as *const _ as usize },
+        48usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Shdr),
+            "::",
+            stringify!(sh_addralign)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Shdr>())).sh_entsize as *const _ as usize },
+        56usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Shdr),
+            "::",
+            stringify!(sh_entsize)
+        )
+    );
 }
-impl Clone for Elf64_Shdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Shdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Shdr {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Chdr {
     pub ch_type: Elf32_Word,
     pub ch_size: Elf32_Word,
@@ -2805,31 +3115,53 @@ pub struct Elf32_Chdr {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Chdr() {
-    assert_eq!(::std::mem::size_of::<Elf32_Chdr>() , 12usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Chdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Chdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Chdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Chdr ) ) . ch_type as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Chdr ) , "::" ,
-                stringify ! ( ch_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Chdr ) ) . ch_size as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Chdr ) , "::" ,
-                stringify ! ( ch_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Chdr ) ) . ch_addralign as * const
-                _ as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Chdr ) , "::" ,
-                stringify ! ( ch_addralign ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Chdr>(),
+        12usize,
+        concat!("Size of: ", stringify!(Elf32_Chdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Chdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Chdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Chdr>())).ch_type as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Chdr),
+            "::",
+            stringify!(ch_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Chdr>())).ch_size as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Chdr),
+            "::",
+            stringify!(ch_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Chdr>())).ch_addralign as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Chdr),
+            "::",
+            stringify!(ch_addralign)
+        )
+    );
 }
-impl Clone for Elf32_Chdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Chdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Chdr {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Chdr {
     pub ch_type: Elf64_Word,
     pub ch_reserved: Elf64_Word,
@@ -2838,36 +3170,63 @@ pub struct Elf64_Chdr {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Chdr() {
-    assert_eq!(::std::mem::size_of::<Elf64_Chdr>() , 24usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Chdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Chdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Chdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Chdr ) ) . ch_type as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Chdr ) , "::" ,
-                stringify ! ( ch_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Chdr ) ) . ch_reserved as * const _
-                as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Chdr ) , "::" ,
-                stringify ! ( ch_reserved ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Chdr ) ) . ch_size as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Chdr ) , "::" ,
-                stringify ! ( ch_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Chdr ) ) . ch_addralign as * const
-                _ as usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Chdr ) , "::" ,
-                stringify ! ( ch_addralign ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Chdr>(),
+        24usize,
+        concat!("Size of: ", stringify!(Elf64_Chdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Chdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Chdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Chdr>())).ch_type as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Chdr),
+            "::",
+            stringify!(ch_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Chdr>())).ch_reserved as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Chdr),
+            "::",
+            stringify!(ch_reserved)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Chdr>())).ch_size as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Chdr),
+            "::",
+            stringify!(ch_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Chdr>())).ch_addralign as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Chdr),
+            "::",
+            stringify!(ch_addralign)
+        )
+    );
 }
-impl Clone for Elf64_Chdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Chdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Chdr {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Sym {
     pub st_name: Elf32_Word,
     pub st_value: Elf32_Addr,
@@ -2878,46 +3237,87 @@ pub struct Elf32_Sym {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Sym() {
-    assert_eq!(::std::mem::size_of::<Elf32_Sym>() , 16usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Sym ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Sym>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Sym ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Sym ) ) . st_name as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Sym ) , "::" ,
-                stringify ! ( st_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Sym ) ) . st_value as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Sym ) , "::" ,
-                stringify ! ( st_value ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Sym ) ) . st_size as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Sym ) , "::" ,
-                stringify ! ( st_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Sym ) ) . st_info as * const _ as
-                usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Sym ) , "::" ,
-                stringify ! ( st_info ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Sym ) ) . st_other as * const _ as
-                usize } , 13usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Sym ) , "::" ,
-                stringify ! ( st_other ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Sym ) ) . st_shndx as * const _ as
-                usize } , 14usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Sym ) , "::" ,
-                stringify ! ( st_shndx ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Sym>(),
+        16usize,
+        concat!("Size of: ", stringify!(Elf32_Sym))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Sym>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Sym))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Sym>())).st_name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Sym),
+            "::",
+            stringify!(st_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Sym>())).st_value as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Sym),
+            "::",
+            stringify!(st_value)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Sym>())).st_size as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Sym),
+            "::",
+            stringify!(st_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Sym>())).st_info as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Sym),
+            "::",
+            stringify!(st_info)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Sym>())).st_other as *const _ as usize },
+        13usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Sym),
+            "::",
+            stringify!(st_other)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Sym>())).st_shndx as *const _ as usize },
+        14usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Sym),
+            "::",
+            stringify!(st_shndx)
+        )
+    );
 }
-impl Clone for Elf32_Sym {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Sym {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(
+            f,
+            "Elf32_Sym {{ st_info: {:?}, st_other: {:?} }}",
+            self.st_info, self.st_other
+        )
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Sym {
     pub st_name: Elf64_Word,
     pub st_info: ::libc::c_uchar,
@@ -2928,150 +3328,259 @@ pub struct Elf64_Sym {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Sym() {
-    assert_eq!(::std::mem::size_of::<Elf64_Sym>() , 24usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Sym ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Sym>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Sym ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Sym ) ) . st_name as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Sym ) , "::" ,
-                stringify ! ( st_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Sym ) ) . st_info as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Sym ) , "::" ,
-                stringify ! ( st_info ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Sym ) ) . st_other as * const _ as
-                usize } , 5usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Sym ) , "::" ,
-                stringify ! ( st_other ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Sym ) ) . st_shndx as * const _ as
-                usize } , 6usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Sym ) , "::" ,
-                stringify ! ( st_shndx ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Sym ) ) . st_value as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Sym ) , "::" ,
-                stringify ! ( st_value ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Sym ) ) . st_size as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Sym ) , "::" ,
-                stringify ! ( st_size ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Sym>(),
+        24usize,
+        concat!("Size of: ", stringify!(Elf64_Sym))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Sym>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Sym))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Sym>())).st_name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Sym),
+            "::",
+            stringify!(st_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Sym>())).st_info as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Sym),
+            "::",
+            stringify!(st_info)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Sym>())).st_other as *const _ as usize },
+        5usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Sym),
+            "::",
+            stringify!(st_other)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Sym>())).st_shndx as *const _ as usize },
+        6usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Sym),
+            "::",
+            stringify!(st_shndx)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Sym>())).st_value as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Sym),
+            "::",
+            stringify!(st_value)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Sym>())).st_size as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Sym),
+            "::",
+            stringify!(st_size)
+        )
+    );
 }
-impl Clone for Elf64_Sym {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Sym {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(
+            f,
+            "Elf64_Sym {{ st_info: {:?}, st_other: {:?} }}",
+            self.st_info, self.st_other
+        )
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Syminfo {
     pub si_boundto: Elf32_Half,
     pub si_flags: Elf32_Half,
 }
 #[test]
 fn bindgen_test_layout_Elf32_Syminfo() {
-    assert_eq!(::std::mem::size_of::<Elf32_Syminfo>() , 4usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Syminfo ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Syminfo>() , 2usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Syminfo ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Syminfo ) ) . si_boundto as * const
-                _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Syminfo ) , "::"
-                , stringify ! ( si_boundto ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Syminfo ) ) . si_flags as * const _
-                as usize } , 2usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Syminfo ) , "::"
-                , stringify ! ( si_flags ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Syminfo>(),
+        4usize,
+        concat!("Size of: ", stringify!(Elf32_Syminfo))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Syminfo>(),
+        2usize,
+        concat!("Alignment of ", stringify!(Elf32_Syminfo))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Syminfo>())).si_boundto as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Syminfo),
+            "::",
+            stringify!(si_boundto)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Syminfo>())).si_flags as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Syminfo),
+            "::",
+            stringify!(si_flags)
+        )
+    );
 }
-impl Clone for Elf32_Syminfo {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Syminfo {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Syminfo {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Syminfo {
     pub si_boundto: Elf64_Half,
     pub si_flags: Elf64_Half,
 }
 #[test]
 fn bindgen_test_layout_Elf64_Syminfo() {
-    assert_eq!(::std::mem::size_of::<Elf64_Syminfo>() , 4usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Syminfo ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Syminfo>() , 2usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Syminfo ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Syminfo ) ) . si_boundto as * const
-                _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Syminfo ) , "::"
-                , stringify ! ( si_boundto ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Syminfo ) ) . si_flags as * const _
-                as usize } , 2usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Syminfo ) , "::"
-                , stringify ! ( si_flags ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Syminfo>(),
+        4usize,
+        concat!("Size of: ", stringify!(Elf64_Syminfo))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Syminfo>(),
+        2usize,
+        concat!("Alignment of ", stringify!(Elf64_Syminfo))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Syminfo>())).si_boundto as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Syminfo),
+            "::",
+            stringify!(si_boundto)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Syminfo>())).si_flags as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Syminfo),
+            "::",
+            stringify!(si_flags)
+        )
+    );
 }
-impl Clone for Elf64_Syminfo {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Syminfo {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Syminfo {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Rel {
     pub r_offset: Elf32_Addr,
     pub r_info: Elf32_Word,
 }
 #[test]
 fn bindgen_test_layout_Elf32_Rel() {
-    assert_eq!(::std::mem::size_of::<Elf32_Rel>() , 8usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Rel ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Rel>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Rel ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Rel ) ) . r_offset as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Rel ) , "::" ,
-                stringify ! ( r_offset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Rel ) ) . r_info as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Rel ) , "::" ,
-                stringify ! ( r_info ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Rel>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf32_Rel))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Rel>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Rel))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Rel>())).r_offset as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Rel),
+            "::",
+            stringify!(r_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Rel>())).r_info as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Rel),
+            "::",
+            stringify!(r_info)
+        )
+    );
 }
-impl Clone for Elf32_Rel {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Rel {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Rel {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Rel {
     pub r_offset: Elf64_Addr,
     pub r_info: Elf64_Xword,
 }
 #[test]
 fn bindgen_test_layout_Elf64_Rel() {
-    assert_eq!(::std::mem::size_of::<Elf64_Rel>() , 16usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Rel ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Rel>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Rel ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Rel ) ) . r_offset as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Rel ) , "::" ,
-                stringify ! ( r_offset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Rel ) ) . r_info as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Rel ) , "::" ,
-                stringify ! ( r_info ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Rel>(),
+        16usize,
+        concat!("Size of: ", stringify!(Elf64_Rel))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Rel>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Rel))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Rel>())).r_offset as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Rel),
+            "::",
+            stringify!(r_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Rel>())).r_info as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Rel),
+            "::",
+            stringify!(r_info)
+        )
+    );
 }
-impl Clone for Elf64_Rel {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Rel {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Rel {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Rela {
     pub r_offset: Elf32_Addr,
     pub r_info: Elf32_Word,
@@ -3079,31 +3588,53 @@ pub struct Elf32_Rela {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Rela() {
-    assert_eq!(::std::mem::size_of::<Elf32_Rela>() , 12usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Rela ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Rela>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Rela ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Rela ) ) . r_offset as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Rela ) , "::" ,
-                stringify ! ( r_offset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Rela ) ) . r_info as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Rela ) , "::" ,
-                stringify ! ( r_info ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Rela ) ) . r_addend as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Rela ) , "::" ,
-                stringify ! ( r_addend ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Rela>(),
+        12usize,
+        concat!("Size of: ", stringify!(Elf32_Rela))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Rela>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Rela))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Rela>())).r_offset as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Rela),
+            "::",
+            stringify!(r_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Rela>())).r_info as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Rela),
+            "::",
+            stringify!(r_info)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Rela>())).r_addend as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Rela),
+            "::",
+            stringify!(r_addend)
+        )
+    );
 }
-impl Clone for Elf32_Rela {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Rela {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Rela {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Rela {
     pub r_offset: Elf64_Addr,
     pub r_info: Elf64_Xword,
@@ -3111,31 +3642,53 @@ pub struct Elf64_Rela {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Rela() {
-    assert_eq!(::std::mem::size_of::<Elf64_Rela>() , 24usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Rela ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Rela>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Rela ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Rela ) ) . r_offset as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Rela ) , "::" ,
-                stringify ! ( r_offset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Rela ) ) . r_info as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Rela ) , "::" ,
-                stringify ! ( r_info ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Rela ) ) . r_addend as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Rela ) , "::" ,
-                stringify ! ( r_addend ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Rela>(),
+        24usize,
+        concat!("Size of: ", stringify!(Elf64_Rela))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Rela>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Rela))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Rela>())).r_offset as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Rela),
+            "::",
+            stringify!(r_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Rela>())).r_info as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Rela),
+            "::",
+            stringify!(r_info)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Rela>())).r_addend as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Rela),
+            "::",
+            stringify!(r_addend)
+        )
+    );
 }
-impl Clone for Elf64_Rela {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Rela {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Rela {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Phdr {
     pub p_type: Elf32_Word,
     pub p_offset: Elf32_Off,
@@ -3148,56 +3701,103 @@ pub struct Elf32_Phdr {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Phdr() {
-    assert_eq!(::std::mem::size_of::<Elf32_Phdr>() , 32usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Phdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Phdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Phdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Phdr ) ) . p_type as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Phdr ) , "::" ,
-                stringify ! ( p_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Phdr ) ) . p_offset as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Phdr ) , "::" ,
-                stringify ! ( p_offset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Phdr ) ) . p_vaddr as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Phdr ) , "::" ,
-                stringify ! ( p_vaddr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Phdr ) ) . p_paddr as * const _ as
-                usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Phdr ) , "::" ,
-                stringify ! ( p_paddr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Phdr ) ) . p_filesz as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Phdr ) , "::" ,
-                stringify ! ( p_filesz ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Phdr ) ) . p_memsz as * const _ as
-                usize } , 20usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Phdr ) , "::" ,
-                stringify ! ( p_memsz ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Phdr ) ) . p_flags as * const _ as
-                usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Phdr ) , "::" ,
-                stringify ! ( p_flags ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Phdr ) ) . p_align as * const _ as
-                usize } , 28usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Phdr ) , "::" ,
-                stringify ! ( p_align ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Phdr>(),
+        32usize,
+        concat!("Size of: ", stringify!(Elf32_Phdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Phdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Phdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Phdr>())).p_type as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Phdr),
+            "::",
+            stringify!(p_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Phdr>())).p_offset as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Phdr),
+            "::",
+            stringify!(p_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Phdr>())).p_vaddr as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Phdr),
+            "::",
+            stringify!(p_vaddr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Phdr>())).p_paddr as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Phdr),
+            "::",
+            stringify!(p_paddr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Phdr>())).p_filesz as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Phdr),
+            "::",
+            stringify!(p_filesz)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Phdr>())).p_memsz as *const _ as usize },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Phdr),
+            "::",
+            stringify!(p_memsz)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Phdr>())).p_flags as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Phdr),
+            "::",
+            stringify!(p_flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Phdr>())).p_align as *const _ as usize },
+        28usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Phdr),
+            "::",
+            stringify!(p_align)
+        )
+    );
 }
-impl Clone for Elf32_Phdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Phdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Phdr {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Phdr {
     pub p_type: Elf64_Word,
     pub p_flags: Elf64_Word,
@@ -3210,166 +3810,277 @@ pub struct Elf64_Phdr {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Phdr() {
-    assert_eq!(::std::mem::size_of::<Elf64_Phdr>() , 56usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Phdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Phdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Phdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Phdr ) ) . p_type as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Phdr ) , "::" ,
-                stringify ! ( p_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Phdr ) ) . p_flags as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Phdr ) , "::" ,
-                stringify ! ( p_flags ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Phdr ) ) . p_offset as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Phdr ) , "::" ,
-                stringify ! ( p_offset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Phdr ) ) . p_vaddr as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Phdr ) , "::" ,
-                stringify ! ( p_vaddr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Phdr ) ) . p_paddr as * const _ as
-                usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Phdr ) , "::" ,
-                stringify ! ( p_paddr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Phdr ) ) . p_filesz as * const _ as
-                usize } , 32usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Phdr ) , "::" ,
-                stringify ! ( p_filesz ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Phdr ) ) . p_memsz as * const _ as
-                usize } , 40usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Phdr ) , "::" ,
-                stringify ! ( p_memsz ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Phdr ) ) . p_align as * const _ as
-                usize } , 48usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Phdr ) , "::" ,
-                stringify ! ( p_align ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Phdr>(),
+        56usize,
+        concat!("Size of: ", stringify!(Elf64_Phdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Phdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Phdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Phdr>())).p_type as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Phdr),
+            "::",
+            stringify!(p_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Phdr>())).p_flags as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Phdr),
+            "::",
+            stringify!(p_flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Phdr>())).p_offset as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Phdr),
+            "::",
+            stringify!(p_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Phdr>())).p_vaddr as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Phdr),
+            "::",
+            stringify!(p_vaddr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Phdr>())).p_paddr as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Phdr),
+            "::",
+            stringify!(p_paddr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Phdr>())).p_filesz as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Phdr),
+            "::",
+            stringify!(p_filesz)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Phdr>())).p_memsz as *const _ as usize },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Phdr),
+            "::",
+            stringify!(p_memsz)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Phdr>())).p_align as *const _ as usize },
+        48usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Phdr),
+            "::",
+            stringify!(p_align)
+        )
+    );
 }
-impl Clone for Elf64_Phdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Phdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Phdr {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Copy)]
 pub struct Elf32_Dyn {
     pub d_tag: Elf32_Sword,
     pub d_un: Elf32_Dyn__bindgen_ty_1,
 }
 #[repr(C)]
-#[derive(Copy)]
-pub union Elf32_Dyn__bindgen_ty_1 {
-    pub d_val: Elf32_Word,
-    pub d_ptr: Elf32_Addr,
-    _bindgen_union_align: u32,
+pub struct Elf32_Dyn__bindgen_ty_1 {
+    pub d_val: __BindgenUnionField<Elf32_Word>,
+    pub d_ptr: __BindgenUnionField<Elf32_Addr>,
+    pub bindgen_union_field: u32,
 }
 #[test]
 fn bindgen_test_layout_Elf32_Dyn__bindgen_ty_1() {
-    assert_eq!(::std::mem::size_of::<Elf32_Dyn__bindgen_ty_1>() , 4usize ,
-               concat ! (
-               "Size of: " , stringify ! ( Elf32_Dyn__bindgen_ty_1 ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Dyn__bindgen_ty_1>() , 4usize ,
-                concat ! (
-                "Alignment of " , stringify ! ( Elf32_Dyn__bindgen_ty_1 ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Dyn__bindgen_ty_1 ) ) . d_val as *
-                const _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Dyn__bindgen_ty_1
-                ) , "::" , stringify ! ( d_val ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Dyn__bindgen_ty_1 ) ) . d_ptr as *
-                const _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Dyn__bindgen_ty_1
-                ) , "::" , stringify ! ( d_ptr ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Dyn__bindgen_ty_1>(),
+        4usize,
+        concat!("Size of: ", stringify!(Elf32_Dyn__bindgen_ty_1))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Dyn__bindgen_ty_1>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Dyn__bindgen_ty_1))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Dyn__bindgen_ty_1>())).d_val as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Dyn__bindgen_ty_1),
+            "::",
+            stringify!(d_val)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Dyn__bindgen_ty_1>())).d_ptr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Dyn__bindgen_ty_1),
+            "::",
+            stringify!(d_ptr)
+        )
+    );
 }
-impl Clone for Elf32_Dyn__bindgen_ty_1 {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Dyn__bindgen_ty_1 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Dyn__bindgen_ty_1 {{ union }}")
+    }
 }
 #[test]
 fn bindgen_test_layout_Elf32_Dyn() {
-    assert_eq!(::std::mem::size_of::<Elf32_Dyn>() , 8usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Dyn ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Dyn>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Dyn ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Dyn ) ) . d_tag as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Dyn ) , "::" ,
-                stringify ! ( d_tag ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Dyn ) ) . d_un as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Dyn ) , "::" ,
-                stringify ! ( d_un ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Dyn>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf32_Dyn))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Dyn>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Dyn))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Dyn>())).d_tag as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Dyn),
+            "::",
+            stringify!(d_tag)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Dyn>())).d_un as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Dyn),
+            "::",
+            stringify!(d_un)
+        )
+    );
 }
-impl Clone for Elf32_Dyn {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Dyn {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Dyn {{ d_un: {:?} }}", self.d_un)
+    }
 }
 #[repr(C)]
-#[derive(Copy)]
 pub struct Elf64_Dyn {
     pub d_tag: Elf64_Sxword,
     pub d_un: Elf64_Dyn__bindgen_ty_1,
 }
 #[repr(C)]
-#[derive(Copy)]
-pub union Elf64_Dyn__bindgen_ty_1 {
-    pub d_val: Elf64_Xword,
-    pub d_ptr: Elf64_Addr,
-    _bindgen_union_align: [u32; 2usize],
+pub struct Elf64_Dyn__bindgen_ty_1 {
+    pub d_val: __BindgenUnionField<Elf64_Xword>,
+    pub d_ptr: __BindgenUnionField<Elf64_Addr>,
+    pub bindgen_union_field: [u32; 2usize],
 }
 #[test]
 fn bindgen_test_layout_Elf64_Dyn__bindgen_ty_1() {
-    assert_eq!(::std::mem::size_of::<Elf64_Dyn__bindgen_ty_1>() , 8usize ,
-               concat ! (
-               "Size of: " , stringify ! ( Elf64_Dyn__bindgen_ty_1 ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Dyn__bindgen_ty_1>() , 4usize ,
-                concat ! (
-                "Alignment of " , stringify ! ( Elf64_Dyn__bindgen_ty_1 ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Dyn__bindgen_ty_1 ) ) . d_val as *
-                const _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Dyn__bindgen_ty_1
-                ) , "::" , stringify ! ( d_val ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Dyn__bindgen_ty_1 ) ) . d_ptr as *
-                const _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Dyn__bindgen_ty_1
-                ) , "::" , stringify ! ( d_ptr ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Dyn__bindgen_ty_1>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf64_Dyn__bindgen_ty_1))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Dyn__bindgen_ty_1>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Dyn__bindgen_ty_1))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Dyn__bindgen_ty_1>())).d_val as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Dyn__bindgen_ty_1),
+            "::",
+            stringify!(d_val)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Dyn__bindgen_ty_1>())).d_ptr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Dyn__bindgen_ty_1),
+            "::",
+            stringify!(d_ptr)
+        )
+    );
 }
-impl Clone for Elf64_Dyn__bindgen_ty_1 {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Dyn__bindgen_ty_1 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Dyn__bindgen_ty_1 {{ union }}")
+    }
 }
 #[test]
 fn bindgen_test_layout_Elf64_Dyn() {
-    assert_eq!(::std::mem::size_of::<Elf64_Dyn>() , 16usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Dyn ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Dyn>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Dyn ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Dyn ) ) . d_tag as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Dyn ) , "::" ,
-                stringify ! ( d_tag ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Dyn ) ) . d_un as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Dyn ) , "::" ,
-                stringify ! ( d_un ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Dyn>(),
+        16usize,
+        concat!("Size of: ", stringify!(Elf64_Dyn))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Dyn>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Dyn))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Dyn>())).d_tag as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Dyn),
+            "::",
+            stringify!(d_tag)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Dyn>())).d_un as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Dyn),
+            "::",
+            stringify!(d_un)
+        )
+    );
 }
-impl Clone for Elf64_Dyn {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Dyn {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Dyn {{ d_un: {:?} }}", self.d_un)
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Verdef {
     pub vd_version: Elf32_Half,
     pub vd_flags: Elf32_Half,
@@ -3381,51 +4092,93 @@ pub struct Elf32_Verdef {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Verdef() {
-    assert_eq!(::std::mem::size_of::<Elf32_Verdef>() , 20usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Verdef ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Verdef>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Verdef ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verdef ) ) . vd_version as * const
-                _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verdef ) , "::" ,
-                stringify ! ( vd_version ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verdef ) ) . vd_flags as * const _
-                as usize } , 2usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verdef ) , "::" ,
-                stringify ! ( vd_flags ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verdef ) ) . vd_ndx as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verdef ) , "::" ,
-                stringify ! ( vd_ndx ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verdef ) ) . vd_cnt as * const _ as
-                usize } , 6usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verdef ) , "::" ,
-                stringify ! ( vd_cnt ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verdef ) ) . vd_hash as * const _
-                as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verdef ) , "::" ,
-                stringify ! ( vd_hash ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verdef ) ) . vd_aux as * const _ as
-                usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verdef ) , "::" ,
-                stringify ! ( vd_aux ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verdef ) ) . vd_next as * const _
-                as usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verdef ) , "::" ,
-                stringify ! ( vd_next ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Verdef>(),
+        20usize,
+        concat!("Size of: ", stringify!(Elf32_Verdef))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Verdef>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Verdef))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verdef>())).vd_version as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verdef),
+            "::",
+            stringify!(vd_version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verdef>())).vd_flags as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verdef),
+            "::",
+            stringify!(vd_flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verdef>())).vd_ndx as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verdef),
+            "::",
+            stringify!(vd_ndx)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verdef>())).vd_cnt as *const _ as usize },
+        6usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verdef),
+            "::",
+            stringify!(vd_cnt)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verdef>())).vd_hash as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verdef),
+            "::",
+            stringify!(vd_hash)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verdef>())).vd_aux as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verdef),
+            "::",
+            stringify!(vd_aux)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verdef>())).vd_next as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verdef),
+            "::",
+            stringify!(vd_next)
+        )
+    );
 }
-impl Clone for Elf32_Verdef {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Verdef {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Verdef {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Verdef {
     pub vd_version: Elf64_Half,
     pub vd_flags: Elf64_Half,
@@ -3437,103 +4190,179 @@ pub struct Elf64_Verdef {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Verdef() {
-    assert_eq!(::std::mem::size_of::<Elf64_Verdef>() , 20usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Verdef ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Verdef>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Verdef ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verdef ) ) . vd_version as * const
-                _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verdef ) , "::" ,
-                stringify ! ( vd_version ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verdef ) ) . vd_flags as * const _
-                as usize } , 2usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verdef ) , "::" ,
-                stringify ! ( vd_flags ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verdef ) ) . vd_ndx as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verdef ) , "::" ,
-                stringify ! ( vd_ndx ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verdef ) ) . vd_cnt as * const _ as
-                usize } , 6usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verdef ) , "::" ,
-                stringify ! ( vd_cnt ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verdef ) ) . vd_hash as * const _
-                as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verdef ) , "::" ,
-                stringify ! ( vd_hash ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verdef ) ) . vd_aux as * const _ as
-                usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verdef ) , "::" ,
-                stringify ! ( vd_aux ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verdef ) ) . vd_next as * const _
-                as usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verdef ) , "::" ,
-                stringify ! ( vd_next ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Verdef>(),
+        20usize,
+        concat!("Size of: ", stringify!(Elf64_Verdef))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Verdef>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Verdef))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verdef>())).vd_version as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verdef),
+            "::",
+            stringify!(vd_version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verdef>())).vd_flags as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verdef),
+            "::",
+            stringify!(vd_flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verdef>())).vd_ndx as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verdef),
+            "::",
+            stringify!(vd_ndx)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verdef>())).vd_cnt as *const _ as usize },
+        6usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verdef),
+            "::",
+            stringify!(vd_cnt)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verdef>())).vd_hash as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verdef),
+            "::",
+            stringify!(vd_hash)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verdef>())).vd_aux as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verdef),
+            "::",
+            stringify!(vd_aux)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verdef>())).vd_next as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verdef),
+            "::",
+            stringify!(vd_next)
+        )
+    );
 }
-impl Clone for Elf64_Verdef {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Verdef {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Verdef {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Verdaux {
     pub vda_name: Elf32_Word,
     pub vda_next: Elf32_Word,
 }
 #[test]
 fn bindgen_test_layout_Elf32_Verdaux() {
-    assert_eq!(::std::mem::size_of::<Elf32_Verdaux>() , 8usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Verdaux ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Verdaux>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Verdaux ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verdaux ) ) . vda_name as * const _
-                as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verdaux ) , "::"
-                , stringify ! ( vda_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verdaux ) ) . vda_next as * const _
-                as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verdaux ) , "::"
-                , stringify ! ( vda_next ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Verdaux>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf32_Verdaux))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Verdaux>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Verdaux))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verdaux>())).vda_name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verdaux),
+            "::",
+            stringify!(vda_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verdaux>())).vda_next as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verdaux),
+            "::",
+            stringify!(vda_next)
+        )
+    );
 }
-impl Clone for Elf32_Verdaux {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Verdaux {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Verdaux {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Verdaux {
     pub vda_name: Elf64_Word,
     pub vda_next: Elf64_Word,
 }
 #[test]
 fn bindgen_test_layout_Elf64_Verdaux() {
-    assert_eq!(::std::mem::size_of::<Elf64_Verdaux>() , 8usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Verdaux ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Verdaux>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Verdaux ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verdaux ) ) . vda_name as * const _
-                as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verdaux ) , "::"
-                , stringify ! ( vda_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verdaux ) ) . vda_next as * const _
-                as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verdaux ) , "::"
-                , stringify ! ( vda_next ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Verdaux>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf64_Verdaux))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Verdaux>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Verdaux))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verdaux>())).vda_name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verdaux),
+            "::",
+            stringify!(vda_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verdaux>())).vda_next as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verdaux),
+            "::",
+            stringify!(vda_next)
+        )
+    );
 }
-impl Clone for Elf64_Verdaux {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Verdaux {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Verdaux {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Verneed {
     pub vn_version: Elf32_Half,
     pub vn_cnt: Elf32_Half,
@@ -3543,41 +4372,73 @@ pub struct Elf32_Verneed {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Verneed() {
-    assert_eq!(::std::mem::size_of::<Elf32_Verneed>() , 16usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Verneed ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Verneed>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Verneed ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verneed ) ) . vn_version as * const
-                _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verneed ) , "::"
-                , stringify ! ( vn_version ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verneed ) ) . vn_cnt as * const _
-                as usize } , 2usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verneed ) , "::"
-                , stringify ! ( vn_cnt ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verneed ) ) . vn_file as * const _
-                as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verneed ) , "::"
-                , stringify ! ( vn_file ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verneed ) ) . vn_aux as * const _
-                as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verneed ) , "::"
-                , stringify ! ( vn_aux ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Verneed ) ) . vn_next as * const _
-                as usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Verneed ) , "::"
-                , stringify ! ( vn_next ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Verneed>(),
+        16usize,
+        concat!("Size of: ", stringify!(Elf32_Verneed))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Verneed>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Verneed))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verneed>())).vn_version as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verneed),
+            "::",
+            stringify!(vn_version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verneed>())).vn_cnt as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verneed),
+            "::",
+            stringify!(vn_cnt)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verneed>())).vn_file as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verneed),
+            "::",
+            stringify!(vn_file)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verneed>())).vn_aux as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verneed),
+            "::",
+            stringify!(vn_aux)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Verneed>())).vn_next as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Verneed),
+            "::",
+            stringify!(vn_next)
+        )
+    );
 }
-impl Clone for Elf32_Verneed {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Verneed {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Verneed {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Verneed {
     pub vn_version: Elf64_Half,
     pub vn_cnt: Elf64_Half,
@@ -3587,41 +4448,73 @@ pub struct Elf64_Verneed {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Verneed() {
-    assert_eq!(::std::mem::size_of::<Elf64_Verneed>() , 16usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Verneed ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Verneed>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Verneed ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verneed ) ) . vn_version as * const
-                _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verneed ) , "::"
-                , stringify ! ( vn_version ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verneed ) ) . vn_cnt as * const _
-                as usize } , 2usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verneed ) , "::"
-                , stringify ! ( vn_cnt ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verneed ) ) . vn_file as * const _
-                as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verneed ) , "::"
-                , stringify ! ( vn_file ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verneed ) ) . vn_aux as * const _
-                as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verneed ) , "::"
-                , stringify ! ( vn_aux ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Verneed ) ) . vn_next as * const _
-                as usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Verneed ) , "::"
-                , stringify ! ( vn_next ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Verneed>(),
+        16usize,
+        concat!("Size of: ", stringify!(Elf64_Verneed))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Verneed>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Verneed))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verneed>())).vn_version as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verneed),
+            "::",
+            stringify!(vn_version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verneed>())).vn_cnt as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verneed),
+            "::",
+            stringify!(vn_cnt)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verneed>())).vn_file as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verneed),
+            "::",
+            stringify!(vn_file)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verneed>())).vn_aux as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verneed),
+            "::",
+            stringify!(vn_aux)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Verneed>())).vn_next as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Verneed),
+            "::",
+            stringify!(vn_next)
+        )
+    );
 }
-impl Clone for Elf64_Verneed {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Verneed {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Verneed {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Vernaux {
     pub vna_hash: Elf32_Word,
     pub vna_flags: Elf32_Half,
@@ -3631,41 +4524,73 @@ pub struct Elf32_Vernaux {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Vernaux() {
-    assert_eq!(::std::mem::size_of::<Elf32_Vernaux>() , 16usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Vernaux ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Vernaux>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Vernaux ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Vernaux ) ) . vna_hash as * const _
-                as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Vernaux ) , "::"
-                , stringify ! ( vna_hash ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Vernaux ) ) . vna_flags as * const
-                _ as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Vernaux ) , "::"
-                , stringify ! ( vna_flags ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Vernaux ) ) . vna_other as * const
-                _ as usize } , 6usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Vernaux ) , "::"
-                , stringify ! ( vna_other ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Vernaux ) ) . vna_name as * const _
-                as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Vernaux ) , "::"
-                , stringify ! ( vna_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Vernaux ) ) . vna_next as * const _
-                as usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Vernaux ) , "::"
-                , stringify ! ( vna_next ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Vernaux>(),
+        16usize,
+        concat!("Size of: ", stringify!(Elf32_Vernaux))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Vernaux>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Vernaux))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Vernaux>())).vna_hash as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Vernaux),
+            "::",
+            stringify!(vna_hash)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Vernaux>())).vna_flags as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Vernaux),
+            "::",
+            stringify!(vna_flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Vernaux>())).vna_other as *const _ as usize },
+        6usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Vernaux),
+            "::",
+            stringify!(vna_other)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Vernaux>())).vna_name as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Vernaux),
+            "::",
+            stringify!(vna_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Vernaux>())).vna_next as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Vernaux),
+            "::",
+            stringify!(vna_next)
+        )
+    );
 }
-impl Clone for Elf32_Vernaux {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Vernaux {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Vernaux {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Vernaux {
     pub vna_hash: Elf64_Word,
     pub vna_flags: Elf64_Half,
@@ -3675,143 +4600,229 @@ pub struct Elf64_Vernaux {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Vernaux() {
-    assert_eq!(::std::mem::size_of::<Elf64_Vernaux>() , 16usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Vernaux ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Vernaux>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Vernaux ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Vernaux ) ) . vna_hash as * const _
-                as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Vernaux ) , "::"
-                , stringify ! ( vna_hash ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Vernaux ) ) . vna_flags as * const
-                _ as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Vernaux ) , "::"
-                , stringify ! ( vna_flags ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Vernaux ) ) . vna_other as * const
-                _ as usize } , 6usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Vernaux ) , "::"
-                , stringify ! ( vna_other ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Vernaux ) ) . vna_name as * const _
-                as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Vernaux ) , "::"
-                , stringify ! ( vna_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Vernaux ) ) . vna_next as * const _
-                as usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Vernaux ) , "::"
-                , stringify ! ( vna_next ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Vernaux>(),
+        16usize,
+        concat!("Size of: ", stringify!(Elf64_Vernaux))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Vernaux>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Vernaux))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Vernaux>())).vna_hash as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Vernaux),
+            "::",
+            stringify!(vna_hash)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Vernaux>())).vna_flags as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Vernaux),
+            "::",
+            stringify!(vna_flags)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Vernaux>())).vna_other as *const _ as usize },
+        6usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Vernaux),
+            "::",
+            stringify!(vna_other)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Vernaux>())).vna_name as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Vernaux),
+            "::",
+            stringify!(vna_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Vernaux>())).vna_next as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Vernaux),
+            "::",
+            stringify!(vna_next)
+        )
+    );
 }
-impl Clone for Elf64_Vernaux {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Vernaux {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Vernaux {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Copy)]
 pub struct Elf32_auxv_t {
     pub a_type: u32,
     pub a_un: Elf32_auxv_t__bindgen_ty_1,
 }
 #[repr(C)]
-#[derive(Copy)]
-pub union Elf32_auxv_t__bindgen_ty_1 {
-    pub a_val: u32,
-    _bindgen_union_align: u32,
+pub struct Elf32_auxv_t__bindgen_ty_1 {
+    pub a_val: __BindgenUnionField<u32>,
+    pub bindgen_union_field: u32,
 }
 #[test]
 fn bindgen_test_layout_Elf32_auxv_t__bindgen_ty_1() {
-    assert_eq!(::std::mem::size_of::<Elf32_auxv_t__bindgen_ty_1>() , 4usize ,
-               concat ! (
-               "Size of: " , stringify ! ( Elf32_auxv_t__bindgen_ty_1 ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_auxv_t__bindgen_ty_1>() , 4usize
-                , concat ! (
-                "Alignment of " , stringify ! ( Elf32_auxv_t__bindgen_ty_1 )
-                ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_auxv_t__bindgen_ty_1 ) ) . a_val as
-                * const _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! (
-                Elf32_auxv_t__bindgen_ty_1 ) , "::" , stringify ! ( a_val )
-                ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_auxv_t__bindgen_ty_1>(),
+        4usize,
+        concat!("Size of: ", stringify!(Elf32_auxv_t__bindgen_ty_1))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_auxv_t__bindgen_ty_1>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_auxv_t__bindgen_ty_1))
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Elf32_auxv_t__bindgen_ty_1>())).a_val as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_auxv_t__bindgen_ty_1),
+            "::",
+            stringify!(a_val)
+        )
+    );
 }
-impl Clone for Elf32_auxv_t__bindgen_ty_1 {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_auxv_t__bindgen_ty_1 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_auxv_t__bindgen_ty_1 {{ union }}")
+    }
 }
 #[test]
 fn bindgen_test_layout_Elf32_auxv_t() {
-    assert_eq!(::std::mem::size_of::<Elf32_auxv_t>() , 8usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_auxv_t ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_auxv_t>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_auxv_t ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_auxv_t ) ) . a_type as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_auxv_t ) , "::" ,
-                stringify ! ( a_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_auxv_t ) ) . a_un as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_auxv_t ) , "::" ,
-                stringify ! ( a_un ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_auxv_t>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf32_auxv_t))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_auxv_t>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_auxv_t))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_auxv_t>())).a_type as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_auxv_t),
+            "::",
+            stringify!(a_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_auxv_t>())).a_un as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_auxv_t),
+            "::",
+            stringify!(a_un)
+        )
+    );
 }
-impl Clone for Elf32_auxv_t {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_auxv_t {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_auxv_t {{ a_un: {:?} }}", self.a_un)
+    }
 }
 #[repr(C)]
-#[derive(Copy)]
 pub struct Elf64_auxv_t {
     pub a_type: u64,
     pub a_un: Elf64_auxv_t__bindgen_ty_1,
 }
 #[repr(C)]
-#[derive(Copy)]
-pub union Elf64_auxv_t__bindgen_ty_1 {
-    pub a_val: u64,
-    _bindgen_union_align: [u32; 2usize],
+pub struct Elf64_auxv_t__bindgen_ty_1 {
+    pub a_val: __BindgenUnionField<u64>,
+    pub bindgen_union_field: [u32; 2usize],
 }
 #[test]
 fn bindgen_test_layout_Elf64_auxv_t__bindgen_ty_1() {
-    assert_eq!(::std::mem::size_of::<Elf64_auxv_t__bindgen_ty_1>() , 8usize ,
-               concat ! (
-               "Size of: " , stringify ! ( Elf64_auxv_t__bindgen_ty_1 ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_auxv_t__bindgen_ty_1>() , 4usize
-                , concat ! (
-                "Alignment of " , stringify ! ( Elf64_auxv_t__bindgen_ty_1 )
-                ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_auxv_t__bindgen_ty_1 ) ) . a_val as
-                * const _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! (
-                Elf64_auxv_t__bindgen_ty_1 ) , "::" , stringify ! ( a_val )
-                ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_auxv_t__bindgen_ty_1>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf64_auxv_t__bindgen_ty_1))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_auxv_t__bindgen_ty_1>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_auxv_t__bindgen_ty_1))
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Elf64_auxv_t__bindgen_ty_1>())).a_val as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_auxv_t__bindgen_ty_1),
+            "::",
+            stringify!(a_val)
+        )
+    );
 }
-impl Clone for Elf64_auxv_t__bindgen_ty_1 {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_auxv_t__bindgen_ty_1 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_auxv_t__bindgen_ty_1 {{ union }}")
+    }
 }
 #[test]
 fn bindgen_test_layout_Elf64_auxv_t() {
-    assert_eq!(::std::mem::size_of::<Elf64_auxv_t>() , 16usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_auxv_t ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_auxv_t>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_auxv_t ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_auxv_t ) ) . a_type as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_auxv_t ) , "::" ,
-                stringify ! ( a_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_auxv_t ) ) . a_un as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_auxv_t ) , "::" ,
-                stringify ! ( a_un ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_auxv_t>(),
+        16usize,
+        concat!("Size of: ", stringify!(Elf64_auxv_t))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_auxv_t>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_auxv_t))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_auxv_t>())).a_type as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_auxv_t),
+            "::",
+            stringify!(a_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_auxv_t>())).a_un as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_auxv_t),
+            "::",
+            stringify!(a_un)
+        )
+    );
 }
-impl Clone for Elf64_auxv_t {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_auxv_t {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_auxv_t {{ a_un: {:?} }}", self.a_un)
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Nhdr {
     pub n_namesz: Elf32_Word,
     pub n_descsz: Elf32_Word,
@@ -3819,31 +4830,53 @@ pub struct Elf32_Nhdr {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Nhdr() {
-    assert_eq!(::std::mem::size_of::<Elf32_Nhdr>() , 12usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Nhdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Nhdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Nhdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Nhdr ) ) . n_namesz as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Nhdr ) , "::" ,
-                stringify ! ( n_namesz ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Nhdr ) ) . n_descsz as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Nhdr ) , "::" ,
-                stringify ! ( n_descsz ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Nhdr ) ) . n_type as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Nhdr ) , "::" ,
-                stringify ! ( n_type ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Nhdr>(),
+        12usize,
+        concat!("Size of: ", stringify!(Elf32_Nhdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Nhdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Nhdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Nhdr>())).n_namesz as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Nhdr),
+            "::",
+            stringify!(n_namesz)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Nhdr>())).n_descsz as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Nhdr),
+            "::",
+            stringify!(n_descsz)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Nhdr>())).n_type as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Nhdr),
+            "::",
+            stringify!(n_type)
+        )
+    );
 }
-impl Clone for Elf32_Nhdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Nhdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Nhdr {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Nhdr {
     pub n_namesz: Elf64_Word,
     pub n_descsz: Elf64_Word,
@@ -3851,31 +4884,53 @@ pub struct Elf64_Nhdr {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Nhdr() {
-    assert_eq!(::std::mem::size_of::<Elf64_Nhdr>() , 12usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Nhdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Nhdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Nhdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Nhdr ) ) . n_namesz as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Nhdr ) , "::" ,
-                stringify ! ( n_namesz ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Nhdr ) ) . n_descsz as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Nhdr ) , "::" ,
-                stringify ! ( n_descsz ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Nhdr ) ) . n_type as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Nhdr ) , "::" ,
-                stringify ! ( n_type ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Nhdr>(),
+        12usize,
+        concat!("Size of: ", stringify!(Elf64_Nhdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Nhdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Nhdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Nhdr>())).n_namesz as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Nhdr),
+            "::",
+            stringify!(n_namesz)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Nhdr>())).n_descsz as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Nhdr),
+            "::",
+            stringify!(n_descsz)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Nhdr>())).n_type as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Nhdr),
+            "::",
+            stringify!(n_type)
+        )
+    );
 }
-impl Clone for Elf64_Nhdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Nhdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Nhdr {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Move {
     pub m_value: Elf32_Xword,
     pub m_info: Elf32_Word,
@@ -3885,41 +4940,73 @@ pub struct Elf32_Move {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Move() {
-    assert_eq!(::std::mem::size_of::<Elf32_Move>() , 20usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Move ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Move>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Move ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Move ) ) . m_value as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Move ) , "::" ,
-                stringify ! ( m_value ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Move ) ) . m_info as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Move ) , "::" ,
-                stringify ! ( m_info ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Move ) ) . m_poffset as * const _
-                as usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Move ) , "::" ,
-                stringify ! ( m_poffset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Move ) ) . m_repeat as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Move ) , "::" ,
-                stringify ! ( m_repeat ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Move ) ) . m_stride as * const _ as
-                usize } , 18usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Move ) , "::" ,
-                stringify ! ( m_stride ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Move>(),
+        20usize,
+        concat!("Size of: ", stringify!(Elf32_Move))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Move>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Move))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Move>())).m_value as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Move),
+            "::",
+            stringify!(m_value)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Move>())).m_info as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Move),
+            "::",
+            stringify!(m_info)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Move>())).m_poffset as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Move),
+            "::",
+            stringify!(m_poffset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Move>())).m_repeat as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Move),
+            "::",
+            stringify!(m_repeat)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Move>())).m_stride as *const _ as usize },
+        18usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Move),
+            "::",
+            stringify!(m_stride)
+        )
+    );
 }
-impl Clone for Elf32_Move {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Move {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Move {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Move {
     pub m_value: Elf64_Xword,
     pub m_info: Elf64_Xword,
@@ -3929,131 +5016,212 @@ pub struct Elf64_Move {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Move() {
-    assert_eq!(::std::mem::size_of::<Elf64_Move>() , 28usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Move ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Move>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Move ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Move ) ) . m_value as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Move ) , "::" ,
-                stringify ! ( m_value ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Move ) ) . m_info as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Move ) , "::" ,
-                stringify ! ( m_info ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Move ) ) . m_poffset as * const _
-                as usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Move ) , "::" ,
-                stringify ! ( m_poffset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Move ) ) . m_repeat as * const _ as
-                usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Move ) , "::" ,
-                stringify ! ( m_repeat ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Move ) ) . m_stride as * const _ as
-                usize } , 26usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Move ) , "::" ,
-                stringify ! ( m_stride ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Move>(),
+        28usize,
+        concat!("Size of: ", stringify!(Elf64_Move))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Move>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Move))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Move>())).m_value as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Move),
+            "::",
+            stringify!(m_value)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Move>())).m_info as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Move),
+            "::",
+            stringify!(m_info)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Move>())).m_poffset as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Move),
+            "::",
+            stringify!(m_poffset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Move>())).m_repeat as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Move),
+            "::",
+            stringify!(m_repeat)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Move>())).m_stride as *const _ as usize },
+        26usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Move),
+            "::",
+            stringify!(m_stride)
+        )
+    );
 }
-impl Clone for Elf64_Move {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Move {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Move {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Copy)]
-pub union Elf32_gptab {
-    pub gt_header: Elf32_gptab__bindgen_ty_1,
-    pub gt_entry: Elf32_gptab__bindgen_ty_2,
-    _bindgen_union_align: [u32; 2usize],
+pub struct Elf32_gptab {
+    pub gt_header: __BindgenUnionField<Elf32_gptab__bindgen_ty_1>,
+    pub gt_entry: __BindgenUnionField<Elf32_gptab__bindgen_ty_2>,
+    pub bindgen_union_field: [u32; 2usize],
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_gptab__bindgen_ty_1 {
     pub gt_current_g_value: Elf32_Word,
     pub gt_unused: Elf32_Word,
 }
 #[test]
 fn bindgen_test_layout_Elf32_gptab__bindgen_ty_1() {
-    assert_eq!(::std::mem::size_of::<Elf32_gptab__bindgen_ty_1>() , 8usize ,
-               concat ! (
-               "Size of: " , stringify ! ( Elf32_gptab__bindgen_ty_1 ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_gptab__bindgen_ty_1>() , 4usize ,
-                concat ! (
-                "Alignment of " , stringify ! ( Elf32_gptab__bindgen_ty_1 )
-                ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_gptab__bindgen_ty_1 ) ) .
-                gt_current_g_value as * const _ as usize } , 0usize , concat !
-                (
-                "Alignment of field: " , stringify ! (
-                Elf32_gptab__bindgen_ty_1 ) , "::" , stringify ! (
-                gt_current_g_value ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_gptab__bindgen_ty_1 ) ) . gt_unused
-                as * const _ as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! (
-                Elf32_gptab__bindgen_ty_1 ) , "::" , stringify ! ( gt_unused )
-                ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_gptab__bindgen_ty_1>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf32_gptab__bindgen_ty_1))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_gptab__bindgen_ty_1>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_gptab__bindgen_ty_1))
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Elf32_gptab__bindgen_ty_1>())).gt_current_g_value as *const _
+                as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_gptab__bindgen_ty_1),
+            "::",
+            stringify!(gt_current_g_value)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Elf32_gptab__bindgen_ty_1>())).gt_unused as *const _ as usize
+        },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_gptab__bindgen_ty_1),
+            "::",
+            stringify!(gt_unused)
+        )
+    );
 }
-impl Clone for Elf32_gptab__bindgen_ty_1 {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_gptab__bindgen_ty_1 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_gptab__bindgen_ty_1 {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_gptab__bindgen_ty_2 {
     pub gt_g_value: Elf32_Word,
     pub gt_bytes: Elf32_Word,
 }
 #[test]
 fn bindgen_test_layout_Elf32_gptab__bindgen_ty_2() {
-    assert_eq!(::std::mem::size_of::<Elf32_gptab__bindgen_ty_2>() , 8usize ,
-               concat ! (
-               "Size of: " , stringify ! ( Elf32_gptab__bindgen_ty_2 ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_gptab__bindgen_ty_2>() , 4usize ,
-                concat ! (
-                "Alignment of " , stringify ! ( Elf32_gptab__bindgen_ty_2 )
-                ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_gptab__bindgen_ty_2 ) ) .
-                gt_g_value as * const _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! (
-                Elf32_gptab__bindgen_ty_2 ) , "::" , stringify ! ( gt_g_value
-                ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_gptab__bindgen_ty_2 ) ) . gt_bytes
-                as * const _ as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! (
-                Elf32_gptab__bindgen_ty_2 ) , "::" , stringify ! ( gt_bytes )
-                ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_gptab__bindgen_ty_2>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf32_gptab__bindgen_ty_2))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_gptab__bindgen_ty_2>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_gptab__bindgen_ty_2))
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Elf32_gptab__bindgen_ty_2>())).gt_g_value as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_gptab__bindgen_ty_2),
+            "::",
+            stringify!(gt_g_value)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Elf32_gptab__bindgen_ty_2>())).gt_bytes as *const _ as usize
+        },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_gptab__bindgen_ty_2),
+            "::",
+            stringify!(gt_bytes)
+        )
+    );
 }
-impl Clone for Elf32_gptab__bindgen_ty_2 {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_gptab__bindgen_ty_2 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_gptab__bindgen_ty_2 {{  }}")
+    }
 }
 #[test]
 fn bindgen_test_layout_Elf32_gptab() {
-    assert_eq!(::std::mem::size_of::<Elf32_gptab>() , 8usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_gptab ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_gptab>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_gptab ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_gptab ) ) . gt_header as * const _
-                as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_gptab ) , "::" ,
-                stringify ! ( gt_header ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_gptab ) ) . gt_entry as * const _
-                as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_gptab ) , "::" ,
-                stringify ! ( gt_entry ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_gptab>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf32_gptab))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_gptab>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_gptab))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_gptab>())).gt_header as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_gptab),
+            "::",
+            stringify!(gt_header)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_gptab>())).gt_entry as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_gptab),
+            "::",
+            stringify!(gt_entry)
+        )
+    );
 }
-impl Clone for Elf32_gptab {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_gptab {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_gptab {{ union }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_RegInfo {
     pub ri_gprmask: Elf32_Word,
     pub ri_cprmask: [Elf32_Word; 4usize],
@@ -4061,31 +5229,53 @@ pub struct Elf32_RegInfo {
 }
 #[test]
 fn bindgen_test_layout_Elf32_RegInfo() {
-    assert_eq!(::std::mem::size_of::<Elf32_RegInfo>() , 24usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_RegInfo ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_RegInfo>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_RegInfo ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_RegInfo ) ) . ri_gprmask as * const
-                _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_RegInfo ) , "::"
-                , stringify ! ( ri_gprmask ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_RegInfo ) ) . ri_cprmask as * const
-                _ as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_RegInfo ) , "::"
-                , stringify ! ( ri_cprmask ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_RegInfo ) ) . ri_gp_value as *
-                const _ as usize } , 20usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_RegInfo ) , "::"
-                , stringify ! ( ri_gp_value ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_RegInfo>(),
+        24usize,
+        concat!("Size of: ", stringify!(Elf32_RegInfo))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_RegInfo>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_RegInfo))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_RegInfo>())).ri_gprmask as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_RegInfo),
+            "::",
+            stringify!(ri_gprmask)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_RegInfo>())).ri_cprmask as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_RegInfo),
+            "::",
+            stringify!(ri_cprmask)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_RegInfo>())).ri_gp_value as *const _ as usize },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_RegInfo),
+            "::",
+            stringify!(ri_gp_value)
+        )
+    );
 }
-impl Clone for Elf32_RegInfo {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_RegInfo {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_RegInfo {{ ri_cprmask: {:?} }}", self.ri_cprmask)
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf_Options {
     pub kind: ::libc::c_uchar,
     pub size: ::libc::c_uchar,
@@ -4094,62 +5284,110 @@ pub struct Elf_Options {
 }
 #[test]
 fn bindgen_test_layout_Elf_Options() {
-    assert_eq!(::std::mem::size_of::<Elf_Options>() , 8usize , concat ! (
-               "Size of: " , stringify ! ( Elf_Options ) ));
-    assert_eq! (::std::mem::align_of::<Elf_Options>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf_Options ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Options ) ) . kind as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Options ) , "::" ,
-                stringify ! ( kind ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Options ) ) . size as * const _ as
-                usize } , 1usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Options ) , "::" ,
-                stringify ! ( size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Options ) ) . section as * const _ as
-                usize } , 2usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Options ) , "::" ,
-                stringify ! ( section ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Options ) ) . info as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Options ) , "::" ,
-                stringify ! ( info ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf_Options>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf_Options))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf_Options>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf_Options))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Options>())).kind as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Options),
+            "::",
+            stringify!(kind)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Options>())).size as *const _ as usize },
+        1usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Options),
+            "::",
+            stringify!(size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Options>())).section as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Options),
+            "::",
+            stringify!(section)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Options>())).info as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Options),
+            "::",
+            stringify!(info)
+        )
+    );
 }
-impl Clone for Elf_Options {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf_Options {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(
+            f,
+            "Elf_Options {{ kind: {:?}, size: {:?} }}",
+            self.kind, self.size
+        )
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf_Options_Hw {
     pub hwp_flags1: Elf32_Word,
     pub hwp_flags2: Elf32_Word,
 }
 #[test]
 fn bindgen_test_layout_Elf_Options_Hw() {
-    assert_eq!(::std::mem::size_of::<Elf_Options_Hw>() , 8usize , concat ! (
-               "Size of: " , stringify ! ( Elf_Options_Hw ) ));
-    assert_eq! (::std::mem::align_of::<Elf_Options_Hw>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf_Options_Hw ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Options_Hw ) ) . hwp_flags1 as *
-                const _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Options_Hw ) , "::"
-                , stringify ! ( hwp_flags1 ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Options_Hw ) ) . hwp_flags2 as *
-                const _ as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Options_Hw ) , "::"
-                , stringify ! ( hwp_flags2 ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf_Options_Hw>(),
+        8usize,
+        concat!("Size of: ", stringify!(Elf_Options_Hw))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf_Options_Hw>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf_Options_Hw))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Options_Hw>())).hwp_flags1 as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Options_Hw),
+            "::",
+            stringify!(hwp_flags1)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Options_Hw>())).hwp_flags2 as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Options_Hw),
+            "::",
+            stringify!(hwp_flags2)
+        )
+    );
 }
-impl Clone for Elf_Options_Hw {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf_Options_Hw {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf_Options_Hw {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf32_Lib {
     pub l_name: Elf32_Word,
     pub l_time_stamp: Elf32_Word,
@@ -4159,41 +5397,73 @@ pub struct Elf32_Lib {
 }
 #[test]
 fn bindgen_test_layout_Elf32_Lib() {
-    assert_eq!(::std::mem::size_of::<Elf32_Lib>() , 20usize , concat ! (
-               "Size of: " , stringify ! ( Elf32_Lib ) ));
-    assert_eq! (::std::mem::align_of::<Elf32_Lib>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf32_Lib ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Lib ) ) . l_name as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Lib ) , "::" ,
-                stringify ! ( l_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Lib ) ) . l_time_stamp as * const _
-                as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Lib ) , "::" ,
-                stringify ! ( l_time_stamp ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Lib ) ) . l_checksum as * const _
-                as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Lib ) , "::" ,
-                stringify ! ( l_checksum ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Lib ) ) . l_version as * const _ as
-                usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Lib ) , "::" ,
-                stringify ! ( l_version ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf32_Lib ) ) . l_flags as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf32_Lib ) , "::" ,
-                stringify ! ( l_flags ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf32_Lib>(),
+        20usize,
+        concat!("Size of: ", stringify!(Elf32_Lib))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf32_Lib>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf32_Lib))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Lib>())).l_name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Lib),
+            "::",
+            stringify!(l_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Lib>())).l_time_stamp as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Lib),
+            "::",
+            stringify!(l_time_stamp)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Lib>())).l_checksum as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Lib),
+            "::",
+            stringify!(l_checksum)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Lib>())).l_version as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Lib),
+            "::",
+            stringify!(l_version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf32_Lib>())).l_flags as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf32_Lib),
+            "::",
+            stringify!(l_flags)
+        )
+    );
 }
-impl Clone for Elf32_Lib {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf32_Lib {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf32_Lib {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf64_Lib {
     pub l_name: Elf64_Word,
     pub l_time_stamp: Elf64_Word,
@@ -4203,42 +5473,74 @@ pub struct Elf64_Lib {
 }
 #[test]
 fn bindgen_test_layout_Elf64_Lib() {
-    assert_eq!(::std::mem::size_of::<Elf64_Lib>() , 20usize , concat ! (
-               "Size of: " , stringify ! ( Elf64_Lib ) ));
-    assert_eq! (::std::mem::align_of::<Elf64_Lib>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf64_Lib ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Lib ) ) . l_name as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Lib ) , "::" ,
-                stringify ! ( l_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Lib ) ) . l_time_stamp as * const _
-                as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Lib ) , "::" ,
-                stringify ! ( l_time_stamp ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Lib ) ) . l_checksum as * const _
-                as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Lib ) , "::" ,
-                stringify ! ( l_checksum ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Lib ) ) . l_version as * const _ as
-                usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Lib ) , "::" ,
-                stringify ! ( l_version ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf64_Lib ) ) . l_flags as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf64_Lib ) , "::" ,
-                stringify ! ( l_flags ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf64_Lib>(),
+        20usize,
+        concat!("Size of: ", stringify!(Elf64_Lib))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf64_Lib>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf64_Lib))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Lib>())).l_name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Lib),
+            "::",
+            stringify!(l_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Lib>())).l_time_stamp as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Lib),
+            "::",
+            stringify!(l_time_stamp)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Lib>())).l_checksum as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Lib),
+            "::",
+            stringify!(l_checksum)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Lib>())).l_version as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Lib),
+            "::",
+            stringify!(l_version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf64_Lib>())).l_flags as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf64_Lib),
+            "::",
+            stringify!(l_flags)
+        )
+    );
 }
-impl Clone for Elf64_Lib {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf64_Lib {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Elf64_Lib {{  }}")
+    }
 }
 pub type Elf32_Conflict = Elf32_Addr;
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf_MIPS_ABIFlags_v0 {
     pub version: Elf32_Half,
     pub isa_level: ::libc::c_uchar,
@@ -4254,107 +5556,166 @@ pub struct Elf_MIPS_ABIFlags_v0 {
 }
 #[test]
 fn bindgen_test_layout_Elf_MIPS_ABIFlags_v0() {
-    assert_eq!(::std::mem::size_of::<Elf_MIPS_ABIFlags_v0>() , 24usize ,
-               concat ! ( "Size of: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-               ));
-    assert_eq! (::std::mem::align_of::<Elf_MIPS_ABIFlags_v0>() , 4usize ,
-                concat ! (
-                "Alignment of " , stringify ! ( Elf_MIPS_ABIFlags_v0 ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . version as *
-                const _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( version ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . isa_level as *
-                const _ as usize } , 2usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( isa_level ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . isa_rev as *
-                const _ as usize } , 3usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( isa_rev ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . gpr_size as *
-                const _ as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( gpr_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . cpr1_size as *
-                const _ as usize } , 5usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( cpr1_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . cpr2_size as *
-                const _ as usize } , 6usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( cpr2_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . fp_abi as *
-                const _ as usize } , 7usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( fp_abi ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . isa_ext as *
-                const _ as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( isa_ext ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . ases as *
-                const _ as usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( ases ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . flags1 as *
-                const _ as usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( flags1 ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_MIPS_ABIFlags_v0 ) ) . flags2 as *
-                const _ as usize } , 20usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_MIPS_ABIFlags_v0 )
-                , "::" , stringify ! ( flags2 ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf_MIPS_ABIFlags_v0>(),
+        24usize,
+        concat!("Size of: ", stringify!(Elf_MIPS_ABIFlags_v0))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf_MIPS_ABIFlags_v0>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf_MIPS_ABIFlags_v0))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).version as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).isa_level as *const _ as usize },
+        2usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(isa_level)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).isa_rev as *const _ as usize },
+        3usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(isa_rev)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).gpr_size as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(gpr_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).cpr1_size as *const _ as usize },
+        5usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(cpr1_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).cpr2_size as *const _ as usize },
+        6usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(cpr2_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).fp_abi as *const _ as usize },
+        7usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(fp_abi)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).isa_ext as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(isa_ext)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).ases as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(ases)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).flags1 as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(flags1)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_MIPS_ABIFlags_v0>())).flags2 as *const _ as usize },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_MIPS_ABIFlags_v0),
+            "::",
+            stringify!(flags2)
+        )
+    );
 }
-impl Clone for Elf_MIPS_ABIFlags_v0 {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf_MIPS_ABIFlags_v0 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write ! ( f , "Elf_MIPS_ABIFlags_v0 {{ isa_level: {:?}, isa_rev: {:?}, gpr_size: {:?}, cpr1_size: {:?}, cpr2_size: {:?}, fp_abi: {:?} }}" , self . isa_level , self . isa_rev , self . gpr_size , self . cpr1_size , self . cpr2_size , self . fp_abi )
+    }
 }
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub enum Elf_Type {
-    ELF_T_BYTE = 0,
-    ELF_T_ADDR = 1,
-    ELF_T_DYN = 2,
-    ELF_T_EHDR = 3,
-    ELF_T_HALF = 4,
-    ELF_T_OFF = 5,
-    ELF_T_PHDR = 6,
-    ELF_T_RELA = 7,
-    ELF_T_REL = 8,
-    ELF_T_SHDR = 9,
-    ELF_T_SWORD = 10,
-    ELF_T_SYM = 11,
-    ELF_T_WORD = 12,
-    ELF_T_XWORD = 13,
-    ELF_T_SXWORD = 14,
-    ELF_T_VDEF = 15,
-    ELF_T_VDAUX = 16,
-    ELF_T_VNEED = 17,
-    ELF_T_VNAUX = 18,
-    ELF_T_NHDR = 19,
-    ELF_T_SYMINFO = 20,
-    ELF_T_MOVE = 21,
-    ELF_T_LIB = 22,
-    ELF_T_GNUHASH = 23,
-    ELF_T_AUXV = 24,
-    ELF_T_CHDR = 25,
-    ELF_T_NUM = 26,
+pub mod Elf_Type {
+    pub type Type = u32;
+    pub const ELF_T_BYTE: Type = 0;
+    pub const ELF_T_ADDR: Type = 1;
+    pub const ELF_T_DYN: Type = 2;
+    pub const ELF_T_EHDR: Type = 3;
+    pub const ELF_T_HALF: Type = 4;
+    pub const ELF_T_OFF: Type = 5;
+    pub const ELF_T_PHDR: Type = 6;
+    pub const ELF_T_RELA: Type = 7;
+    pub const ELF_T_REL: Type = 8;
+    pub const ELF_T_SHDR: Type = 9;
+    pub const ELF_T_SWORD: Type = 10;
+    pub const ELF_T_SYM: Type = 11;
+    pub const ELF_T_WORD: Type = 12;
+    pub const ELF_T_XWORD: Type = 13;
+    pub const ELF_T_SXWORD: Type = 14;
+    pub const ELF_T_VDEF: Type = 15;
+    pub const ELF_T_VDAUX: Type = 16;
+    pub const ELF_T_VNEED: Type = 17;
+    pub const ELF_T_VNAUX: Type = 18;
+    pub const ELF_T_NHDR: Type = 19;
+    pub const ELF_T_SYMINFO: Type = 20;
+    pub const ELF_T_MOVE: Type = 21;
+    pub const ELF_T_LIB: Type = 22;
+    pub const ELF_T_GNUHASH: Type = 23;
+    pub const ELF_T_AUXV: Type = 24;
+    pub const ELF_T_CHDR: Type = 25;
+    pub const ELF_T_NUM: Type = 26;
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf_Data {
     pub d_buf: *mut ::libc::c_void,
-    pub d_type: Elf_Type,
+    pub d_type: Elf_Type::Type,
     pub d_version: ::libc::c_uint,
     pub d_size: usize,
     pub d_off: i64,
@@ -4362,87 +5723,118 @@ pub struct Elf_Data {
 }
 #[test]
 fn bindgen_test_layout_Elf_Data() {
-    assert_eq!(::std::mem::size_of::<Elf_Data>() , 28usize , concat ! (
-               "Size of: " , stringify ! ( Elf_Data ) ));
-    assert_eq! (::std::mem::align_of::<Elf_Data>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf_Data ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Data ) ) . d_buf as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Data ) , "::" ,
-                stringify ! ( d_buf ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Data ) ) . d_type as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Data ) , "::" ,
-                stringify ! ( d_type ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Data ) ) . d_version as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Data ) , "::" ,
-                stringify ! ( d_version ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Data ) ) . d_size as * const _ as
-                usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Data ) , "::" ,
-                stringify ! ( d_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Data ) ) . d_off as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Data ) , "::" ,
-                stringify ! ( d_off ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Data ) ) . d_align as * const _ as
-                usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Data ) , "::" ,
-                stringify ! ( d_align ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf_Data>(),
+        28usize,
+        concat!("Size of: ", stringify!(Elf_Data))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf_Data>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf_Data))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Data>())).d_buf as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Data),
+            "::",
+            stringify!(d_buf)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Data>())).d_type as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Data),
+            "::",
+            stringify!(d_type)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Data>())).d_version as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Data),
+            "::",
+            stringify!(d_version)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Data>())).d_size as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Data),
+            "::",
+            stringify!(d_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Data>())).d_off as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Data),
+            "::",
+            stringify!(d_off)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Data>())).d_align as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Data),
+            "::",
+            stringify!(d_align)
+        )
+    );
 }
-impl Clone for Elf_Data {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf_Data {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(
+            f,
+            "Elf_Data {{ d_buf: {:?}, d_type: {:?}, d_version: {:?} }}",
+            self.d_buf, self.d_type, self.d_version
+        )
+    }
 }
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub enum Elf_Cmd {
-    ELF_C_NULL = 0,
-    ELF_C_READ = 1,
-    ELF_C_RDWR = 2,
-    ELF_C_WRITE = 3,
-    ELF_C_CLR = 4,
-    ELF_C_SET = 5,
-    ELF_C_FDDONE = 6,
-    ELF_C_FDREAD = 7,
-    ELF_C_READ_MMAP = 8,
-    ELF_C_RDWR_MMAP = 9,
-    ELF_C_WRITE_MMAP = 10,
-    ELF_C_READ_MMAP_PRIVATE = 11,
-    ELF_C_EMPTY = 12,
-    ELF_C_NUM = 13,
+pub mod Elf_Cmd {
+    pub type Type = u32;
+    pub const ELF_C_NULL: Type = 0;
+    pub const ELF_C_READ: Type = 1;
+    pub const ELF_C_RDWR: Type = 2;
+    pub const ELF_C_WRITE: Type = 3;
+    pub const ELF_C_CLR: Type = 4;
+    pub const ELF_C_SET: Type = 5;
+    pub const ELF_C_FDDONE: Type = 6;
+    pub const ELF_C_FDREAD: Type = 7;
+    pub const ELF_C_READ_MMAP: Type = 8;
+    pub const ELF_C_RDWR_MMAP: Type = 9;
+    pub const ELF_C_WRITE_MMAP: Type = 10;
+    pub const ELF_C_READ_MMAP_PRIVATE: Type = 11;
+    pub const ELF_C_EMPTY: Type = 12;
+    pub const ELF_C_NUM: Type = 13;
 }
-pub const ELF_F_DIRTY: _bindgen_ty_2 = _bindgen_ty_2::ELF_F_DIRTY;
-pub const ELF_F_LAYOUT: _bindgen_ty_2 = _bindgen_ty_2::ELF_F_LAYOUT;
-pub const ELF_F_PERMISSIVE: _bindgen_ty_2 = _bindgen_ty_2::ELF_F_PERMISSIVE;
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub enum _bindgen_ty_2 {
-    ELF_F_DIRTY = 1,
-    ELF_F_LAYOUT = 4,
-    ELF_F_PERMISSIVE = 8,
-}
-pub const ELF_CHF_FORCE: _bindgen_ty_3 = _bindgen_ty_3::ELF_CHF_FORCE;
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub enum _bindgen_ty_3 { ELF_CHF_FORCE = 1, }
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub enum Elf_Kind {
-    ELF_K_NONE = 0,
-    ELF_K_AR = 1,
-    ELF_K_COFF = 2,
-    ELF_K_ELF = 3,
-    ELF_K_NUM = 4,
+pub const ELF_F_DIRTY: _bindgen_ty_2 = 1;
+pub const ELF_F_LAYOUT: _bindgen_ty_2 = 4;
+pub const ELF_F_PERMISSIVE: _bindgen_ty_2 = 8;
+pub type _bindgen_ty_2 = u32;
+pub const ELF_CHF_FORCE: _bindgen_ty_3 = 1;
+pub type _bindgen_ty_3 = u32;
+pub mod Elf_Kind {
+    pub type Type = u32;
+    pub const ELF_K_NONE: Type = 0;
+    pub const ELF_K_AR: Type = 1;
+    pub const ELF_K_COFF: Type = 2;
+    pub const ELF_K_ELF: Type = 3;
+    pub const ELF_K_NUM: Type = 4;
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf_Arhdr {
     pub ar_name: *mut ::libc::c_char,
     pub ar_date: time_t,
@@ -4454,51 +5846,97 @@ pub struct Elf_Arhdr {
 }
 #[test]
 fn bindgen_test_layout_Elf_Arhdr() {
-    assert_eq!(::std::mem::size_of::<Elf_Arhdr>() , 32usize , concat ! (
-               "Size of: " , stringify ! ( Elf_Arhdr ) ));
-    assert_eq! (::std::mem::align_of::<Elf_Arhdr>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf_Arhdr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Arhdr ) ) . ar_name as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Arhdr ) , "::" ,
-                stringify ! ( ar_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Arhdr ) ) . ar_date as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Arhdr ) , "::" ,
-                stringify ! ( ar_date ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Arhdr ) ) . ar_uid as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Arhdr ) , "::" ,
-                stringify ! ( ar_uid ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Arhdr ) ) . ar_gid as * const _ as
-                usize } , 12usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Arhdr ) , "::" ,
-                stringify ! ( ar_gid ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Arhdr ) ) . ar_mode as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Arhdr ) , "::" ,
-                stringify ! ( ar_mode ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Arhdr ) ) . ar_size as * const _ as
-                usize } , 20usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Arhdr ) , "::" ,
-                stringify ! ( ar_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Arhdr ) ) . ar_rawname as * const _
-                as usize } , 28usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Arhdr ) , "::" ,
-                stringify ! ( ar_rawname ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf_Arhdr>(),
+        32usize,
+        concat!("Size of: ", stringify!(Elf_Arhdr))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf_Arhdr>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf_Arhdr))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Arhdr>())).ar_name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Arhdr),
+            "::",
+            stringify!(ar_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Arhdr>())).ar_date as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Arhdr),
+            "::",
+            stringify!(ar_date)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Arhdr>())).ar_uid as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Arhdr),
+            "::",
+            stringify!(ar_uid)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Arhdr>())).ar_gid as *const _ as usize },
+        12usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Arhdr),
+            "::",
+            stringify!(ar_gid)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Arhdr>())).ar_mode as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Arhdr),
+            "::",
+            stringify!(ar_mode)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Arhdr>())).ar_size as *const _ as usize },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Arhdr),
+            "::",
+            stringify!(ar_size)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Arhdr>())).ar_rawname as *const _ as usize },
+        28usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Arhdr),
+            "::",
+            stringify!(ar_rawname)
+        )
+    );
 }
-impl Clone for Elf_Arhdr {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf_Arhdr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(
+            f,
+            "Elf_Arhdr {{ ar_name: {:?}, ar_rawname: {:?} }}",
+            self.ar_name, self.ar_rawname
+        )
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Elf_Arsym {
     pub as_name: *mut ::libc::c_char,
     pub as_off: usize,
@@ -4506,28 +5944,55 @@ pub struct Elf_Arsym {
 }
 #[test]
 fn bindgen_test_layout_Elf_Arsym() {
-    assert_eq!(::std::mem::size_of::<Elf_Arsym>() , 12usize , concat ! (
-               "Size of: " , stringify ! ( Elf_Arsym ) ));
-    assert_eq! (::std::mem::align_of::<Elf_Arsym>() , 4usize , concat ! (
-                "Alignment of " , stringify ! ( Elf_Arsym ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Arsym ) ) . as_name as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Arsym ) , "::" ,
-                stringify ! ( as_name ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Arsym ) ) . as_off as * const _ as
-                usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Arsym ) , "::" ,
-                stringify ! ( as_off ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Elf_Arsym ) ) . as_hash as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Elf_Arsym ) , "::" ,
-                stringify ! ( as_hash ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Elf_Arsym>(),
+        12usize,
+        concat!("Size of: ", stringify!(Elf_Arsym))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Elf_Arsym>(),
+        4usize,
+        concat!("Alignment of ", stringify!(Elf_Arsym))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Arsym>())).as_name as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Arsym),
+            "::",
+            stringify!(as_name)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Arsym>())).as_off as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Arsym),
+            "::",
+            stringify!(as_off)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Elf_Arsym>())).as_hash as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Elf_Arsym),
+            "::",
+            stringify!(as_hash)
+        )
+    );
 }
-impl Clone for Elf_Arsym {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Elf_Arsym {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(
+            f,
+            "Elf_Arsym {{ as_name: {:?}, as_hash: {:?} }}",
+            self.as_name, self.as_hash
+        )
+    }
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -4540,34 +6005,31 @@ pub struct Elf_Scn {
     _unused: [u8; 0],
 }
 extern "C" {
-    pub fn elf_begin(__fildes: ::libc::c_int, __cmd: Elf_Cmd, __ref: *mut Elf)
-     -> *mut Elf;
+    pub fn elf_begin(__fildes: ::libc::c_int, __cmd: Elf_Cmd::Type, __ref: *mut Elf) -> *mut Elf;
 }
 extern "C" {
-    pub fn elf_clone(__elf: *mut Elf, __cmd: Elf_Cmd) -> *mut Elf;
+    pub fn elf_clone(__elf: *mut Elf, __cmd: Elf_Cmd::Type) -> *mut Elf;
 }
 extern "C" {
-    pub fn elf_memory(__image: *mut ::libc::c_char, __size: usize)
-     -> *mut Elf;
+    pub fn elf_memory(__image: *mut ::libc::c_char, __size: usize) -> *mut Elf;
 }
 extern "C" {
-    pub fn elf_next(__elf: *mut Elf) -> Elf_Cmd;
+    pub fn elf_next(__elf: *mut Elf) -> Elf_Cmd::Type;
 }
 extern "C" {
     pub fn elf_end(__elf: *mut Elf) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn elf_update(__elf: *mut Elf, __cmd: Elf_Cmd) -> i64;
+    pub fn elf_update(__elf: *mut Elf, __cmd: Elf_Cmd::Type) -> i64;
 }
 extern "C" {
-    pub fn elf_kind(__elf: *mut Elf) -> Elf_Kind;
+    pub fn elf_kind(__elf: *mut Elf) -> Elf_Kind::Type;
 }
 extern "C" {
     pub fn elf_getbase(__elf: *mut Elf) -> i64;
 }
 extern "C" {
-    pub fn elf_getident(__elf: *mut Elf, __nbytes: *mut usize)
-     -> *mut ::libc::c_char;
+    pub fn elf_getident(__elf: *mut Elf, __nbytes: *mut usize) -> *mut ::libc::c_char;
 }
 extern "C" {
     pub fn elf32_getehdr(__elf: *mut Elf) -> *mut Elf32_Ehdr;
@@ -4582,8 +6044,7 @@ extern "C" {
     pub fn elf64_newehdr(__elf: *mut Elf) -> *mut Elf64_Ehdr;
 }
 extern "C" {
-    pub fn elf_getphdrnum(__elf: *mut Elf, __dst: *mut usize)
-     -> ::libc::c_int;
+    pub fn elf_getphdrnum(__elf: *mut Elf, __dst: *mut usize) -> ::libc::c_int;
 }
 extern "C" {
     pub fn elf32_getphdr(__elf: *mut Elf) -> *mut Elf32_Phdr;
@@ -4619,19 +6080,16 @@ extern "C" {
     pub fn elf_scnshndx(__scn: *mut Elf_Scn) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn elf_getshdrnum(__elf: *mut Elf, __dst: *mut usize)
-     -> ::libc::c_int;
+    pub fn elf_getshdrnum(__elf: *mut Elf, __dst: *mut usize) -> ::libc::c_int;
 }
 extern "C" {
     pub fn elf_getshnum(__elf: *mut Elf, __dst: *mut usize) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn elf_getshdrstrndx(__elf: *mut Elf, __dst: *mut usize)
-     -> ::libc::c_int;
+    pub fn elf_getshdrstrndx(__elf: *mut Elf, __dst: *mut usize) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn elf_getshstrndx(__elf: *mut Elf, __dst: *mut usize)
-     -> ::libc::c_int;
+    pub fn elf_getshstrndx(__elf: *mut Elf, __dst: *mut usize) -> ::libc::c_int;
 }
 extern "C" {
     pub fn elf32_getshdr(__scn: *mut Elf_Scn) -> *mut Elf32_Shdr;
@@ -4646,55 +6104,80 @@ extern "C" {
     pub fn elf64_getchdr(__scn: *mut Elf_Scn) -> *mut Elf64_Chdr;
 }
 extern "C" {
-    pub fn elf_compress(scn: *mut Elf_Scn, type_: ::libc::c_int,
-                        flags: ::libc::c_uint) -> ::libc::c_int;
+    pub fn elf_compress(
+        scn: *mut Elf_Scn,
+        type_: ::libc::c_int,
+        flags: ::libc::c_uint,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn elf_compress_gnu(scn: *mut Elf_Scn, compress: ::libc::c_int,
-                            flags: ::libc::c_uint) -> ::libc::c_int;
+    pub fn elf_compress_gnu(
+        scn: *mut Elf_Scn,
+        compress: ::libc::c_int,
+        flags: ::libc::c_uint,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn elf_flagelf(__elf: *mut Elf, __cmd: Elf_Cmd,
-                       __flags: ::libc::c_uint) -> ::libc::c_uint;
+    pub fn elf_flagelf(
+        __elf: *mut Elf,
+        __cmd: Elf_Cmd::Type,
+        __flags: ::libc::c_uint,
+    ) -> ::libc::c_uint;
 }
 extern "C" {
-    pub fn elf_flagehdr(__elf: *mut Elf, __cmd: Elf_Cmd,
-                        __flags: ::libc::c_uint) -> ::libc::c_uint;
+    pub fn elf_flagehdr(
+        __elf: *mut Elf,
+        __cmd: Elf_Cmd::Type,
+        __flags: ::libc::c_uint,
+    ) -> ::libc::c_uint;
 }
 extern "C" {
-    pub fn elf_flagphdr(__elf: *mut Elf, __cmd: Elf_Cmd,
-                        __flags: ::libc::c_uint) -> ::libc::c_uint;
+    pub fn elf_flagphdr(
+        __elf: *mut Elf,
+        __cmd: Elf_Cmd::Type,
+        __flags: ::libc::c_uint,
+    ) -> ::libc::c_uint;
 }
 extern "C" {
-    pub fn elf_flagscn(__scn: *mut Elf_Scn, __cmd: Elf_Cmd,
-                       __flags: ::libc::c_uint) -> ::libc::c_uint;
+    pub fn elf_flagscn(
+        __scn: *mut Elf_Scn,
+        __cmd: Elf_Cmd::Type,
+        __flags: ::libc::c_uint,
+    ) -> ::libc::c_uint;
 }
 extern "C" {
-    pub fn elf_flagdata(__data: *mut Elf_Data, __cmd: Elf_Cmd,
-                        __flags: ::libc::c_uint) -> ::libc::c_uint;
+    pub fn elf_flagdata(
+        __data: *mut Elf_Data,
+        __cmd: Elf_Cmd::Type,
+        __flags: ::libc::c_uint,
+    ) -> ::libc::c_uint;
 }
 extern "C" {
-    pub fn elf_flagshdr(__scn: *mut Elf_Scn, __cmd: Elf_Cmd,
-                        __flags: ::libc::c_uint) -> ::libc::c_uint;
+    pub fn elf_flagshdr(
+        __scn: *mut Elf_Scn,
+        __cmd: Elf_Cmd::Type,
+        __flags: ::libc::c_uint,
+    ) -> ::libc::c_uint;
 }
 extern "C" {
-    pub fn elf_getdata(__scn: *mut Elf_Scn, __data: *mut Elf_Data)
-     -> *mut Elf_Data;
+    pub fn elf_getdata(__scn: *mut Elf_Scn, __data: *mut Elf_Data) -> *mut Elf_Data;
 }
 extern "C" {
-    pub fn elf_rawdata(__scn: *mut Elf_Scn, __data: *mut Elf_Data)
-     -> *mut Elf_Data;
+    pub fn elf_rawdata(__scn: *mut Elf_Scn, __data: *mut Elf_Data) -> *mut Elf_Data;
 }
 extern "C" {
     pub fn elf_newdata(__scn: *mut Elf_Scn) -> *mut Elf_Data;
 }
 extern "C" {
-    pub fn elf_getdata_rawchunk(__elf: *mut Elf, __offset: i64, __size: usize,
-                                __type: Elf_Type) -> *mut Elf_Data;
+    pub fn elf_getdata_rawchunk(
+        __elf: *mut Elf,
+        __offset: i64,
+        __size: usize,
+        __type: Elf_Type::Type,
+    ) -> *mut Elf_Data;
 }
 extern "C" {
-    pub fn elf_strptr(__elf: *mut Elf, __index: usize, __offset: usize)
-     -> *mut ::libc::c_char;
+    pub fn elf_strptr(__elf: *mut Elf, __index: usize, __offset: usize) -> *mut ::libc::c_char;
 }
 extern "C" {
     pub fn elf_getarhdr(__elf: *mut Elf) -> *mut Elf_Arhdr;
@@ -4706,39 +6189,47 @@ extern "C" {
     pub fn elf_rand(__elf: *mut Elf, __offset: usize) -> usize;
 }
 extern "C" {
-    pub fn elf_getarsym(__elf: *mut Elf, __narsyms: *mut usize)
-     -> *mut Elf_Arsym;
+    pub fn elf_getarsym(__elf: *mut Elf, __narsyms: *mut usize) -> *mut Elf_Arsym;
 }
 extern "C" {
-    pub fn elf_cntl(__elf: *mut Elf, __cmd: Elf_Cmd) -> ::libc::c_int;
+    pub fn elf_cntl(__elf: *mut Elf, __cmd: Elf_Cmd::Type) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn elf_rawfile(__elf: *mut Elf, __nbytes: *mut usize)
-     -> *mut ::libc::c_char;
+    pub fn elf_rawfile(__elf: *mut Elf, __nbytes: *mut usize) -> *mut ::libc::c_char;
 }
 extern "C" {
-    pub fn elf32_fsize(__type: Elf_Type, __count: usize,
-                       __version: ::libc::c_uint) -> usize;
+    pub fn elf32_fsize(__type: Elf_Type::Type, __count: usize, __version: ::libc::c_uint) -> usize;
 }
 extern "C" {
-    pub fn elf64_fsize(__type: Elf_Type, __count: usize,
-                       __version: ::libc::c_uint) -> usize;
+    pub fn elf64_fsize(__type: Elf_Type::Type, __count: usize, __version: ::libc::c_uint) -> usize;
 }
 extern "C" {
-    pub fn elf32_xlatetom(__dest: *mut Elf_Data, __src: *const Elf_Data,
-                          __encode: ::libc::c_uint) -> *mut Elf_Data;
+    pub fn elf32_xlatetom(
+        __dest: *mut Elf_Data,
+        __src: *const Elf_Data,
+        __encode: ::libc::c_uint,
+    ) -> *mut Elf_Data;
 }
 extern "C" {
-    pub fn elf64_xlatetom(__dest: *mut Elf_Data, __src: *const Elf_Data,
-                          __encode: ::libc::c_uint) -> *mut Elf_Data;
+    pub fn elf64_xlatetom(
+        __dest: *mut Elf_Data,
+        __src: *const Elf_Data,
+        __encode: ::libc::c_uint,
+    ) -> *mut Elf_Data;
 }
 extern "C" {
-    pub fn elf32_xlatetof(__dest: *mut Elf_Data, __src: *const Elf_Data,
-                          __encode: ::libc::c_uint) -> *mut Elf_Data;
+    pub fn elf32_xlatetof(
+        __dest: *mut Elf_Data,
+        __src: *const Elf_Data,
+        __encode: ::libc::c_uint,
+    ) -> *mut Elf_Data;
 }
 extern "C" {
-    pub fn elf64_xlatetof(__dest: *mut Elf_Data, __src: *const Elf_Data,
-                          __encode: ::libc::c_uint) -> *mut Elf_Data;
+    pub fn elf64_xlatetof(
+        __dest: *mut Elf_Data,
+        __src: *const Elf_Data,
+        __encode: ::libc::c_uint,
+    ) -> *mut Elf_Data;
 }
 extern "C" {
     pub fn elf_errno() -> ::libc::c_int;
@@ -4794,178 +6285,275 @@ extern "C" {
     pub fn gelf_getclass(__elf: *mut Elf) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_fsize(__elf: *mut Elf, __type: Elf_Type, __count: usize,
-                      __version: ::libc::c_uint) -> usize;
+    pub fn gelf_fsize(
+        __elf: *mut Elf,
+        __type: Elf_Type::Type,
+        __count: usize,
+        __version: ::libc::c_uint,
+    ) -> usize;
 }
 extern "C" {
-    pub fn gelf_getehdr(__elf: *mut Elf, __dest: *mut GElf_Ehdr)
-     -> *mut GElf_Ehdr;
+    pub fn gelf_getehdr(__elf: *mut Elf, __dest: *mut GElf_Ehdr) -> *mut GElf_Ehdr;
 }
 extern "C" {
-    pub fn gelf_update_ehdr(__elf: *mut Elf, __src: *mut GElf_Ehdr)
-     -> ::libc::c_int;
+    pub fn gelf_update_ehdr(__elf: *mut Elf, __src: *mut GElf_Ehdr) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_newehdr(__elf: *mut Elf, __class: ::libc::c_int)
-     -> *mut ::libc::c_void;
+    pub fn gelf_newehdr(__elf: *mut Elf, __class: ::libc::c_int) -> *mut ::libc::c_void;
 }
 extern "C" {
     pub fn gelf_offscn(__elf: *mut Elf, __offset: GElf_Off) -> *mut Elf_Scn;
 }
 extern "C" {
-    pub fn gelf_getshdr(__scn: *mut Elf_Scn, __dst: *mut GElf_Shdr)
-     -> *mut GElf_Shdr;
+    pub fn gelf_getshdr(__scn: *mut Elf_Scn, __dst: *mut GElf_Shdr) -> *mut GElf_Shdr;
 }
 extern "C" {
-    pub fn gelf_update_shdr(__scn: *mut Elf_Scn, __src: *mut GElf_Shdr)
-     -> ::libc::c_int;
+    pub fn gelf_update_shdr(__scn: *mut Elf_Scn, __src: *mut GElf_Shdr) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getphdr(__elf: *mut Elf, __ndx: ::libc::c_int,
-                        __dst: *mut GElf_Phdr) -> *mut GElf_Phdr;
+    pub fn gelf_getphdr(
+        __elf: *mut Elf,
+        __ndx: ::libc::c_int,
+        __dst: *mut GElf_Phdr,
+    ) -> *mut GElf_Phdr;
 }
 extern "C" {
-    pub fn gelf_update_phdr(__elf: *mut Elf, __ndx: ::libc::c_int,
-                            __src: *mut GElf_Phdr) -> ::libc::c_int;
+    pub fn gelf_update_phdr(
+        __elf: *mut Elf,
+        __ndx: ::libc::c_int,
+        __src: *mut GElf_Phdr,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_newphdr(__elf: *mut Elf, __phnum: usize)
-     -> *mut ::libc::c_void;
+    pub fn gelf_newphdr(__elf: *mut Elf, __phnum: usize) -> *mut ::libc::c_void;
 }
 extern "C" {
-    pub fn gelf_getchdr(__scn: *mut Elf_Scn, __dst: *mut GElf_Chdr)
-     -> *mut GElf_Chdr;
+    pub fn gelf_getchdr(__scn: *mut Elf_Scn, __dst: *mut GElf_Chdr) -> *mut GElf_Chdr;
 }
 extern "C" {
-    pub fn gelf_xlatetom(__elf: *mut Elf, __dest: *mut Elf_Data,
-                         __src: *const Elf_Data, __encode: ::libc::c_uint)
-     -> *mut Elf_Data;
+    pub fn gelf_xlatetom(
+        __elf: *mut Elf,
+        __dest: *mut Elf_Data,
+        __src: *const Elf_Data,
+        __encode: ::libc::c_uint,
+    ) -> *mut Elf_Data;
 }
 extern "C" {
-    pub fn gelf_xlatetof(__elf: *mut Elf, __dest: *mut Elf_Data,
-                         __src: *const Elf_Data, __encode: ::libc::c_uint)
-     -> *mut Elf_Data;
+    pub fn gelf_xlatetof(
+        __elf: *mut Elf,
+        __dest: *mut Elf_Data,
+        __src: *const Elf_Data,
+        __encode: ::libc::c_uint,
+    ) -> *mut Elf_Data;
 }
 extern "C" {
-    pub fn gelf_getrel(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                       __dst: *mut GElf_Rel) -> *mut GElf_Rel;
+    pub fn gelf_getrel(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __dst: *mut GElf_Rel,
+    ) -> *mut GElf_Rel;
 }
 extern "C" {
-    pub fn gelf_getrela(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                        __dst: *mut GElf_Rela) -> *mut GElf_Rela;
+    pub fn gelf_getrela(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __dst: *mut GElf_Rela,
+    ) -> *mut GElf_Rela;
 }
 extern "C" {
-    pub fn gelf_update_rel(__dst: *mut Elf_Data, __ndx: ::libc::c_int,
-                           __src: *mut GElf_Rel) -> ::libc::c_int;
+    pub fn gelf_update_rel(
+        __dst: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __src: *mut GElf_Rel,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_update_rela(__dst: *mut Elf_Data, __ndx: ::libc::c_int,
-                            __src: *mut GElf_Rela) -> ::libc::c_int;
+    pub fn gelf_update_rela(
+        __dst: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __src: *mut GElf_Rela,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getsym(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                       __dst: *mut GElf_Sym) -> *mut GElf_Sym;
+    pub fn gelf_getsym(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __dst: *mut GElf_Sym,
+    ) -> *mut GElf_Sym;
 }
 extern "C" {
-    pub fn gelf_update_sym(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                           __src: *mut GElf_Sym) -> ::libc::c_int;
+    pub fn gelf_update_sym(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __src: *mut GElf_Sym,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getsymshndx(__symdata: *mut Elf_Data,
-                            __shndxdata: *mut Elf_Data, __ndx: ::libc::c_int,
-                            __sym: *mut GElf_Sym, __xshndx: *mut Elf32_Word)
-     -> *mut GElf_Sym;
+    pub fn gelf_getsymshndx(
+        __symdata: *mut Elf_Data,
+        __shndxdata: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __sym: *mut GElf_Sym,
+        __xshndx: *mut Elf32_Word,
+    ) -> *mut GElf_Sym;
 }
 extern "C" {
-    pub fn gelf_update_symshndx(__symdata: *mut Elf_Data,
-                                __shndxdata: *mut Elf_Data,
-                                __ndx: ::libc::c_int, __sym: *mut GElf_Sym,
-                                __xshndx: Elf32_Word) -> ::libc::c_int;
+    pub fn gelf_update_symshndx(
+        __symdata: *mut Elf_Data,
+        __shndxdata: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __sym: *mut GElf_Sym,
+        __xshndx: Elf32_Word,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getsyminfo(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                           __dst: *mut GElf_Syminfo) -> *mut GElf_Syminfo;
+    pub fn gelf_getsyminfo(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __dst: *mut GElf_Syminfo,
+    ) -> *mut GElf_Syminfo;
 }
 extern "C" {
-    pub fn gelf_update_syminfo(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                               __src: *mut GElf_Syminfo) -> ::libc::c_int;
+    pub fn gelf_update_syminfo(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __src: *mut GElf_Syminfo,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getdyn(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                       __dst: *mut GElf_Dyn) -> *mut GElf_Dyn;
+    pub fn gelf_getdyn(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __dst: *mut GElf_Dyn,
+    ) -> *mut GElf_Dyn;
 }
 extern "C" {
-    pub fn gelf_update_dyn(__dst: *mut Elf_Data, __ndx: ::libc::c_int,
-                           __src: *mut GElf_Dyn) -> ::libc::c_int;
+    pub fn gelf_update_dyn(
+        __dst: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __src: *mut GElf_Dyn,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getmove(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                        __dst: *mut GElf_Move) -> *mut GElf_Move;
+    pub fn gelf_getmove(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __dst: *mut GElf_Move,
+    ) -> *mut GElf_Move;
 }
 extern "C" {
-    pub fn gelf_update_move(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                            __src: *mut GElf_Move) -> ::libc::c_int;
+    pub fn gelf_update_move(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __src: *mut GElf_Move,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getlib(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                       __dst: *mut GElf_Lib) -> *mut GElf_Lib;
+    pub fn gelf_getlib(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __dst: *mut GElf_Lib,
+    ) -> *mut GElf_Lib;
 }
 extern "C" {
-    pub fn gelf_update_lib(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                           __src: *mut GElf_Lib) -> ::libc::c_int;
+    pub fn gelf_update_lib(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __src: *mut GElf_Lib,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getversym(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                          __dst: *mut GElf_Versym) -> *mut GElf_Versym;
+    pub fn gelf_getversym(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __dst: *mut GElf_Versym,
+    ) -> *mut GElf_Versym;
 }
 extern "C" {
-    pub fn gelf_update_versym(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                              __src: *mut GElf_Versym) -> ::libc::c_int;
+    pub fn gelf_update_versym(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __src: *mut GElf_Versym,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getverneed(__data: *mut Elf_Data, __offset: ::libc::c_int,
-                           __dst: *mut GElf_Verneed) -> *mut GElf_Verneed;
+    pub fn gelf_getverneed(
+        __data: *mut Elf_Data,
+        __offset: ::libc::c_int,
+        __dst: *mut GElf_Verneed,
+    ) -> *mut GElf_Verneed;
 }
 extern "C" {
-    pub fn gelf_update_verneed(__data: *mut Elf_Data, __offset: ::libc::c_int,
-                               __src: *mut GElf_Verneed) -> ::libc::c_int;
+    pub fn gelf_update_verneed(
+        __data: *mut Elf_Data,
+        __offset: ::libc::c_int,
+        __src: *mut GElf_Verneed,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getvernaux(__data: *mut Elf_Data, __offset: ::libc::c_int,
-                           __dst: *mut GElf_Vernaux) -> *mut GElf_Vernaux;
+    pub fn gelf_getvernaux(
+        __data: *mut Elf_Data,
+        __offset: ::libc::c_int,
+        __dst: *mut GElf_Vernaux,
+    ) -> *mut GElf_Vernaux;
 }
 extern "C" {
-    pub fn gelf_update_vernaux(__data: *mut Elf_Data, __offset: ::libc::c_int,
-                               __src: *mut GElf_Vernaux) -> ::libc::c_int;
+    pub fn gelf_update_vernaux(
+        __data: *mut Elf_Data,
+        __offset: ::libc::c_int,
+        __src: *mut GElf_Vernaux,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getverdef(__data: *mut Elf_Data, __offset: ::libc::c_int,
-                          __dst: *mut GElf_Verdef) -> *mut GElf_Verdef;
+    pub fn gelf_getverdef(
+        __data: *mut Elf_Data,
+        __offset: ::libc::c_int,
+        __dst: *mut GElf_Verdef,
+    ) -> *mut GElf_Verdef;
 }
 extern "C" {
-    pub fn gelf_update_verdef(__data: *mut Elf_Data, __offset: ::libc::c_int,
-                              __src: *mut GElf_Verdef) -> ::libc::c_int;
+    pub fn gelf_update_verdef(
+        __data: *mut Elf_Data,
+        __offset: ::libc::c_int,
+        __src: *mut GElf_Verdef,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getverdaux(__data: *mut Elf_Data, __offset: ::libc::c_int,
-                           __dst: *mut GElf_Verdaux) -> *mut GElf_Verdaux;
+    pub fn gelf_getverdaux(
+        __data: *mut Elf_Data,
+        __offset: ::libc::c_int,
+        __dst: *mut GElf_Verdaux,
+    ) -> *mut GElf_Verdaux;
 }
 extern "C" {
-    pub fn gelf_update_verdaux(__data: *mut Elf_Data, __offset: ::libc::c_int,
-                               __src: *mut GElf_Verdaux) -> ::libc::c_int;
+    pub fn gelf_update_verdaux(
+        __data: *mut Elf_Data,
+        __offset: ::libc::c_int,
+        __src: *mut GElf_Verdaux,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getauxv(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                        __dst: *mut GElf_auxv_t) -> *mut GElf_auxv_t;
+    pub fn gelf_getauxv(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __dst: *mut GElf_auxv_t,
+    ) -> *mut GElf_auxv_t;
 }
 extern "C" {
-    pub fn gelf_update_auxv(__data: *mut Elf_Data, __ndx: ::libc::c_int,
-                            __src: *mut GElf_auxv_t) -> ::libc::c_int;
+    pub fn gelf_update_auxv(
+        __data: *mut Elf_Data,
+        __ndx: ::libc::c_int,
+        __src: *mut GElf_auxv_t,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn gelf_getnote(__data: *mut Elf_Data, __offset: usize,
-                        __result: *mut GElf_Nhdr, __name_offset: *mut usize,
-                        __desc_offset: *mut usize) -> usize;
+    pub fn gelf_getnote(
+        __data: *mut Elf_Data,
+        __offset: usize,
+        __result: *mut GElf_Nhdr,
+        __name_offset: *mut usize,
+        __desc_offset: *mut usize,
+    ) -> usize;
 }
 extern "C" {
     pub fn gelf_checksum(__elf: *mut Elf) -> ::libc::c_long;

@@ -46,6 +46,8 @@ $(LIBELF): $(LIBELF_H) $(LIBELF_DEPS)
 	    --whitelist-var '(STB|STN|STO|STT|STV)_.*' \
 	    --whitelist-var 'SYMINFO_.*' \
 	    --whitelist-var 'VER_.*' \
+	    --constified-enum-module 'Elf_(Cmd|Kind|Type)' \
+	    --impl-debug \
 	    --raw-line '#![allow(bad_style)]' \
 	    --ctypes-prefix=::libc \
 	    --raw-line 'use libc::{time_t, uid_t, gid_t, mode_t};' \
@@ -68,7 +70,8 @@ $(LIBDW): $(LIBDW_H) $(LIBDW_DEPS)
 	    --whitelist-type 'Dwfl|Dwfl_.*|argp' \
 	    --whitelist-type 'Dwelf_.*' \
 	    --whitelist-var '(DW|DWARF)_.*' \
-	    --constified-enum '(DW|DWARF)_.*' \
+	    --constified-enum-module 'Dwarf_Cmd' \
+	    --impl-debug \
 	    --raw-line '#![allow(bad_style)]' \
 	    --ctypes-prefix=::libc \
 	    --raw-line 'use libc::{FILE, pid_t};' \

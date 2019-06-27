@@ -4,19 +4,65 @@
 use libc::{FILE, pid_t};
 use libelf_sys::*;
 
-pub const DWARF_GETMACROS_START: ::libc::c_longlong = -9223372036854775808;
-pub const DW_AT_subscr_data: ::libc::c_uint = 10;
-pub const DW_AT_element_list: ::libc::c_uint = 15;
-pub const DW_AT_member: ::libc::c_uint = 20;
-pub const DW_ADDR_none: ::libc::c_uint = 0;
-#[repr(u32)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub enum Dwarf_Cmd { DWARF_C_READ = 0, DWARF_C_RDWR = 1, DWARF_C_WRITE = 2, }
+#[repr(C)]
+pub struct __BindgenUnionField<T>(::std::marker::PhantomData<T>);
+impl<T> __BindgenUnionField<T> {
+    #[inline]
+    pub const fn new() -> Self {
+        __BindgenUnionField(::std::marker::PhantomData)
+    }
+    #[inline]
+    pub unsafe fn as_ref(&self) -> &T {
+        ::std::mem::transmute(self)
+    }
+    #[inline]
+    pub unsafe fn as_mut(&mut self) -> &mut T {
+        ::std::mem::transmute(self)
+    }
+}
+impl<T> ::std::default::Default for __BindgenUnionField<T> {
+    #[inline]
+    fn default() -> Self {
+        Self::new()
+    }
+}
+impl<T> ::std::clone::Clone for __BindgenUnionField<T> {
+    #[inline]
+    fn clone(&self) -> Self {
+        Self::new()
+    }
+}
+impl<T> ::std::marker::Copy for __BindgenUnionField<T> {}
+impl<T> ::std::fmt::Debug for __BindgenUnionField<T> {
+    fn fmt(&self, fmt: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        fmt.write_str("__BindgenUnionField")
+    }
+}
+impl<T> ::std::hash::Hash for __BindgenUnionField<T> {
+    fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {}
+}
+impl<T> ::std::cmp::PartialEq for __BindgenUnionField<T> {
+    fn eq(&self, _other: &__BindgenUnionField<T>) -> bool {
+        true
+    }
+}
+impl<T> ::std::cmp::Eq for __BindgenUnionField<T> {}
+pub const DWARF_GETMACROS_START: i64 = -9223372036854775808;
+pub const DW_AT_subscr_data: u32 = 10;
+pub const DW_AT_element_list: u32 = 15;
+pub const DW_AT_member: u32 = 20;
+pub const DW_ADDR_none: u32 = 0;
+pub mod Dwarf_Cmd {
+    pub type Type = u32;
+    pub const DWARF_C_READ: Type = 0;
+    pub const DWARF_C_RDWR: Type = 1;
+    pub const DWARF_C_WRITE: Type = 2;
+}
 pub const DWARF_CB_OK: _bindgen_ty_4 = 0;
 pub const DWARF_CB_ABORT: _bindgen_ty_4 = 1;
-pub type _bindgen_ty_4 = ::libc::c_uint;
+pub type _bindgen_ty_4 = u32;
 pub const DW_TAG_invalid: _bindgen_ty_5 = 0;
-pub type _bindgen_ty_5 = ::libc::c_uint;
+pub type _bindgen_ty_5 = u32;
 pub type Dwarf_Off = GElf_Off;
 pub type Dwarf_Addr = GElf_Addr;
 pub type Dwarf_Word = GElf_Xword;
@@ -69,7 +115,7 @@ pub struct Dwarf_Macro_s {
 }
 pub type Dwarf_Macro = Dwarf_Macro_s;
 #[repr(C)]
-#[derive(Debug, Copy)]
+#[derive(Debug, Copy, Clone)]
 pub struct Dwarf_Attribute {
     pub code: ::libc::c_uint,
     pub form: ::libc::c_uint,
@@ -78,62 +124,102 @@ pub struct Dwarf_Attribute {
 }
 #[test]
 fn bindgen_test_layout_Dwarf_Attribute() {
-    assert_eq!(::std::mem::size_of::<Dwarf_Attribute>() , 24usize , concat ! (
-               "Size of: " , stringify ! ( Dwarf_Attribute ) ));
-    assert_eq! (::std::mem::align_of::<Dwarf_Attribute>() , 8usize , concat !
-                ( "Alignment of " , stringify ! ( Dwarf_Attribute ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Attribute ) ) . code as * const _
-                as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Attribute ) ,
-                "::" , stringify ! ( code ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Attribute ) ) . form as * const _
-                as usize } , 4usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Attribute ) ,
-                "::" , stringify ! ( form ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Attribute ) ) . valp as * const _
-                as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Attribute ) ,
-                "::" , stringify ! ( valp ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Attribute ) ) . cu as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Attribute ) ,
-                "::" , stringify ! ( cu ) ));
-}
-impl Clone for Dwarf_Attribute {
-    fn clone(&self) -> Self { *self }
+    assert_eq!(
+        ::std::mem::size_of::<Dwarf_Attribute>(),
+        24usize,
+        concat!("Size of: ", stringify!(Dwarf_Attribute))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Dwarf_Attribute>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Dwarf_Attribute))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Attribute>())).code as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Attribute),
+            "::",
+            stringify!(code)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Attribute>())).form as *const _ as usize },
+        4usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Attribute),
+            "::",
+            stringify!(form)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Attribute>())).valp as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Attribute),
+            "::",
+            stringify!(valp)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Attribute>())).cu as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Attribute),
+            "::",
+            stringify!(cu)
+        )
+    );
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Dwarf_Block {
     pub length: Dwarf_Word,
     pub data: *mut ::libc::c_uchar,
 }
 #[test]
 fn bindgen_test_layout_Dwarf_Block() {
-    assert_eq!(::std::mem::size_of::<Dwarf_Block>() , 16usize , concat ! (
-               "Size of: " , stringify ! ( Dwarf_Block ) ));
-    assert_eq! (::std::mem::align_of::<Dwarf_Block>() , 8usize , concat ! (
-                "Alignment of " , stringify ! ( Dwarf_Block ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Block ) ) . length as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Block ) , "::" ,
-                stringify ! ( length ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Block ) ) . data as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Block ) , "::" ,
-                stringify ! ( data ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Dwarf_Block>(),
+        16usize,
+        concat!("Size of: ", stringify!(Dwarf_Block))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Dwarf_Block>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Dwarf_Block))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Block>())).length as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Block),
+            "::",
+            stringify!(length)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Block>())).data as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Block),
+            "::",
+            stringify!(data)
+        )
+    );
 }
-impl Clone for Dwarf_Block {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Dwarf_Block {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Dwarf_Block {{ data: {:?} }}", self.data)
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
+#[derive(Debug, Copy, Clone)]
 pub struct Dwarf_Die {
     pub addr: *mut ::libc::c_void,
     pub cu: *mut Dwarf_CU,
@@ -142,36 +228,58 @@ pub struct Dwarf_Die {
 }
 #[test]
 fn bindgen_test_layout_Dwarf_Die() {
-    assert_eq!(::std::mem::size_of::<Dwarf_Die>() , 32usize , concat ! (
-               "Size of: " , stringify ! ( Dwarf_Die ) ));
-    assert_eq! (::std::mem::align_of::<Dwarf_Die>() , 8usize , concat ! (
-                "Alignment of " , stringify ! ( Dwarf_Die ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Die ) ) . addr as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Die ) , "::" ,
-                stringify ! ( addr ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Die ) ) . cu as * const _ as usize
-                } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Die ) , "::" ,
-                stringify ! ( cu ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Die ) ) . abbrev as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Die ) , "::" ,
-                stringify ! ( abbrev ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Die ) ) . padding__ as * const _ as
-                usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Die ) , "::" ,
-                stringify ! ( padding__ ) ));
-}
-impl Clone for Dwarf_Die {
-    fn clone(&self) -> Self { *self }
+    assert_eq!(
+        ::std::mem::size_of::<Dwarf_Die>(),
+        32usize,
+        concat!("Size of: ", stringify!(Dwarf_Die))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Dwarf_Die>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Dwarf_Die))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Die>())).addr as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Die),
+            "::",
+            stringify!(addr)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Die>())).cu as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Die),
+            "::",
+            stringify!(cu)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Die>())).abbrev as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Die),
+            "::",
+            stringify!(abbrev)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Die>())).padding__ as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Die),
+            "::",
+            stringify!(padding__)
+        )
+    );
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Dwarf_Global {
     pub cu_offset: Dwarf_Off,
     pub die_offset: Dwarf_Off,
@@ -179,31 +287,53 @@ pub struct Dwarf_Global {
 }
 #[test]
 fn bindgen_test_layout_Dwarf_Global() {
-    assert_eq!(::std::mem::size_of::<Dwarf_Global>() , 24usize , concat ! (
-               "Size of: " , stringify ! ( Dwarf_Global ) ));
-    assert_eq! (::std::mem::align_of::<Dwarf_Global>() , 8usize , concat ! (
-                "Alignment of " , stringify ! ( Dwarf_Global ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Global ) ) . cu_offset as * const _
-                as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Global ) , "::" ,
-                stringify ! ( cu_offset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Global ) ) . die_offset as * const
-                _ as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Global ) , "::" ,
-                stringify ! ( die_offset ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Global ) ) . name as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Global ) , "::" ,
-                stringify ! ( name ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Dwarf_Global>(),
+        24usize,
+        concat!("Size of: ", stringify!(Dwarf_Global))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Dwarf_Global>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Dwarf_Global))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Global>())).cu_offset as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Global),
+            "::",
+            stringify!(cu_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Global>())).die_offset as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Global),
+            "::",
+            stringify!(die_offset)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Global>())).name as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Global),
+            "::",
+            stringify!(name)
+        )
+    );
 }
-impl Clone for Dwarf_Global {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Dwarf_Global {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Dwarf_Global {{ name: {:?} }}", self.name)
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Dwarf_Op {
     pub atom: u8,
     pub number: Dwarf_Word,
@@ -212,36 +342,63 @@ pub struct Dwarf_Op {
 }
 #[test]
 fn bindgen_test_layout_Dwarf_Op() {
-    assert_eq!(::std::mem::size_of::<Dwarf_Op>() , 32usize , concat ! (
-               "Size of: " , stringify ! ( Dwarf_Op ) ));
-    assert_eq! (::std::mem::align_of::<Dwarf_Op>() , 8usize , concat ! (
-                "Alignment of " , stringify ! ( Dwarf_Op ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Op ) ) . atom as * const _ as usize
-                } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Op ) , "::" ,
-                stringify ! ( atom ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Op ) ) . number as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Op ) , "::" ,
-                stringify ! ( number ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Op ) ) . number2 as * const _ as
-                usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Op ) , "::" ,
-                stringify ! ( number2 ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_Op ) ) . offset as * const _ as
-                usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_Op ) , "::" ,
-                stringify ! ( offset ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Dwarf_Op>(),
+        32usize,
+        concat!("Size of: ", stringify!(Dwarf_Op))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Dwarf_Op>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Dwarf_Op))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Op>())).atom as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Op),
+            "::",
+            stringify!(atom)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Op>())).number as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Op),
+            "::",
+            stringify!(number)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Op>())).number2 as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Op),
+            "::",
+            stringify!(number2)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_Op>())).offset as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_Op),
+            "::",
+            stringify!(offset)
+        )
+    );
 }
-impl Clone for Dwarf_Op {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Dwarf_Op {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Dwarf_Op {{  }}")
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Dwarf_CIE {
     pub CIE_id: Dwarf_Off,
     pub initial_instructions: *const u8,
@@ -256,67 +413,131 @@ pub struct Dwarf_CIE {
 }
 #[test]
 fn bindgen_test_layout_Dwarf_CIE() {
-    assert_eq!(::std::mem::size_of::<Dwarf_CIE>() , 80usize , concat ! (
-               "Size of: " , stringify ! ( Dwarf_CIE ) ));
-    assert_eq! (::std::mem::align_of::<Dwarf_CIE>() , 8usize , concat ! (
-                "Alignment of " , stringify ! ( Dwarf_CIE ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CIE ) ) . CIE_id as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CIE ) , "::" ,
-                stringify ! ( CIE_id ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CIE ) ) . initial_instructions as *
-                const _ as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CIE ) , "::" ,
-                stringify ! ( initial_instructions ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CIE ) ) . initial_instructions_end
-                as * const _ as usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CIE ) , "::" ,
-                stringify ! ( initial_instructions_end ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CIE ) ) . code_alignment_factor as
-                * const _ as usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CIE ) , "::" ,
-                stringify ! ( code_alignment_factor ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CIE ) ) . data_alignment_factor as
-                * const _ as usize } , 32usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CIE ) , "::" ,
-                stringify ! ( data_alignment_factor ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CIE ) ) . return_address_register
-                as * const _ as usize } , 40usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CIE ) , "::" ,
-                stringify ! ( return_address_register ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CIE ) ) . augmentation as * const _
-                as usize } , 48usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CIE ) , "::" ,
-                stringify ! ( augmentation ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CIE ) ) . augmentation_data as *
-                const _ as usize } , 56usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CIE ) , "::" ,
-                stringify ! ( augmentation_data ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CIE ) ) . augmentation_data_size as
-                * const _ as usize } , 64usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CIE ) , "::" ,
-                stringify ! ( augmentation_data_size ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CIE ) ) .
-                fde_augmentation_data_size as * const _ as usize } , 72usize ,
-                concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CIE ) , "::" ,
-                stringify ! ( fde_augmentation_data_size ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Dwarf_CIE>(),
+        80usize,
+        concat!("Size of: ", stringify!(Dwarf_CIE))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Dwarf_CIE>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Dwarf_CIE))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_CIE>())).CIE_id as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CIE),
+            "::",
+            stringify!(CIE_id)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_CIE>())).initial_instructions as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CIE),
+            "::",
+            stringify!(initial_instructions)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Dwarf_CIE>())).initial_instructions_end as *const _ as usize
+        },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CIE),
+            "::",
+            stringify!(initial_instructions_end)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_CIE>())).code_alignment_factor as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CIE),
+            "::",
+            stringify!(code_alignment_factor)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_CIE>())).data_alignment_factor as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CIE),
+            "::",
+            stringify!(data_alignment_factor)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Dwarf_CIE>())).return_address_register as *const _ as usize
+        },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CIE),
+            "::",
+            stringify!(return_address_register)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_CIE>())).augmentation as *const _ as usize },
+        48usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CIE),
+            "::",
+            stringify!(augmentation)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_CIE>())).augmentation_data as *const _ as usize },
+        56usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CIE),
+            "::",
+            stringify!(augmentation_data)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Dwarf_CIE>())).augmentation_data_size as *const _ as usize
+        },
+        64usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CIE),
+            "::",
+            stringify!(augmentation_data_size)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Dwarf_CIE>())).fde_augmentation_data_size as *const _ as usize
+        },
+        72usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CIE),
+            "::",
+            stringify!(fde_augmentation_data_size)
+        )
+    );
 }
-impl Clone for Dwarf_CIE {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Dwarf_CIE {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write ! ( f , "Dwarf_CIE {{ initial_instructions: {:?}, initial_instructions_end: {:?}, augmentation: {:?}, augmentation_data: {:?} }}" , self . initial_instructions , self . initial_instructions_end , self . augmentation , self . augmentation_data )
+    }
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
 pub struct Dwarf_FDE {
     pub CIE_pointer: Dwarf_Off,
     pub start: *const u8,
@@ -324,61 +545,110 @@ pub struct Dwarf_FDE {
 }
 #[test]
 fn bindgen_test_layout_Dwarf_FDE() {
-    assert_eq!(::std::mem::size_of::<Dwarf_FDE>() , 24usize , concat ! (
-               "Size of: " , stringify ! ( Dwarf_FDE ) ));
-    assert_eq! (::std::mem::align_of::<Dwarf_FDE>() , 8usize , concat ! (
-                "Alignment of " , stringify ! ( Dwarf_FDE ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_FDE ) ) . CIE_pointer as * const _
-                as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_FDE ) , "::" ,
-                stringify ! ( CIE_pointer ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_FDE ) ) . start as * const _ as
-                usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_FDE ) , "::" ,
-                stringify ! ( start ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_FDE ) ) . end as * const _ as usize
-                } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_FDE ) , "::" ,
-                stringify ! ( end ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Dwarf_FDE>(),
+        24usize,
+        concat!("Size of: ", stringify!(Dwarf_FDE))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Dwarf_FDE>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Dwarf_FDE))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_FDE>())).CIE_pointer as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_FDE),
+            "::",
+            stringify!(CIE_pointer)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_FDE>())).start as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_FDE),
+            "::",
+            stringify!(start)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_FDE>())).end as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_FDE),
+            "::",
+            stringify!(end)
+        )
+    );
 }
-impl Clone for Dwarf_FDE {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Dwarf_FDE {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(
+            f,
+            "Dwarf_FDE {{ start: {:?}, end: {:?} }}",
+            self.start, self.end
+        )
+    }
 }
 #[repr(C)]
-#[derive(Copy)]
-pub union Dwarf_CFI_Entry {
-    pub CIE_id: Dwarf_Off,
-    pub cie: Dwarf_CIE,
-    pub fde: Dwarf_FDE,
-    _bindgen_union_align: [u64; 10usize],
+pub struct Dwarf_CFI_Entry {
+    pub CIE_id: __BindgenUnionField<Dwarf_Off>,
+    pub cie: __BindgenUnionField<Dwarf_CIE>,
+    pub fde: __BindgenUnionField<Dwarf_FDE>,
+    pub bindgen_union_field: [u64; 10usize],
 }
 #[test]
 fn bindgen_test_layout_Dwarf_CFI_Entry() {
-    assert_eq!(::std::mem::size_of::<Dwarf_CFI_Entry>() , 80usize , concat ! (
-               "Size of: " , stringify ! ( Dwarf_CFI_Entry ) ));
-    assert_eq! (::std::mem::align_of::<Dwarf_CFI_Entry>() , 8usize , concat !
-                ( "Alignment of " , stringify ! ( Dwarf_CFI_Entry ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CFI_Entry ) ) . CIE_id as * const _
-                as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CFI_Entry ) ,
-                "::" , stringify ! ( CIE_id ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CFI_Entry ) ) . cie as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CFI_Entry ) ,
-                "::" , stringify ! ( cie ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwarf_CFI_Entry ) ) . fde as * const _ as
-                usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwarf_CFI_Entry ) ,
-                "::" , stringify ! ( fde ) ));
+    assert_eq!(
+        ::std::mem::size_of::<Dwarf_CFI_Entry>(),
+        80usize,
+        concat!("Size of: ", stringify!(Dwarf_CFI_Entry))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Dwarf_CFI_Entry>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Dwarf_CFI_Entry))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_CFI_Entry>())).CIE_id as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CFI_Entry),
+            "::",
+            stringify!(CIE_id)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_CFI_Entry>())).cie as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CFI_Entry),
+            "::",
+            stringify!(cie)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwarf_CFI_Entry>())).fde as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwarf_CFI_Entry),
+            "::",
+            stringify!(fde)
+        )
+    );
 }
-impl Clone for Dwarf_CFI_Entry {
-    fn clone(&self) -> Self { *self }
+impl ::std::fmt::Debug for Dwarf_CFI_Entry {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        write!(f, "Dwarf_CFI_Entry {{ union }}")
+    }
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -399,11 +669,11 @@ pub struct Dwarf {
 }
 pub type Dwarf_OOM = ::std::option::Option<unsafe extern "C" fn()>;
 extern "C" {
-    pub fn dwarf_begin(fildes: ::libc::c_int, cmd: Dwarf_Cmd) -> *mut Dwarf;
+    pub fn dwarf_begin(fildes: ::libc::c_int, cmd: Dwarf_Cmd::Type) -> *mut Dwarf;
 }
 extern "C" {
-    pub fn dwarf_begin_elf(elf: *mut Elf, cmd: Dwarf_Cmd,
-                           scngrp: *mut Elf_Scn) -> *mut Dwarf;
+    pub fn dwarf_begin_elf(elf: *mut Elf, cmd: Dwarf_Cmd::Type, scngrp: *mut Elf_Scn)
+        -> *mut Dwarf;
 }
 extern "C" {
     pub fn dwarf_getelf(dwarf: *mut Dwarf) -> *mut Elf;
@@ -424,26 +694,39 @@ extern "C" {
     pub fn dwarf_getscn_info(dwarf: *mut Dwarf) -> *mut Elf_Data;
 }
 extern "C" {
-    pub fn dwarf_nextcu(dwarf: *mut Dwarf, off: Dwarf_Off,
-                        next_off: *mut Dwarf_Off, header_sizep: *mut usize,
-                        abbrev_offsetp: *mut Dwarf_Off,
-                        address_sizep: *mut u8, offset_sizep: *mut u8)
-     -> ::libc::c_int;
+    pub fn dwarf_nextcu(
+        dwarf: *mut Dwarf,
+        off: Dwarf_Off,
+        next_off: *mut Dwarf_Off,
+        header_sizep: *mut usize,
+        abbrev_offsetp: *mut Dwarf_Off,
+        address_sizep: *mut u8,
+        offset_sizep: *mut u8,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_next_unit(dwarf: *mut Dwarf, off: Dwarf_Off,
-                           next_off: *mut Dwarf_Off, header_sizep: *mut usize,
-                           versionp: *mut Dwarf_Half,
-                           abbrev_offsetp: *mut Dwarf_Off,
-                           address_sizep: *mut u8, offset_sizep: *mut u8,
-                           type_signaturep: *mut u64,
-                           type_offsetp: *mut Dwarf_Off) -> ::libc::c_int;
+    pub fn dwarf_next_unit(
+        dwarf: *mut Dwarf,
+        off: Dwarf_Off,
+        next_off: *mut Dwarf_Off,
+        header_sizep: *mut usize,
+        versionp: *mut Dwarf_Half,
+        abbrev_offsetp: *mut Dwarf_Off,
+        address_sizep: *mut u8,
+        offset_sizep: *mut u8,
+        type_signaturep: *mut u64,
+        type_offsetp: *mut Dwarf_Off,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_next_cfi(e_ident: *const ::libc::c_uchar,
-                          data: *mut Elf_Data, eh_frame_p: bool,
-                          offset: Dwarf_Off, next_offset: *mut Dwarf_Off,
-                          entry: *mut Dwarf_CFI_Entry) -> ::libc::c_int;
+    pub fn dwarf_next_cfi(
+        e_ident: *const ::libc::c_uchar,
+        data: *mut Elf_Data,
+        eh_frame_p: bool,
+        offset: Dwarf_Off,
+        next_offset: *mut Dwarf_Off,
+        entry: *mut Dwarf_CFI_Entry,
+    ) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwarf_getcfi(dwarf: *mut Dwarf) -> *mut Dwarf_CFI;
@@ -455,12 +738,18 @@ extern "C" {
     pub fn dwarf_cfi_end(cache: *mut Dwarf_CFI) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_offdie(dbg: *mut Dwarf, offset: Dwarf_Off,
-                        result: *mut Dwarf_Die) -> *mut Dwarf_Die;
+    pub fn dwarf_offdie(
+        dbg: *mut Dwarf,
+        offset: Dwarf_Off,
+        result: *mut Dwarf_Die,
+    ) -> *mut Dwarf_Die;
 }
 extern "C" {
-    pub fn dwarf_offdie_types(dbg: *mut Dwarf, offset: Dwarf_Off,
-                              result: *mut Dwarf_Die) -> *mut Dwarf_Die;
+    pub fn dwarf_offdie_types(
+        dbg: *mut Dwarf,
+        offset: Dwarf_Off,
+        result: *mut Dwarf_Die,
+    ) -> *mut Dwarf_Die;
 }
 extern "C" {
     pub fn dwarf_dieoffset(die: *mut Dwarf_Die) -> Dwarf_Off;
@@ -469,72 +758,85 @@ extern "C" {
     pub fn dwarf_cuoffset(die: *mut Dwarf_Die) -> Dwarf_Off;
 }
 extern "C" {
-    pub fn dwarf_diecu(die: *mut Dwarf_Die, result: *mut Dwarf_Die,
-                       address_sizep: *mut u8, offset_sizep: *mut u8)
-     -> *mut Dwarf_Die;
+    pub fn dwarf_diecu(
+        die: *mut Dwarf_Die,
+        result: *mut Dwarf_Die,
+        address_sizep: *mut u8,
+        offset_sizep: *mut u8,
+    ) -> *mut Dwarf_Die;
 }
 extern "C" {
-    pub fn dwarf_cu_die(cu: *mut Dwarf_CU, result: *mut Dwarf_Die,
-                        versionp: *mut Dwarf_Half,
-                        abbrev_offsetp: *mut Dwarf_Off,
-                        address_sizep: *mut u8, offset_sizep: *mut u8,
-                        type_signaturep: *mut u64,
-                        type_offsetp: *mut Dwarf_Off) -> *mut Dwarf_Die;
+    pub fn dwarf_cu_die(
+        cu: *mut Dwarf_CU,
+        result: *mut Dwarf_Die,
+        versionp: *mut Dwarf_Half,
+        abbrev_offsetp: *mut Dwarf_Off,
+        address_sizep: *mut u8,
+        offset_sizep: *mut u8,
+        type_signaturep: *mut u64,
+        type_offsetp: *mut Dwarf_Off,
+    ) -> *mut Dwarf_Die;
 }
 extern "C" {
-    pub fn dwarf_addrdie(dbg: *mut Dwarf, addr: Dwarf_Addr,
-                         result: *mut Dwarf_Die) -> *mut Dwarf_Die;
+    pub fn dwarf_addrdie(
+        dbg: *mut Dwarf,
+        addr: Dwarf_Addr,
+        result: *mut Dwarf_Die,
+    ) -> *mut Dwarf_Die;
 }
 extern "C" {
-    pub fn dwarf_child(die: *mut Dwarf_Die, result: *mut Dwarf_Die)
-     -> ::libc::c_int;
+    pub fn dwarf_child(die: *mut Dwarf_Die, result: *mut Dwarf_Die) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_siblingof(die: *mut Dwarf_Die, result: *mut Dwarf_Die)
-     -> ::libc::c_int;
+    pub fn dwarf_siblingof(die: *mut Dwarf_Die, result: *mut Dwarf_Die) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_peel_type(die: *mut Dwarf_Die, result: *mut Dwarf_Die)
-     -> ::libc::c_int;
+    pub fn dwarf_peel_type(die: *mut Dwarf_Die, result: *mut Dwarf_Die) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwarf_haschildren(die: *mut Dwarf_Die) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getattrs(die: *mut Dwarf_Die,
-                          callback:
-                              ::std::option::Option<unsafe extern "C" fn(arg1:
-                                                                             *mut Dwarf_Attribute,
-                                                                         arg2:
-                                                                             *mut ::libc::c_void)
-                                                        -> ::libc::c_int>,
-                          arg: *mut ::libc::c_void, offset: isize) -> isize;
+    pub fn dwarf_getattrs(
+        die: *mut Dwarf_Die,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut Dwarf_Attribute,
+                arg2: *mut ::libc::c_void,
+            ) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+        offset: isize,
+    ) -> isize;
 }
 extern "C" {
     pub fn dwarf_tag(die: *mut Dwarf_Die) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_attr(die: *mut Dwarf_Die, search_name: ::libc::c_uint,
-                      result: *mut Dwarf_Attribute) -> *mut Dwarf_Attribute;
+    pub fn dwarf_attr(
+        die: *mut Dwarf_Die,
+        search_name: ::libc::c_uint,
+        result: *mut Dwarf_Attribute,
+    ) -> *mut Dwarf_Attribute;
 }
 extern "C" {
-    pub fn dwarf_hasattr(die: *mut Dwarf_Die, search_name: ::libc::c_uint)
-     -> ::libc::c_int;
+    pub fn dwarf_hasattr(die: *mut Dwarf_Die, search_name: ::libc::c_uint) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_attr_integrate(die: *mut Dwarf_Die,
-                                search_name: ::libc::c_uint,
-                                result: *mut Dwarf_Attribute)
-     -> *mut Dwarf_Attribute;
+    pub fn dwarf_attr_integrate(
+        die: *mut Dwarf_Die,
+        search_name: ::libc::c_uint,
+        result: *mut Dwarf_Attribute,
+    ) -> *mut Dwarf_Attribute;
 }
 extern "C" {
-    pub fn dwarf_hasattr_integrate(die: *mut Dwarf_Die,
-                                   search_name: ::libc::c_uint)
-     -> ::libc::c_int;
+    pub fn dwarf_hasattr_integrate(
+        die: *mut Dwarf_Die,
+        search_name: ::libc::c_uint,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_hasform(attr: *mut Dwarf_Attribute,
-                         search_form: ::libc::c_uint) -> ::libc::c_int;
+    pub fn dwarf_hasform(attr: *mut Dwarf_Attribute, search_form: ::libc::c_uint) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwarf_whatattr(attr: *mut Dwarf_Attribute) -> ::libc::c_uint;
@@ -543,59 +845,68 @@ extern "C" {
     pub fn dwarf_whatform(attr: *mut Dwarf_Attribute) -> ::libc::c_uint;
 }
 extern "C" {
-    pub fn dwarf_formstring(attrp: *mut Dwarf_Attribute)
-     -> *const ::libc::c_char;
+    pub fn dwarf_formstring(attrp: *mut Dwarf_Attribute) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwarf_formudata(attr: *mut Dwarf_Attribute,
-                           return_uval: *mut Dwarf_Word) -> ::libc::c_int;
+    pub fn dwarf_formudata(
+        attr: *mut Dwarf_Attribute,
+        return_uval: *mut Dwarf_Word,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_formsdata(attr: *mut Dwarf_Attribute,
-                           return_uval: *mut Dwarf_Sword) -> ::libc::c_int;
+    pub fn dwarf_formsdata(
+        attr: *mut Dwarf_Attribute,
+        return_uval: *mut Dwarf_Sword,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_formaddr(attr: *mut Dwarf_Attribute,
-                          return_addr: *mut Dwarf_Addr) -> ::libc::c_int;
+    pub fn dwarf_formaddr(
+        attr: *mut Dwarf_Attribute,
+        return_addr: *mut Dwarf_Addr,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_formref(attr: *mut Dwarf_Attribute,
-                         return_offset: *mut Dwarf_Off) -> ::libc::c_int;
+    pub fn dwarf_formref(
+        attr: *mut Dwarf_Attribute,
+        return_offset: *mut Dwarf_Off,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_formref_die(attr: *mut Dwarf_Attribute,
-                             die_mem: *mut Dwarf_Die) -> *mut Dwarf_Die;
+    pub fn dwarf_formref_die(attr: *mut Dwarf_Attribute, die_mem: *mut Dwarf_Die)
+        -> *mut Dwarf_Die;
 }
 extern "C" {
-    pub fn dwarf_formblock(attr: *mut Dwarf_Attribute,
-                           return_block: *mut Dwarf_Block) -> ::libc::c_int;
+    pub fn dwarf_formblock(
+        attr: *mut Dwarf_Attribute,
+        return_block: *mut Dwarf_Block,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_formflag(attr: *mut Dwarf_Attribute, return_bool: *mut bool)
-     -> ::libc::c_int;
+    pub fn dwarf_formflag(attr: *mut Dwarf_Attribute, return_bool: *mut bool) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwarf_diename(die: *mut Dwarf_Die) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwarf_highpc(die: *mut Dwarf_Die, return_addr: *mut Dwarf_Addr)
-     -> ::libc::c_int;
+    pub fn dwarf_highpc(die: *mut Dwarf_Die, return_addr: *mut Dwarf_Addr) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_lowpc(die: *mut Dwarf_Die, return_addr: *mut Dwarf_Addr)
-     -> ::libc::c_int;
+    pub fn dwarf_lowpc(die: *mut Dwarf_Die, return_addr: *mut Dwarf_Addr) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_entrypc(die: *mut Dwarf_Die, return_addr: *mut Dwarf_Addr)
-     -> ::libc::c_int;
+    pub fn dwarf_entrypc(die: *mut Dwarf_Die, return_addr: *mut Dwarf_Addr) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwarf_haspc(die: *mut Dwarf_Die, pc: Dwarf_Addr) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_ranges(die: *mut Dwarf_Die, offset: isize,
-                        basep: *mut Dwarf_Addr, startp: *mut Dwarf_Addr,
-                        endp: *mut Dwarf_Addr) -> isize;
+    pub fn dwarf_ranges(
+        die: *mut Dwarf_Die,
+        offset: isize,
+        basep: *mut Dwarf_Addr,
+        startp: *mut Dwarf_Addr,
+        endp: *mut Dwarf_Addr,
+    ) -> isize;
 }
 extern "C" {
     pub fn dwarf_bytesize(die: *mut Dwarf_Die) -> ::libc::c_int;
@@ -613,13 +924,19 @@ extern "C" {
     pub fn dwarf_srclang(die: *mut Dwarf_Die) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getabbrev(die: *mut Dwarf_Die, offset: Dwarf_Off,
-                           lengthp: *mut usize) -> *mut Dwarf_Abbrev;
+    pub fn dwarf_getabbrev(
+        die: *mut Dwarf_Die,
+        offset: Dwarf_Off,
+        lengthp: *mut usize,
+    ) -> *mut Dwarf_Abbrev;
 }
 extern "C" {
-    pub fn dwarf_offabbrev(dbg: *mut Dwarf, offset: Dwarf_Off,
-                           lengthp: *mut usize, abbrevp: *mut Dwarf_Abbrev)
-     -> ::libc::c_int;
+    pub fn dwarf_offabbrev(
+        dbg: *mut Dwarf,
+        offset: Dwarf_Off,
+        lengthp: *mut usize,
+        abbrevp: *mut Dwarf_Abbrev,
+    ) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwarf_getabbrevcode(abbrev: *mut Dwarf_Abbrev) -> ::libc::c_uint;
@@ -628,319 +945,378 @@ extern "C" {
     pub fn dwarf_getabbrevtag(abbrev: *mut Dwarf_Abbrev) -> ::libc::c_uint;
 }
 extern "C" {
-    pub fn dwarf_abbrevhaschildren(abbrev: *mut Dwarf_Abbrev)
-     -> ::libc::c_int;
+    pub fn dwarf_abbrevhaschildren(abbrev: *mut Dwarf_Abbrev) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getattrcnt(abbrev: *mut Dwarf_Abbrev, attrcntp: *mut usize)
-     -> ::libc::c_int;
+    pub fn dwarf_getattrcnt(abbrev: *mut Dwarf_Abbrev, attrcntp: *mut usize) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getabbrevattr(abbrev: *mut Dwarf_Abbrev, idx: usize,
-                               namep: *mut ::libc::c_uint,
-                               formp: *mut ::libc::c_uint,
-                               offset: *mut Dwarf_Off) -> ::libc::c_int;
+    pub fn dwarf_getabbrevattr(
+        abbrev: *mut Dwarf_Abbrev,
+        idx: usize,
+        namep: *mut ::libc::c_uint,
+        formp: *mut ::libc::c_uint,
+        offset: *mut Dwarf_Off,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getstring(dbg: *mut Dwarf, offset: Dwarf_Off,
-                           lenp: *mut usize) -> *const ::libc::c_char;
+    pub fn dwarf_getstring(
+        dbg: *mut Dwarf,
+        offset: Dwarf_Off,
+        lenp: *mut usize,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwarf_getpubnames(dbg: *mut Dwarf,
-                             callback:
-                                 ::std::option::Option<unsafe extern "C" fn(arg1:
-                                                                                *mut Dwarf,
-                                                                            arg2:
-                                                                                *mut Dwarf_Global,
-                                                                            arg3:
-                                                                                *mut ::libc::c_void)
-                                                           -> ::libc::c_int>,
-                             arg: *mut ::libc::c_void, offset: isize)
-     -> isize;
+    pub fn dwarf_getpubnames(
+        dbg: *mut Dwarf,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut Dwarf,
+                arg2: *mut Dwarf_Global,
+                arg3: *mut ::libc::c_void,
+            ) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+        offset: isize,
+    ) -> isize;
 }
 extern "C" {
-    pub fn dwarf_getsrclines(cudie: *mut Dwarf_Die,
-                             lines: *mut *mut Dwarf_Lines, nlines: *mut usize)
-     -> ::libc::c_int;
+    pub fn dwarf_getsrclines(
+        cudie: *mut Dwarf_Die,
+        lines: *mut *mut Dwarf_Lines,
+        nlines: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_onesrcline(lines: *mut Dwarf_Lines, idx: usize)
-     -> *mut Dwarf_Line;
+    pub fn dwarf_onesrcline(lines: *mut Dwarf_Lines, idx: usize) -> *mut Dwarf_Line;
 }
 extern "C" {
-    pub fn dwarf_getsrcfiles(cudie: *mut Dwarf_Die,
-                             files: *mut *mut Dwarf_Files, nfiles: *mut usize)
-     -> ::libc::c_int;
+    pub fn dwarf_getsrcfiles(
+        cudie: *mut Dwarf_Die,
+        files: *mut *mut Dwarf_Files,
+        nfiles: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getsrc_die(cudie: *mut Dwarf_Die, addr: Dwarf_Addr)
-     -> *mut Dwarf_Line;
+    pub fn dwarf_getsrc_die(cudie: *mut Dwarf_Die, addr: Dwarf_Addr) -> *mut Dwarf_Line;
 }
 extern "C" {
-    pub fn dwarf_getsrc_file(dbg: *mut Dwarf, fname: *const ::libc::c_char,
-                             line: ::libc::c_int, col: ::libc::c_int,
-                             srcsp: *mut *mut *mut Dwarf_Line,
-                             nsrcs: *mut usize) -> ::libc::c_int;
+    pub fn dwarf_getsrc_file(
+        dbg: *mut Dwarf,
+        fname: *const ::libc::c_char,
+        line: ::libc::c_int,
+        col: ::libc::c_int,
+        srcsp: *mut *mut *mut Dwarf_Line,
+        nsrcs: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_lineaddr(line: *mut Dwarf_Line, addrp: *mut Dwarf_Addr)
-     -> ::libc::c_int;
+    pub fn dwarf_lineaddr(line: *mut Dwarf_Line, addrp: *mut Dwarf_Addr) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_lineop_index(line: *mut Dwarf_Line,
-                              op_indexp: *mut ::libc::c_uint)
-     -> ::libc::c_int;
+    pub fn dwarf_lineop_index(
+        line: *mut Dwarf_Line,
+        op_indexp: *mut ::libc::c_uint,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_lineno(line: *mut Dwarf_Line, linep: *mut ::libc::c_int)
-     -> ::libc::c_int;
+    pub fn dwarf_lineno(line: *mut Dwarf_Line, linep: *mut ::libc::c_int) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_linecol(line: *mut Dwarf_Line, colp: *mut ::libc::c_int)
-     -> ::libc::c_int;
+    pub fn dwarf_linecol(line: *mut Dwarf_Line, colp: *mut ::libc::c_int) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_linebeginstatement(line: *mut Dwarf_Line, flagp: *mut bool)
-     -> ::libc::c_int;
+    pub fn dwarf_linebeginstatement(line: *mut Dwarf_Line, flagp: *mut bool) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_lineendsequence(line: *mut Dwarf_Line, flagp: *mut bool)
-     -> ::libc::c_int;
+    pub fn dwarf_lineendsequence(line: *mut Dwarf_Line, flagp: *mut bool) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_lineblock(line: *mut Dwarf_Line, flagp: *mut bool)
-     -> ::libc::c_int;
+    pub fn dwarf_lineblock(line: *mut Dwarf_Line, flagp: *mut bool) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_lineprologueend(line: *mut Dwarf_Line, flagp: *mut bool)
-     -> ::libc::c_int;
+    pub fn dwarf_lineprologueend(line: *mut Dwarf_Line, flagp: *mut bool) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_lineepiloguebegin(line: *mut Dwarf_Line, flagp: *mut bool)
-     -> ::libc::c_int;
+    pub fn dwarf_lineepiloguebegin(line: *mut Dwarf_Line, flagp: *mut bool) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_lineisa(line: *mut Dwarf_Line, isap: *mut ::libc::c_uint)
-     -> ::libc::c_int;
+    pub fn dwarf_lineisa(line: *mut Dwarf_Line, isap: *mut ::libc::c_uint) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_linediscriminator(line: *mut Dwarf_Line,
-                                   discp: *mut ::libc::c_uint)
-     -> ::libc::c_int;
+    pub fn dwarf_linediscriminator(
+        line: *mut Dwarf_Line,
+        discp: *mut ::libc::c_uint,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_linesrc(line: *mut Dwarf_Line, mtime: *mut Dwarf_Word,
-                         length: *mut Dwarf_Word) -> *const ::libc::c_char;
+    pub fn dwarf_linesrc(
+        line: *mut Dwarf_Line,
+        mtime: *mut Dwarf_Word,
+        length: *mut Dwarf_Word,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwarf_filesrc(file: *mut Dwarf_Files, idx: usize,
-                         mtime: *mut Dwarf_Word, length: *mut Dwarf_Word)
-     -> *const ::libc::c_char;
+    pub fn dwarf_filesrc(
+        file: *mut Dwarf_Files,
+        idx: usize,
+        mtime: *mut Dwarf_Word,
+        length: *mut Dwarf_Word,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwarf_line_file(line: *mut Dwarf_Line,
-                           files: *mut *mut Dwarf_Files, idx: *mut usize)
-     -> ::libc::c_int;
+    pub fn dwarf_line_file(
+        line: *mut Dwarf_Line,
+        files: *mut *mut Dwarf_Files,
+        idx: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getsrcdirs(files: *mut Dwarf_Files,
-                            result: *mut *const *const ::libc::c_char,
-                            ndirs: *mut usize) -> ::libc::c_int;
+    pub fn dwarf_getsrcdirs(
+        files: *mut Dwarf_Files,
+        result: *mut *const *const ::libc::c_char,
+        ndirs: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getlocation(attr: *mut Dwarf_Attribute,
-                             expr: *mut *mut Dwarf_Op, exprlen: *mut usize)
-     -> ::libc::c_int;
+    pub fn dwarf_getlocation(
+        attr: *mut Dwarf_Attribute,
+        expr: *mut *mut Dwarf_Op,
+        exprlen: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getlocation_addr(attr: *mut Dwarf_Attribute,
-                                  address: Dwarf_Addr,
-                                  exprs: *mut *mut Dwarf_Op,
-                                  exprlens: *mut usize, nlocs: usize)
-     -> ::libc::c_int;
+    pub fn dwarf_getlocation_addr(
+        attr: *mut Dwarf_Attribute,
+        address: Dwarf_Addr,
+        exprs: *mut *mut Dwarf_Op,
+        exprlens: *mut usize,
+        nlocs: usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getlocations(attr: *mut Dwarf_Attribute, offset: isize,
-                              basep: *mut Dwarf_Addr, startp: *mut Dwarf_Addr,
-                              endp: *mut Dwarf_Addr, expr: *mut *mut Dwarf_Op,
-                              exprlen: *mut usize) -> isize;
+    pub fn dwarf_getlocations(
+        attr: *mut Dwarf_Attribute,
+        offset: isize,
+        basep: *mut Dwarf_Addr,
+        startp: *mut Dwarf_Addr,
+        endp: *mut Dwarf_Addr,
+        expr: *mut *mut Dwarf_Op,
+        exprlen: *mut usize,
+    ) -> isize;
 }
 extern "C" {
-    pub fn dwarf_getlocation_implicit_value(attr: *mut Dwarf_Attribute,
-                                            op: *const Dwarf_Op,
-                                            return_block: *mut Dwarf_Block)
-     -> ::libc::c_int;
+    pub fn dwarf_getlocation_implicit_value(
+        attr: *mut Dwarf_Attribute,
+        op: *const Dwarf_Op,
+        return_block: *mut Dwarf_Block,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getlocation_implicit_pointer(attr: *mut Dwarf_Attribute,
-                                              op: *const Dwarf_Op,
-                                              result: *mut Dwarf_Attribute)
-     -> ::libc::c_int;
+    pub fn dwarf_getlocation_implicit_pointer(
+        attr: *mut Dwarf_Attribute,
+        op: *const Dwarf_Op,
+        result: *mut Dwarf_Attribute,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getlocation_die(attr: *mut Dwarf_Attribute,
-                                 op: *const Dwarf_Op, result: *mut Dwarf_Die)
-     -> ::libc::c_int;
+    pub fn dwarf_getlocation_die(
+        attr: *mut Dwarf_Attribute,
+        op: *const Dwarf_Op,
+        result: *mut Dwarf_Die,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getlocation_attr(attr: *mut Dwarf_Attribute,
-                                  op: *const Dwarf_Op,
-                                  result: *mut Dwarf_Attribute)
-     -> ::libc::c_int;
+    pub fn dwarf_getlocation_attr(
+        attr: *mut Dwarf_Attribute,
+        op: *const Dwarf_Op,
+        result: *mut Dwarf_Attribute,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_aggregate_size(die: *mut Dwarf_Die, size: *mut Dwarf_Word)
-     -> ::libc::c_int;
+    pub fn dwarf_aggregate_size(die: *mut Dwarf_Die, size: *mut Dwarf_Word) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_default_lower_bound(lang: ::libc::c_int,
-                                     result: *mut Dwarf_Sword)
-     -> ::libc::c_int;
+    pub fn dwarf_default_lower_bound(
+        lang: ::libc::c_int,
+        result: *mut Dwarf_Sword,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getscopes(cudie: *mut Dwarf_Die, pc: Dwarf_Addr,
-                           scopes: *mut *mut Dwarf_Die) -> ::libc::c_int;
+    pub fn dwarf_getscopes(
+        cudie: *mut Dwarf_Die,
+        pc: Dwarf_Addr,
+        scopes: *mut *mut Dwarf_Die,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getscopes_die(die: *mut Dwarf_Die,
-                               scopes: *mut *mut Dwarf_Die) -> ::libc::c_int;
+    pub fn dwarf_getscopes_die(die: *mut Dwarf_Die, scopes: *mut *mut Dwarf_Die) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getscopevar(scopes: *mut Dwarf_Die, nscopes: ::libc::c_int,
-                             name: *const ::libc::c_char,
-                             skip_shadows: ::libc::c_int,
-                             match_file: *const ::libc::c_char,
-                             match_lineno: ::libc::c_int,
-                             match_linecol: ::libc::c_int,
-                             result: *mut Dwarf_Die) -> ::libc::c_int;
+    pub fn dwarf_getscopevar(
+        scopes: *mut Dwarf_Die,
+        nscopes: ::libc::c_int,
+        name: *const ::libc::c_char,
+        skip_shadows: ::libc::c_int,
+        match_file: *const ::libc::c_char,
+        match_lineno: ::libc::c_int,
+        match_linecol: ::libc::c_int,
+        result: *mut Dwarf_Die,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getaranges(dbg: *mut Dwarf, aranges: *mut *mut Dwarf_Aranges,
-                            naranges: *mut usize) -> ::libc::c_int;
+    pub fn dwarf_getaranges(
+        dbg: *mut Dwarf,
+        aranges: *mut *mut Dwarf_Aranges,
+        naranges: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_onearange(aranges: *mut Dwarf_Aranges, idx: usize)
-     -> *mut Dwarf_Arange;
+    pub fn dwarf_onearange(aranges: *mut Dwarf_Aranges, idx: usize) -> *mut Dwarf_Arange;
 }
 extern "C" {
-    pub fn dwarf_getarangeinfo(arange: *mut Dwarf_Arange,
-                               addrp: *mut Dwarf_Addr,
-                               lengthp: *mut Dwarf_Word,
-                               offsetp: *mut Dwarf_Off) -> ::libc::c_int;
+    pub fn dwarf_getarangeinfo(
+        arange: *mut Dwarf_Arange,
+        addrp: *mut Dwarf_Addr,
+        lengthp: *mut Dwarf_Word,
+        offsetp: *mut Dwarf_Off,
+    ) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwarf_getarange_addr(aranges: *mut Dwarf_Aranges, addr: Dwarf_Addr)
-     -> *mut Dwarf_Arange;
+        -> *mut Dwarf_Arange;
 }
 extern "C" {
-    pub fn dwarf_getfuncs(cudie: *mut Dwarf_Die,
-                          callback:
-                              ::std::option::Option<unsafe extern "C" fn(arg1:
-                                                                             *mut Dwarf_Die,
-                                                                         arg2:
-                                                                             *mut ::libc::c_void)
-                                                        -> ::libc::c_int>,
-                          arg: *mut ::libc::c_void, offset: isize) -> isize;
+    pub fn dwarf_getfuncs(
+        cudie: *mut Dwarf_Die,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(arg1: *mut Dwarf_Die, arg2: *mut ::libc::c_void) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+        offset: isize,
+    ) -> isize;
 }
 extern "C" {
     pub fn dwarf_decl_file(decl: *mut Dwarf_Die) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwarf_decl_line(decl: *mut Dwarf_Die, linep: *mut ::libc::c_int)
-     -> ::libc::c_int;
+    pub fn dwarf_decl_line(decl: *mut Dwarf_Die, linep: *mut ::libc::c_int) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_decl_column(decl: *mut Dwarf_Die, colp: *mut ::libc::c_int)
-     -> ::libc::c_int;
+    pub fn dwarf_decl_column(decl: *mut Dwarf_Die, colp: *mut ::libc::c_int) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwarf_func_inline(func: *mut Dwarf_Die) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_func_inline_instances(func: *mut Dwarf_Die,
-                                       callback:
-                                           ::std::option::Option<unsafe extern "C" fn(arg1:
-                                                                                          *mut Dwarf_Die,
-                                                                                      arg2:
-                                                                                          *mut ::libc::c_void)
-                                                                     ->
-                                                                         ::libc::c_int>,
-                                       arg: *mut ::libc::c_void)
-     -> ::libc::c_int;
+    pub fn dwarf_func_inline_instances(
+        func: *mut Dwarf_Die,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(arg1: *mut Dwarf_Die, arg2: *mut ::libc::c_void) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_entry_breakpoints(die: *mut Dwarf_Die,
-                                   bkpts: *mut *mut Dwarf_Addr)
-     -> ::libc::c_int;
+    pub fn dwarf_entry_breakpoints(
+        die: *mut Dwarf_Die,
+        bkpts: *mut *mut Dwarf_Addr,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_getmacros(cudie: *mut Dwarf_Die,
-                           callback:
-                               ::std::option::Option<unsafe extern "C" fn(arg1:
-                                                                              *mut Dwarf_Macro,
-                                                                          arg2:
-                                                                              *mut ::libc::c_void)
-                                                         -> ::libc::c_int>,
-                           arg: *mut ::libc::c_void, token: isize) -> isize;
+    pub fn dwarf_getmacros(
+        cudie: *mut Dwarf_Die,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut Dwarf_Macro,
+                arg2: *mut ::libc::c_void,
+            ) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+        token: isize,
+    ) -> isize;
 }
 extern "C" {
-    pub fn dwarf_getmacros_off(dbg: *mut Dwarf, macoff: Dwarf_Off,
-                               callback:
-                                   ::std::option::Option<unsafe extern "C" fn(arg1:
-                                                                                  *mut Dwarf_Macro,
-                                                                              arg2:
-                                                                                  *mut ::libc::c_void)
-                                                             ->
-                                                                 ::libc::c_int>,
-                               arg: *mut ::libc::c_void, token: isize)
-     -> isize;
+    pub fn dwarf_getmacros_off(
+        dbg: *mut Dwarf,
+        macoff: Dwarf_Off,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut Dwarf_Macro,
+                arg2: *mut ::libc::c_void,
+            ) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+        token: isize,
+    ) -> isize;
 }
 extern "C" {
-    pub fn dwarf_macro_getsrcfiles(dbg: *mut Dwarf, macro_: *mut Dwarf_Macro,
-                                   files: *mut *mut Dwarf_Files,
-                                   nfiles: *mut usize) -> ::libc::c_int;
+    pub fn dwarf_macro_getsrcfiles(
+        dbg: *mut Dwarf,
+        macro_: *mut Dwarf_Macro,
+        files: *mut *mut Dwarf_Files,
+        nfiles: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_macro_opcode(macro_: *mut Dwarf_Macro,
-                              opcodep: *mut ::libc::c_uint) -> ::libc::c_int;
+    pub fn dwarf_macro_opcode(
+        macro_: *mut Dwarf_Macro,
+        opcodep: *mut ::libc::c_uint,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_macro_getparamcnt(macro_: *mut Dwarf_Macro,
-                                   paramcntp: *mut usize) -> ::libc::c_int;
+    pub fn dwarf_macro_getparamcnt(
+        macro_: *mut Dwarf_Macro,
+        paramcntp: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_macro_param(macro_: *mut Dwarf_Macro, idx: usize,
-                             attribute: *mut Dwarf_Attribute)
-     -> ::libc::c_int;
+    pub fn dwarf_macro_param(
+        macro_: *mut Dwarf_Macro,
+        idx: usize,
+        attribute: *mut Dwarf_Attribute,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_macro_param1(macro_: *mut Dwarf_Macro,
-                              paramp: *mut Dwarf_Word) -> ::libc::c_int;
+    pub fn dwarf_macro_param1(macro_: *mut Dwarf_Macro, paramp: *mut Dwarf_Word) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_macro_param2(macro_: *mut Dwarf_Macro,
-                              paramp: *mut Dwarf_Word,
-                              strp: *mut *const ::libc::c_char)
-     -> ::libc::c_int;
+    pub fn dwarf_macro_param2(
+        macro_: *mut Dwarf_Macro,
+        paramp: *mut Dwarf_Word,
+        strp: *mut *const ::libc::c_char,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_cfi_addrframe(cache: *mut Dwarf_CFI, address: Dwarf_Addr,
-                               frame: *mut *mut Dwarf_Frame) -> ::libc::c_int;
+    pub fn dwarf_cfi_addrframe(
+        cache: *mut Dwarf_CFI,
+        address: Dwarf_Addr,
+        frame: *mut *mut Dwarf_Frame,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_frame_info(frame: *mut Dwarf_Frame, start: *mut Dwarf_Addr,
-                            end: *mut Dwarf_Addr, signalp: *mut bool)
-     -> ::libc::c_int;
+    pub fn dwarf_frame_info(
+        frame: *mut Dwarf_Frame,
+        start: *mut Dwarf_Addr,
+        end: *mut Dwarf_Addr,
+        signalp: *mut bool,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_frame_cfa(frame: *mut Dwarf_Frame, ops: *mut *mut Dwarf_Op,
-                           nops: *mut usize) -> ::libc::c_int;
+    pub fn dwarf_frame_cfa(
+        frame: *mut Dwarf_Frame,
+        ops: *mut *mut Dwarf_Op,
+        nops: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwarf_frame_register(frame: *mut Dwarf_Frame, regno: ::libc::c_int,
-                                ops_mem: *mut Dwarf_Op,
-                                ops: *mut *mut Dwarf_Op, nops: *mut usize)
-     -> ::libc::c_int;
+    pub fn dwarf_frame_register(
+        frame: *mut Dwarf_Frame,
+        regno: ::libc::c_int,
+        ops_mem: *mut Dwarf_Op,
+        ops: *mut *mut Dwarf_Op,
+        nops: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwarf_errno() -> ::libc::c_int;
@@ -949,8 +1325,7 @@ extern "C" {
     pub fn dwarf_errmsg(err: ::libc::c_int) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwarf_new_oom_handler(dbg: *mut Dwarf, handler: Dwarf_OOM)
-     -> Dwarf_OOM;
+    pub fn dwarf_new_oom_handler(dbg: *mut Dwarf, handler: Dwarf_OOM) -> Dwarf_OOM;
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -978,85 +1353,96 @@ pub struct Dwfl_Frame {
     _unused: [u8; 0],
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
+#[derive(Debug, Copy, Clone)]
 pub struct Dwfl_Callbacks {
-    pub find_elf: ::std::option::Option<unsafe extern "C" fn(mod_:
-                                                                 *mut Dwfl_Module,
-                                                             userdata:
-                                                                 *mut *mut ::libc::c_void,
-                                                             modname:
-                                                                 *const ::libc::c_char,
-                                                             base: Dwarf_Addr,
-                                                             file_name:
-                                                                 *mut *mut ::libc::c_char,
-                                                             elfp:
-                                                                 *mut *mut Elf)
-                                            -> ::libc::c_int>,
-    pub find_debuginfo: ::std::option::Option<unsafe extern "C" fn(mod_:
-                                                                       *mut Dwfl_Module,
-                                                                   userdata:
-                                                                       *mut *mut ::libc::c_void,
-                                                                   modname:
-                                                                       *const ::libc::c_char,
-                                                                   base:
-                                                                       Dwarf_Addr,
-                                                                   file_name:
-                                                                       *const ::libc::c_char,
-                                                                   debuglink_file:
-                                                                       *const ::libc::c_char,
-                                                                   debuglink_crc:
-                                                                       GElf_Word,
-                                                                   debuginfo_file_name:
-                                                                       *mut *mut ::libc::c_char)
-                                                  -> ::libc::c_int>,
-    pub section_address: ::std::option::Option<unsafe extern "C" fn(mod_:
-                                                                        *mut Dwfl_Module,
-                                                                    userdata:
-                                                                        *mut *mut ::libc::c_void,
-                                                                    modname:
-                                                                        *const ::libc::c_char,
-                                                                    base:
-                                                                        Dwarf_Addr,
-                                                                    secname:
-                                                                        *const ::libc::c_char,
-                                                                    shndx:
-                                                                        GElf_Word,
-                                                                    shdr:
-                                                                        *const GElf_Shdr,
-                                                                    addr:
-                                                                        *mut Dwarf_Addr)
-                                                   -> ::libc::c_int>,
+    pub find_elf: ::std::option::Option<
+        unsafe extern "C" fn(
+            mod_: *mut Dwfl_Module,
+            userdata: *mut *mut ::libc::c_void,
+            modname: *const ::libc::c_char,
+            base: Dwarf_Addr,
+            file_name: *mut *mut ::libc::c_char,
+            elfp: *mut *mut Elf,
+        ) -> ::libc::c_int,
+    >,
+    pub find_debuginfo: ::std::option::Option<
+        unsafe extern "C" fn(
+            mod_: *mut Dwfl_Module,
+            userdata: *mut *mut ::libc::c_void,
+            modname: *const ::libc::c_char,
+            base: Dwarf_Addr,
+            file_name: *const ::libc::c_char,
+            debuglink_file: *const ::libc::c_char,
+            debuglink_crc: GElf_Word,
+            debuginfo_file_name: *mut *mut ::libc::c_char,
+        ) -> ::libc::c_int,
+    >,
+    pub section_address: ::std::option::Option<
+        unsafe extern "C" fn(
+            mod_: *mut Dwfl_Module,
+            userdata: *mut *mut ::libc::c_void,
+            modname: *const ::libc::c_char,
+            base: Dwarf_Addr,
+            secname: *const ::libc::c_char,
+            shndx: GElf_Word,
+            shdr: *const GElf_Shdr,
+            addr: *mut Dwarf_Addr,
+        ) -> ::libc::c_int,
+    >,
     pub debuginfo_path: *mut *mut ::libc::c_char,
 }
 #[test]
 fn bindgen_test_layout_Dwfl_Callbacks() {
-    assert_eq!(::std::mem::size_of::<Dwfl_Callbacks>() , 32usize , concat ! (
-               "Size of: " , stringify ! ( Dwfl_Callbacks ) ));
-    assert_eq! (::std::mem::align_of::<Dwfl_Callbacks>() , 8usize , concat ! (
-                "Alignment of " , stringify ! ( Dwfl_Callbacks ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwfl_Callbacks ) ) . find_elf as * const
-                _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwfl_Callbacks ) , "::"
-                , stringify ! ( find_elf ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwfl_Callbacks ) ) . find_debuginfo as *
-                const _ as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwfl_Callbacks ) , "::"
-                , stringify ! ( find_debuginfo ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwfl_Callbacks ) ) . section_address as *
-                const _ as usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwfl_Callbacks ) , "::"
-                , stringify ! ( section_address ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwfl_Callbacks ) ) . debuginfo_path as *
-                const _ as usize } , 24usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwfl_Callbacks ) , "::"
-                , stringify ! ( debuginfo_path ) ));
-}
-impl Clone for Dwfl_Callbacks {
-    fn clone(&self) -> Self { *self }
+    assert_eq!(
+        ::std::mem::size_of::<Dwfl_Callbacks>(),
+        32usize,
+        concat!("Size of: ", stringify!(Dwfl_Callbacks))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Dwfl_Callbacks>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Dwfl_Callbacks))
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwfl_Callbacks>())).find_elf as *const _ as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwfl_Callbacks),
+            "::",
+            stringify!(find_elf)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwfl_Callbacks>())).find_debuginfo as *const _ as usize },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwfl_Callbacks),
+            "::",
+            stringify!(find_debuginfo)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwfl_Callbacks>())).section_address as *const _ as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwfl_Callbacks),
+            "::",
+            stringify!(section_address)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwfl_Callbacks>())).debuginfo_path as *const _ as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwfl_Callbacks),
+            "::",
+            stringify!(debuginfo_path)
+        )
+    );
 }
 extern "C" {
     pub fn dwfl_begin(callbacks: *const Dwfl_Callbacks) -> *mut Dwfl;
@@ -1077,151 +1463,178 @@ extern "C" {
     pub fn dwfl_report_begin(dwfl: *mut Dwfl);
 }
 extern "C" {
-    pub fn dwfl_report_segment(dwfl: *mut Dwfl, ndx: ::libc::c_int,
-                               phdr: *const GElf_Phdr, bias: GElf_Addr,
-                               ident: *const ::libc::c_void) -> ::libc::c_int;
+    pub fn dwfl_report_segment(
+        dwfl: *mut Dwfl,
+        ndx: ::libc::c_int,
+        phdr: *const GElf_Phdr,
+        bias: GElf_Addr,
+        ident: *const ::libc::c_void,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_report_module(dwfl: *mut Dwfl, name: *const ::libc::c_char,
-                              start: Dwarf_Addr, end: Dwarf_Addr)
-     -> *mut Dwfl_Module;
+    pub fn dwfl_report_module(
+        dwfl: *mut Dwfl,
+        name: *const ::libc::c_char,
+        start: Dwarf_Addr,
+        end: Dwarf_Addr,
+    ) -> *mut Dwfl_Module;
 }
 extern "C" {
-    pub fn dwfl_report_elf(dwfl: *mut Dwfl, name: *const ::libc::c_char,
-                           file_name: *const ::libc::c_char,
-                           fd: ::libc::c_int, base: GElf_Addr,
-                           add_p_vaddr: bool) -> *mut Dwfl_Module;
+    pub fn dwfl_report_elf(
+        dwfl: *mut Dwfl,
+        name: *const ::libc::c_char,
+        file_name: *const ::libc::c_char,
+        fd: ::libc::c_int,
+        base: GElf_Addr,
+        add_p_vaddr: bool,
+    ) -> *mut Dwfl_Module;
 }
 extern "C" {
-    pub fn dwfl_report_offline(dwfl: *mut Dwfl, name: *const ::libc::c_char,
-                               file_name: *const ::libc::c_char,
-                               fd: ::libc::c_int) -> *mut Dwfl_Module;
+    pub fn dwfl_report_offline(
+        dwfl: *mut Dwfl,
+        name: *const ::libc::c_char,
+        file_name: *const ::libc::c_char,
+        fd: ::libc::c_int,
+    ) -> *mut Dwfl_Module;
 }
 extern "C" {
-    pub fn dwfl_report_end(dwfl: *mut Dwfl,
-                           removed:
-                               ::std::option::Option<unsafe extern "C" fn(arg1:
-                                                                              *mut Dwfl_Module,
-                                                                          arg2:
-                                                                              *mut ::libc::c_void,
-                                                                          arg3:
-                                                                              *const ::libc::c_char,
-                                                                          arg4:
-                                                                              Dwarf_Addr,
-                                                                          arg:
-                                                                              *mut ::libc::c_void)
-                                                         -> ::libc::c_int>,
-                           arg: *mut ::libc::c_void) -> ::libc::c_int;
+    pub fn dwfl_report_end(
+        dwfl: *mut Dwfl,
+        removed: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut Dwfl_Module,
+                arg2: *mut ::libc::c_void,
+                arg3: *const ::libc::c_char,
+                arg4: Dwarf_Addr,
+                arg: *mut ::libc::c_void,
+            ) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+    ) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwfl_report_begin_add(dwfl: *mut Dwfl);
 }
 extern "C" {
-    pub fn dwfl_module_info(mod_: *mut Dwfl_Module,
-                            userdata: *mut *mut *mut ::libc::c_void,
-                            start: *mut Dwarf_Addr, end: *mut Dwarf_Addr,
-                            dwbias: *mut Dwarf_Addr, symbias: *mut Dwarf_Addr,
-                            mainfile: *mut *const ::libc::c_char,
-                            debugfile: *mut *const ::libc::c_char)
-     -> *const ::libc::c_char;
+    pub fn dwfl_module_info(
+        mod_: *mut Dwfl_Module,
+        userdata: *mut *mut *mut ::libc::c_void,
+        start: *mut Dwarf_Addr,
+        end: *mut Dwarf_Addr,
+        dwbias: *mut Dwarf_Addr,
+        symbias: *mut Dwarf_Addr,
+        mainfile: *mut *const ::libc::c_char,
+        debugfile: *mut *const ::libc::c_char,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwfl_getmodules(dwfl: *mut Dwfl,
-                           callback:
-                               ::std::option::Option<unsafe extern "C" fn(arg1:
-                                                                              *mut Dwfl_Module,
-                                                                          arg2:
-                                                                              *mut *mut ::libc::c_void,
-                                                                          arg3:
-                                                                              *const ::libc::c_char,
-                                                                          arg4:
-                                                                              Dwarf_Addr,
-                                                                          arg:
-                                                                              *mut ::libc::c_void)
-                                                         -> ::libc::c_int>,
-                           arg: *mut ::libc::c_void, offset: isize) -> isize;
+    pub fn dwfl_getmodules(
+        dwfl: *mut Dwfl,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut Dwfl_Module,
+                arg2: *mut *mut ::libc::c_void,
+                arg3: *const ::libc::c_char,
+                arg4: Dwarf_Addr,
+                arg: *mut ::libc::c_void,
+            ) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+        offset: isize,
+    ) -> isize;
 }
 extern "C" {
-    pub fn dwfl_addrmodule(dwfl: *mut Dwfl, address: Dwarf_Addr)
-     -> *mut Dwfl_Module;
+    pub fn dwfl_addrmodule(dwfl: *mut Dwfl, address: Dwarf_Addr) -> *mut Dwfl_Module;
 }
 extern "C" {
-    pub fn dwfl_addrsegment(dwfl: *mut Dwfl, address: Dwarf_Addr,
-                            mod_: *mut *mut Dwfl_Module) -> ::libc::c_int;
+    pub fn dwfl_addrsegment(
+        dwfl: *mut Dwfl,
+        address: Dwarf_Addr,
+        mod_: *mut *mut Dwfl_Module,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_module_report_build_id(mod_: *mut Dwfl_Module,
-                                       bits: *const ::libc::c_uchar,
-                                       len: usize, vaddr: GElf_Addr)
-     -> ::libc::c_int;
+    pub fn dwfl_module_report_build_id(
+        mod_: *mut Dwfl_Module,
+        bits: *const ::libc::c_uchar,
+        len: usize,
+        vaddr: GElf_Addr,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_module_build_id(mod_: *mut Dwfl_Module,
-                                bits: *mut *const ::libc::c_uchar,
-                                vaddr: *mut GElf_Addr) -> ::libc::c_int;
+    pub fn dwfl_module_build_id(
+        mod_: *mut Dwfl_Module,
+        bits: *mut *const ::libc::c_uchar,
+        vaddr: *mut GElf_Addr,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_build_id_find_elf(arg1: *mut Dwfl_Module,
-                                  arg2: *mut *mut ::libc::c_void,
-                                  arg3: *const ::libc::c_char,
-                                  arg4: Dwarf_Addr,
-                                  arg5: *mut *mut ::libc::c_char,
-                                  arg6: *mut *mut Elf) -> ::libc::c_int;
+    pub fn dwfl_build_id_find_elf(
+        arg1: *mut Dwfl_Module,
+        arg2: *mut *mut ::libc::c_void,
+        arg3: *const ::libc::c_char,
+        arg4: Dwarf_Addr,
+        arg5: *mut *mut ::libc::c_char,
+        arg6: *mut *mut Elf,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_build_id_find_debuginfo(arg1: *mut Dwfl_Module,
-                                        arg2: *mut *mut ::libc::c_void,
-                                        arg3: *const ::libc::c_char,
-                                        arg4: Dwarf_Addr,
-                                        arg5: *const ::libc::c_char,
-                                        arg6: *const ::libc::c_char,
-                                        arg7: GElf_Word,
-                                        arg8: *mut *mut ::libc::c_char)
-     -> ::libc::c_int;
+    pub fn dwfl_build_id_find_debuginfo(
+        arg1: *mut Dwfl_Module,
+        arg2: *mut *mut ::libc::c_void,
+        arg3: *const ::libc::c_char,
+        arg4: Dwarf_Addr,
+        arg5: *const ::libc::c_char,
+        arg6: *const ::libc::c_char,
+        arg7: GElf_Word,
+        arg8: *mut *mut ::libc::c_char,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_standard_find_debuginfo(arg1: *mut Dwfl_Module,
-                                        arg2: *mut *mut ::libc::c_void,
-                                        arg3: *const ::libc::c_char,
-                                        arg4: Dwarf_Addr,
-                                        arg5: *const ::libc::c_char,
-                                        arg6: *const ::libc::c_char,
-                                        arg7: GElf_Word,
-                                        arg8: *mut *mut ::libc::c_char)
-     -> ::libc::c_int;
+    pub fn dwfl_standard_find_debuginfo(
+        arg1: *mut Dwfl_Module,
+        arg2: *mut *mut ::libc::c_void,
+        arg3: *const ::libc::c_char,
+        arg4: Dwarf_Addr,
+        arg5: *const ::libc::c_char,
+        arg6: *const ::libc::c_char,
+        arg7: GElf_Word,
+        arg8: *mut *mut ::libc::c_char,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_offline_section_address(arg1: *mut Dwfl_Module,
-                                        arg2: *mut *mut ::libc::c_void,
-                                        arg3: *const ::libc::c_char,
-                                        arg4: Dwarf_Addr,
-                                        arg5: *const ::libc::c_char,
-                                        arg6: GElf_Word,
-                                        arg7: *const GElf_Shdr,
-                                        addr: *mut Dwarf_Addr)
-     -> ::libc::c_int;
+    pub fn dwfl_offline_section_address(
+        arg1: *mut Dwfl_Module,
+        arg2: *mut *mut ::libc::c_void,
+        arg3: *const ::libc::c_char,
+        arg4: Dwarf_Addr,
+        arg5: *const ::libc::c_char,
+        arg6: GElf_Word,
+        arg7: *const GElf_Shdr,
+        addr: *mut Dwarf_Addr,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_linux_kernel_find_elf(arg1: *mut Dwfl_Module,
-                                      arg2: *mut *mut ::libc::c_void,
-                                      arg3: *const ::libc::c_char,
-                                      arg4: Dwarf_Addr,
-                                      arg5: *mut *mut ::libc::c_char,
-                                      arg6: *mut *mut Elf) -> ::libc::c_int;
+    pub fn dwfl_linux_kernel_find_elf(
+        arg1: *mut Dwfl_Module,
+        arg2: *mut *mut ::libc::c_void,
+        arg3: *const ::libc::c_char,
+        arg4: Dwarf_Addr,
+        arg5: *mut *mut ::libc::c_char,
+        arg6: *mut *mut Elf,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_linux_kernel_module_section_address(arg1: *mut Dwfl_Module,
-                                                    arg2:
-                                                        *mut *mut ::libc::c_void,
-                                                    arg3:
-                                                        *const ::libc::c_char,
-                                                    arg4: Dwarf_Addr,
-                                                    arg5:
-                                                        *const ::libc::c_char,
-                                                    arg6: GElf_Word,
-                                                    arg7: *const GElf_Shdr,
-                                                    addr: *mut Dwarf_Addr)
-     -> ::libc::c_int;
+    pub fn dwfl_linux_kernel_module_section_address(
+        arg1: *mut Dwfl_Module,
+        arg2: *mut *mut ::libc::c_void,
+        arg3: *const ::libc::c_char,
+        arg4: Dwarf_Addr,
+        arg5: *const ::libc::c_char,
+        arg6: GElf_Word,
+        arg7: *const GElf_Shdr,
+        addr: *mut Dwarf_Addr,
+    ) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwfl_linux_kernel_report_kernel(dwfl: *mut Dwfl) -> ::libc::c_int;
@@ -1230,37 +1643,39 @@ extern "C" {
     pub fn dwfl_linux_kernel_report_modules(dwfl: *mut Dwfl) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_linux_kernel_report_offline(dwfl: *mut Dwfl,
-                                            release: *const ::libc::c_char,
-                                            predicate:
-                                                ::std::option::Option<unsafe extern "C" fn(arg1:
-                                                                                               *const ::libc::c_char,
-                                                                                           arg2:
-                                                                                               *const ::libc::c_char)
-                                                                          ->
-                                                                              ::libc::c_int>)
-     -> ::libc::c_int;
+    pub fn dwfl_linux_kernel_report_offline(
+        dwfl: *mut Dwfl,
+        release: *const ::libc::c_char,
+        predicate: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *const ::libc::c_char,
+                arg2: *const ::libc::c_char,
+            ) -> ::libc::c_int,
+        >,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_core_file_report(dwfl: *mut Dwfl, elf: *mut Elf,
-                                 executable: *const ::libc::c_char)
-     -> ::libc::c_int;
+    pub fn dwfl_core_file_report(
+        dwfl: *mut Dwfl,
+        elf: *mut Elf,
+        executable: *const ::libc::c_char,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_linux_proc_report(dwfl: *mut Dwfl, pid: pid_t)
-     -> ::libc::c_int;
+    pub fn dwfl_linux_proc_report(dwfl: *mut Dwfl, pid: pid_t) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_linux_proc_maps_report(dwfl: *mut Dwfl, arg1: *mut FILE)
-     -> ::libc::c_int;
+    pub fn dwfl_linux_proc_maps_report(dwfl: *mut Dwfl, arg1: *mut FILE) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_linux_proc_find_elf(mod_: *mut Dwfl_Module,
-                                    userdata: *mut *mut ::libc::c_void,
-                                    module_name: *const ::libc::c_char,
-                                    base: Dwarf_Addr,
-                                    file_name: *mut *mut ::libc::c_char,
-                                    arg1: *mut *mut Elf) -> ::libc::c_int;
+    pub fn dwfl_linux_proc_find_elf(
+        mod_: *mut Dwfl_Module,
+        userdata: *mut *mut ::libc::c_void,
+        module_name: *const ::libc::c_char,
+        base: Dwarf_Addr,
+        file_name: *mut *mut ::libc::c_char,
+        arg1: *mut *mut Elf,
+    ) -> ::libc::c_int;
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -1271,139 +1686,164 @@ extern "C" {
     pub fn dwfl_standard_argp() -> *const argp;
 }
 extern "C" {
-    /// Relocation of addresses from Dwfl
+    #[doc = " Relocation of addresses from Dwfl"]
     pub fn dwfl_module_relocations(mod_: *mut Dwfl_Module) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_module_relocate_address(mod_: *mut Dwfl_Module,
-                                        address: *mut Dwarf_Addr)
-     -> ::libc::c_int;
+    pub fn dwfl_module_relocate_address(
+        mod_: *mut Dwfl_Module,
+        address: *mut Dwarf_Addr,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_module_relocation_info(mod_: *mut Dwfl_Module,
-                                       idx: ::libc::c_uint,
-                                       shndxp: *mut GElf_Word)
-     -> *const ::libc::c_char;
+    pub fn dwfl_module_relocation_info(
+        mod_: *mut Dwfl_Module,
+        idx: ::libc::c_uint,
+        shndxp: *mut GElf_Word,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwfl_validate_address(dwfl: *mut Dwfl, address: Dwarf_Addr,
-                                 offset: Dwarf_Sword) -> ::libc::c_int;
+    pub fn dwfl_validate_address(
+        dwfl: *mut Dwfl,
+        address: Dwarf_Addr,
+        offset: Dwarf_Sword,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    /// ELF access functions
-    pub fn dwfl_module_getelf(arg1: *mut Dwfl_Module, bias: *mut GElf_Addr)
-     -> *mut Elf;
+    #[doc = " ELF access functions"]
+    pub fn dwfl_module_getelf(arg1: *mut Dwfl_Module, bias: *mut GElf_Addr) -> *mut Elf;
 }
 extern "C" {
     pub fn dwfl_module_getsymtab(mod_: *mut Dwfl_Module) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_module_getsymtab_first_global(mod_: *mut Dwfl_Module)
-     -> ::libc::c_int;
+    pub fn dwfl_module_getsymtab_first_global(mod_: *mut Dwfl_Module) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_module_getsym(mod_: *mut Dwfl_Module, ndx: ::libc::c_int,
-                              sym: *mut GElf_Sym, shndxp: *mut GElf_Word)
-     -> *const ::libc::c_char;
+    pub fn dwfl_module_getsym(
+        mod_: *mut Dwfl_Module,
+        ndx: ::libc::c_int,
+        sym: *mut GElf_Sym,
+        shndxp: *mut GElf_Word,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwfl_module_getsym_info(mod_: *mut Dwfl_Module, ndx: ::libc::c_int,
-                                   sym: *mut GElf_Sym, addr: *mut GElf_Addr,
-                                   shndxp: *mut GElf_Word,
-                                   elfp: *mut *mut Elf, bias: *mut Dwarf_Addr)
-     -> *const ::libc::c_char;
+    pub fn dwfl_module_getsym_info(
+        mod_: *mut Dwfl_Module,
+        ndx: ::libc::c_int,
+        sym: *mut GElf_Sym,
+        addr: *mut GElf_Addr,
+        shndxp: *mut GElf_Word,
+        elfp: *mut *mut Elf,
+        bias: *mut Dwarf_Addr,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwfl_module_addrname(mod_: *mut Dwfl_Module, address: GElf_Addr)
-     -> *const ::libc::c_char;
+    pub fn dwfl_module_addrname(
+        mod_: *mut Dwfl_Module,
+        address: GElf_Addr,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwfl_module_addrinfo(mod_: *mut Dwfl_Module, address: GElf_Addr,
-                                offset: *mut GElf_Off, sym: *mut GElf_Sym,
-                                shndxp: *mut GElf_Word, elfp: *mut *mut Elf,
-                                bias: *mut Dwarf_Addr)
-     -> *const ::libc::c_char;
+    pub fn dwfl_module_addrinfo(
+        mod_: *mut Dwfl_Module,
+        address: GElf_Addr,
+        offset: *mut GElf_Off,
+        sym: *mut GElf_Sym,
+        shndxp: *mut GElf_Word,
+        elfp: *mut *mut Elf,
+        bias: *mut Dwarf_Addr,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwfl_module_addrsym(mod_: *mut Dwfl_Module, address: GElf_Addr,
-                               sym: *mut GElf_Sym, shndxp: *mut GElf_Word)
-     -> *const ::libc::c_char;
+    pub fn dwfl_module_addrsym(
+        mod_: *mut Dwfl_Module,
+        address: GElf_Addr,
+        sym: *mut GElf_Sym,
+        shndxp: *mut GElf_Word,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwfl_module_address_section(mod_: *mut Dwfl_Module,
-                                       address: *mut Dwarf_Addr,
-                                       bias: *mut Dwarf_Addr) -> *mut Elf_Scn;
+    pub fn dwfl_module_address_section(
+        mod_: *mut Dwfl_Module,
+        address: *mut Dwarf_Addr,
+        bias: *mut Dwarf_Addr,
+    ) -> *mut Elf_Scn;
 }
 extern "C" {
-    /// Dwarf access functions
-    pub fn dwfl_module_getdwarf(arg1: *mut Dwfl_Module, bias: *mut Dwarf_Addr)
-     -> *mut Dwarf;
+    #[doc = " Dwarf access functions"]
+    pub fn dwfl_module_getdwarf(arg1: *mut Dwfl_Module, bias: *mut Dwarf_Addr) -> *mut Dwarf;
 }
 extern "C" {
-    pub fn dwfl_getdwarf(arg1: *mut Dwfl,
-                         callback:
-                             ::std::option::Option<unsafe extern "C" fn(arg1:
-                                                                            *mut Dwfl_Module,
-                                                                        arg2:
-                                                                            *mut *mut ::libc::c_void,
-                                                                        arg3:
-                                                                            *const ::libc::c_char,
-                                                                        arg4:
-                                                                            Dwarf_Addr,
-                                                                        arg5:
-                                                                            *mut Dwarf,
-                                                                        arg6:
-                                                                            Dwarf_Addr,
-                                                                        arg7:
-                                                                            *mut ::libc::c_void)
-                                                       -> ::libc::c_int>,
-                         arg: *mut ::libc::c_void, offset: isize) -> isize;
+    pub fn dwfl_getdwarf(
+        arg1: *mut Dwfl,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg1: *mut Dwfl_Module,
+                arg2: *mut *mut ::libc::c_void,
+                arg3: *const ::libc::c_char,
+                arg4: Dwarf_Addr,
+                arg5: *mut Dwarf,
+                arg6: Dwarf_Addr,
+                arg7: *mut ::libc::c_void,
+            ) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+        offset: isize,
+    ) -> isize;
 }
 extern "C" {
-    pub fn dwfl_addrdwarf(dwfl: *mut Dwfl, addr: Dwarf_Addr,
-                          bias: *mut Dwarf_Addr) -> *mut Dwarf;
+    pub fn dwfl_addrdwarf(dwfl: *mut Dwfl, addr: Dwarf_Addr, bias: *mut Dwarf_Addr) -> *mut Dwarf;
 }
 extern "C" {
-    pub fn dwfl_addrdie(dwfl: *mut Dwfl, addr: Dwarf_Addr,
-                        bias: *mut Dwarf_Addr) -> *mut Dwarf_Die;
+    pub fn dwfl_addrdie(dwfl: *mut Dwfl, addr: Dwarf_Addr, bias: *mut Dwarf_Addr)
+        -> *mut Dwarf_Die;
 }
 extern "C" {
-    pub fn dwfl_module_addrdie(mod_: *mut Dwfl_Module, addr: Dwarf_Addr,
-                               bias: *mut Dwarf_Addr) -> *mut Dwarf_Die;
+    pub fn dwfl_module_addrdie(
+        mod_: *mut Dwfl_Module,
+        addr: Dwarf_Addr,
+        bias: *mut Dwarf_Addr,
+    ) -> *mut Dwarf_Die;
 }
 extern "C" {
-    pub fn dwfl_nextcu(dwfl: *mut Dwfl, lastcu: *mut Dwarf_Die,
-                       bias: *mut Dwarf_Addr) -> *mut Dwarf_Die;
+    pub fn dwfl_nextcu(
+        dwfl: *mut Dwfl,
+        lastcu: *mut Dwarf_Die,
+        bias: *mut Dwarf_Addr,
+    ) -> *mut Dwarf_Die;
 }
 extern "C" {
-    pub fn dwfl_module_nextcu(mod_: *mut Dwfl_Module, lastcu: *mut Dwarf_Die,
-                              bias: *mut Dwarf_Addr) -> *mut Dwarf_Die;
+    pub fn dwfl_module_nextcu(
+        mod_: *mut Dwfl_Module,
+        lastcu: *mut Dwarf_Die,
+        bias: *mut Dwarf_Addr,
+    ) -> *mut Dwarf_Die;
 }
 extern "C" {
     pub fn dwfl_cumodule(cudie: *mut Dwarf_Die) -> *mut Dwfl_Module;
 }
 extern "C" {
-    pub fn dwfl_getsrclines(cudie: *mut Dwarf_Die, nlines: *mut usize)
-     -> ::libc::c_int;
+    pub fn dwfl_getsrclines(cudie: *mut Dwarf_Die, nlines: *mut usize) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_onesrcline(cudie: *mut Dwarf_Die, idx: usize)
-     -> *mut Dwfl_Line;
+    pub fn dwfl_onesrcline(cudie: *mut Dwarf_Die, idx: usize) -> *mut Dwfl_Line;
 }
 extern "C" {
-    pub fn dwfl_module_getsrc(mod_: *mut Dwfl_Module, addr: Dwarf_Addr)
-     -> *mut Dwfl_Line;
+    pub fn dwfl_module_getsrc(mod_: *mut Dwfl_Module, addr: Dwarf_Addr) -> *mut Dwfl_Line;
 }
 extern "C" {
     pub fn dwfl_getsrc(dwfl: *mut Dwfl, addr: Dwarf_Addr) -> *mut Dwfl_Line;
 }
 extern "C" {
-    pub fn dwfl_module_getsrc_file(mod_: *mut Dwfl_Module,
-                                   fname: *const ::libc::c_char,
-                                   lineno: ::libc::c_int,
-                                   column: ::libc::c_int,
-                                   srcsp: *mut *mut *mut Dwfl_Line,
-                                   nsrcs: *mut usize) -> ::libc::c_int;
+    pub fn dwfl_module_getsrc_file(
+        mod_: *mut Dwfl_Module,
+        fname: *const ::libc::c_char,
+        lineno: ::libc::c_int,
+        column: ::libc::c_int,
+        srcsp: *mut *mut *mut Dwfl_Line,
+        nsrcs: *mut usize,
+    ) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwfl_linemodule(line: *mut Dwfl_Line) -> *mut Dwfl_Module;
@@ -1412,151 +1852,189 @@ extern "C" {
     pub fn dwfl_linecu(line: *mut Dwfl_Line) -> *mut Dwarf_Die;
 }
 extern "C" {
-    pub fn dwfl_lineinfo(line: *mut Dwfl_Line, addr: *mut Dwarf_Addr,
-                         linep: *mut ::libc::c_int, colp: *mut ::libc::c_int,
-                         mtime: *mut Dwarf_Word, length: *mut Dwarf_Word)
-     -> *const ::libc::c_char;
+    pub fn dwfl_lineinfo(
+        line: *mut Dwfl_Line,
+        addr: *mut Dwarf_Addr,
+        linep: *mut ::libc::c_int,
+        colp: *mut ::libc::c_int,
+        mtime: *mut Dwarf_Word,
+        length: *mut Dwarf_Word,
+    ) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwfl_dwarf_line(line: *mut Dwfl_Line, bias: *mut Dwarf_Addr)
-     -> *mut Dwarf_Line;
+    pub fn dwfl_dwarf_line(line: *mut Dwfl_Line, bias: *mut Dwarf_Addr) -> *mut Dwarf_Line;
 }
 extern "C" {
     pub fn dwfl_line_comp_dir(line: *mut Dwfl_Line) -> *const ::libc::c_char;
 }
 extern "C" {
-    /// Machine backend access functions
-    pub fn dwfl_module_return_value_location(mod_: *mut Dwfl_Module,
-                                             functypedie: *mut Dwarf_Die,
-                                             locops: *mut *const Dwarf_Op)
-     -> ::libc::c_int;
+    #[doc = " Machine backend access functions"]
+    pub fn dwfl_module_return_value_location(
+        mod_: *mut Dwfl_Module,
+        functypedie: *mut Dwarf_Die,
+        locops: *mut *const Dwarf_Op,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_module_register_names(mod_: *mut Dwfl_Module,
-                                      callback:
-                                          ::std::option::Option<unsafe extern "C" fn(arg:
-                                                                                         *mut ::libc::c_void,
-                                                                                     regno:
-                                                                                         ::libc::c_int,
-                                                                                     setname:
-                                                                                         *const ::libc::c_char,
-                                                                                     prefix:
-                                                                                         *const ::libc::c_char,
-                                                                                     regname:
-                                                                                         *const ::libc::c_char,
-                                                                                     bits:
-                                                                                         ::libc::c_int,
-                                                                                     type_:
-                                                                                         ::libc::c_int)
-                                                                    ->
-                                                                        ::libc::c_int>,
-                                      arg: *mut ::libc::c_void)
-     -> ::libc::c_int;
+    pub fn dwfl_module_register_names(
+        mod_: *mut Dwfl_Module,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(
+                arg: *mut ::libc::c_void,
+                regno: ::libc::c_int,
+                setname: *const ::libc::c_char,
+                prefix: *const ::libc::c_char,
+                regname: *const ::libc::c_char,
+                bits: ::libc::c_int,
+                type_: ::libc::c_int,
+            ) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_module_dwarf_cfi(mod_: *mut Dwfl_Module,
-                                 bias: *mut Dwarf_Addr) -> *mut Dwarf_CFI;
+    pub fn dwfl_module_dwarf_cfi(mod_: *mut Dwfl_Module, bias: *mut Dwarf_Addr) -> *mut Dwarf_CFI;
 }
 extern "C" {
-    pub fn dwfl_module_eh_cfi(mod_: *mut Dwfl_Module, bias: *mut Dwarf_Addr)
-     -> *mut Dwarf_CFI;
+    pub fn dwfl_module_eh_cfi(mod_: *mut Dwfl_Module, bias: *mut Dwarf_Addr) -> *mut Dwarf_CFI;
 }
 #[repr(C)]
-#[derive(Debug, Copy)]
+#[derive(Debug, Copy, Clone)]
 pub struct Dwfl_Thread_Callbacks {
-    pub next_thread: ::std::option::Option<unsafe extern "C" fn(dwfl:
-                                                                    *mut Dwfl,
-                                                                dwfl_arg:
-                                                                    *mut ::libc::c_void,
-                                                                thread_argp:
-                                                                    *mut *mut ::libc::c_void)
-                                               -> pid_t>,
-    pub get_thread: ::std::option::Option<unsafe extern "C" fn(dwfl:
-                                                                   *mut Dwfl,
-                                                               tid: pid_t,
-                                                               dwfl_arg:
-                                                                   *mut ::libc::c_void,
-                                                               thread_argp:
-                                                                   *mut *mut ::libc::c_void)
-                                              -> bool>,
-    pub memory_read: ::std::option::Option<unsafe extern "C" fn(dwfl:
-                                                                    *mut Dwfl,
-                                                                addr:
-                                                                    Dwarf_Addr,
-                                                                result:
-                                                                    *mut Dwarf_Word,
-                                                                dwfl_arg:
-                                                                    *mut ::libc::c_void)
-                                               -> bool>,
-    pub set_initial_registers: ::std::option::Option<unsafe extern "C" fn(thread:
-                                                                              *mut Dwfl_Thread,
-                                                                          thread_arg:
-                                                                              *mut ::libc::c_void)
-                                                         -> bool>,
-    pub detach: ::std::option::Option<unsafe extern "C" fn(dwfl: *mut Dwfl,
-                                                           dwfl_arg:
-                                                               *mut ::libc::c_void)>,
-    pub thread_detach: ::std::option::Option<unsafe extern "C" fn(thread:
-                                                                      *mut Dwfl_Thread,
-                                                                  thread_arg:
-                                                                      *mut ::libc::c_void)>,
+    pub next_thread: ::std::option::Option<
+        unsafe extern "C" fn(
+            dwfl: *mut Dwfl,
+            dwfl_arg: *mut ::libc::c_void,
+            thread_argp: *mut *mut ::libc::c_void,
+        ) -> pid_t,
+    >,
+    pub get_thread: ::std::option::Option<
+        unsafe extern "C" fn(
+            dwfl: *mut Dwfl,
+            tid: pid_t,
+            dwfl_arg: *mut ::libc::c_void,
+            thread_argp: *mut *mut ::libc::c_void,
+        ) -> bool,
+    >,
+    pub memory_read: ::std::option::Option<
+        unsafe extern "C" fn(
+            dwfl: *mut Dwfl,
+            addr: Dwarf_Addr,
+            result: *mut Dwarf_Word,
+            dwfl_arg: *mut ::libc::c_void,
+        ) -> bool,
+    >,
+    pub set_initial_registers: ::std::option::Option<
+        unsafe extern "C" fn(thread: *mut Dwfl_Thread, thread_arg: *mut ::libc::c_void) -> bool,
+    >,
+    pub detach:
+        ::std::option::Option<unsafe extern "C" fn(dwfl: *mut Dwfl, dwfl_arg: *mut ::libc::c_void)>,
+    pub thread_detach: ::std::option::Option<
+        unsafe extern "C" fn(thread: *mut Dwfl_Thread, thread_arg: *mut ::libc::c_void),
+    >,
 }
 #[test]
 fn bindgen_test_layout_Dwfl_Thread_Callbacks() {
-    assert_eq!(::std::mem::size_of::<Dwfl_Thread_Callbacks>() , 48usize ,
-               concat ! ( "Size of: " , stringify ! ( Dwfl_Thread_Callbacks )
-               ));
-    assert_eq! (::std::mem::align_of::<Dwfl_Thread_Callbacks>() , 8usize ,
-                concat ! (
-                "Alignment of " , stringify ! ( Dwfl_Thread_Callbacks ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwfl_Thread_Callbacks ) ) . next_thread
-                as * const _ as usize } , 0usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwfl_Thread_Callbacks )
-                , "::" , stringify ! ( next_thread ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwfl_Thread_Callbacks ) ) . get_thread as
-                * const _ as usize } , 8usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwfl_Thread_Callbacks )
-                , "::" , stringify ! ( get_thread ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwfl_Thread_Callbacks ) ) . memory_read
-                as * const _ as usize } , 16usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwfl_Thread_Callbacks )
-                , "::" , stringify ! ( memory_read ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwfl_Thread_Callbacks ) ) .
-                set_initial_registers as * const _ as usize } , 24usize ,
-                concat ! (
-                "Alignment of field: " , stringify ! ( Dwfl_Thread_Callbacks )
-                , "::" , stringify ! ( set_initial_registers ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwfl_Thread_Callbacks ) ) . detach as *
-                const _ as usize } , 32usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwfl_Thread_Callbacks )
-                , "::" , stringify ! ( detach ) ));
-    assert_eq! (unsafe {
-                & ( * ( 0 as * const Dwfl_Thread_Callbacks ) ) . thread_detach
-                as * const _ as usize } , 40usize , concat ! (
-                "Alignment of field: " , stringify ! ( Dwfl_Thread_Callbacks )
-                , "::" , stringify ! ( thread_detach ) ));
-}
-impl Clone for Dwfl_Thread_Callbacks {
-    fn clone(&self) -> Self { *self }
+    assert_eq!(
+        ::std::mem::size_of::<Dwfl_Thread_Callbacks>(),
+        48usize,
+        concat!("Size of: ", stringify!(Dwfl_Thread_Callbacks))
+    );
+    assert_eq!(
+        ::std::mem::align_of::<Dwfl_Thread_Callbacks>(),
+        8usize,
+        concat!("Alignment of ", stringify!(Dwfl_Thread_Callbacks))
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Dwfl_Thread_Callbacks>())).next_thread as *const _ as usize
+        },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwfl_Thread_Callbacks),
+            "::",
+            stringify!(next_thread)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Dwfl_Thread_Callbacks>())).get_thread as *const _ as usize
+        },
+        8usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwfl_Thread_Callbacks),
+            "::",
+            stringify!(get_thread)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Dwfl_Thread_Callbacks>())).memory_read as *const _ as usize
+        },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwfl_Thread_Callbacks),
+            "::",
+            stringify!(memory_read)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Dwfl_Thread_Callbacks>())).set_initial_registers as *const _
+                as usize
+        },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwfl_Thread_Callbacks),
+            "::",
+            stringify!(set_initial_registers)
+        )
+    );
+    assert_eq!(
+        unsafe { &(*(::std::ptr::null::<Dwfl_Thread_Callbacks>())).detach as *const _ as usize },
+        32usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwfl_Thread_Callbacks),
+            "::",
+            stringify!(detach)
+        )
+    );
+    assert_eq!(
+        unsafe {
+            &(*(::std::ptr::null::<Dwfl_Thread_Callbacks>())).thread_detach as *const _ as usize
+        },
+        40usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(Dwfl_Thread_Callbacks),
+            "::",
+            stringify!(thread_detach)
+        )
+    );
 }
 extern "C" {
-    pub fn dwfl_attach_state(dwfl: *mut Dwfl, elf: *mut Elf, pid: pid_t,
-                             thread_callbacks: *const Dwfl_Thread_Callbacks,
-                             dwfl_arg: *mut ::libc::c_void) -> bool;
+    pub fn dwfl_attach_state(
+        dwfl: *mut Dwfl,
+        elf: *mut Elf,
+        pid: pid_t,
+        thread_callbacks: *const Dwfl_Thread_Callbacks,
+        dwfl_arg: *mut ::libc::c_void,
+    ) -> bool;
 }
 extern "C" {
-    pub fn dwfl_core_file_attach(dwfl: *mut Dwfl, elf: *mut Elf)
-     -> ::libc::c_int;
+    pub fn dwfl_core_file_attach(dwfl: *mut Dwfl, elf: *mut Elf) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_linux_proc_attach(dwfl: *mut Dwfl, pid: pid_t,
-                                  assume_ptrace_stopped: bool)
-     -> ::libc::c_int;
+    pub fn dwfl_linux_proc_attach(
+        dwfl: *mut Dwfl,
+        pid: pid_t,
+        assume_ptrace_stopped: bool,
+    ) -> ::libc::c_int;
 }
 extern "C" {
     pub fn dwfl_pid(dwfl: *mut Dwfl) -> pid_t;
@@ -1571,65 +2049,69 @@ extern "C" {
     pub fn dwfl_frame_thread(state: *mut Dwfl_Frame) -> *mut Dwfl_Thread;
 }
 extern "C" {
-    pub fn dwfl_thread_state_registers(thread: *mut Dwfl_Thread,
-                                       firstreg: ::libc::c_int,
-                                       nregs: ::libc::c_uint,
-                                       regs: *const Dwarf_Word) -> bool;
+    pub fn dwfl_thread_state_registers(
+        thread: *mut Dwfl_Thread,
+        firstreg: ::libc::c_int,
+        nregs: ::libc::c_uint,
+        regs: *const Dwarf_Word,
+    ) -> bool;
 }
 extern "C" {
-    pub fn dwfl_thread_state_register_pc(thread: *mut Dwfl_Thread,
-                                         pc: Dwarf_Word);
+    pub fn dwfl_thread_state_register_pc(thread: *mut Dwfl_Thread, pc: Dwarf_Word);
 }
 extern "C" {
-    pub fn dwfl_getthreads(dwfl: *mut Dwfl,
-                           callback:
-                               ::std::option::Option<unsafe extern "C" fn(thread:
-                                                                              *mut Dwfl_Thread,
-                                                                          arg:
-                                                                              *mut ::libc::c_void)
-                                                         -> ::libc::c_int>,
-                           arg: *mut ::libc::c_void) -> ::libc::c_int;
+    pub fn dwfl_getthreads(
+        dwfl: *mut Dwfl,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(
+                thread: *mut Dwfl_Thread,
+                arg: *mut ::libc::c_void,
+            ) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_thread_getframes(thread: *mut Dwfl_Thread,
-                                 callback:
-                                     ::std::option::Option<unsafe extern "C" fn(state:
-                                                                                    *mut Dwfl_Frame,
-                                                                                arg:
-                                                                                    *mut ::libc::c_void)
-                                                               ->
-                                                                   ::libc::c_int>,
-                                 arg: *mut ::libc::c_void) -> ::libc::c_int;
+    pub fn dwfl_thread_getframes(
+        thread: *mut Dwfl_Thread,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(state: *mut Dwfl_Frame, arg: *mut ::libc::c_void) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_getthread_frames(dwfl: *mut Dwfl, tid: pid_t,
-                                 callback:
-                                     ::std::option::Option<unsafe extern "C" fn(thread:
-                                                                                    *mut Dwfl_Frame,
-                                                                                arg:
-                                                                                    *mut ::libc::c_void)
-                                                               ->
-                                                                   ::libc::c_int>,
-                                 arg: *mut ::libc::c_void) -> ::libc::c_int;
+    pub fn dwfl_getthread_frames(
+        dwfl: *mut Dwfl,
+        tid: pid_t,
+        callback: ::std::option::Option<
+            unsafe extern "C" fn(
+                thread: *mut Dwfl_Frame,
+                arg: *mut ::libc::c_void,
+            ) -> ::libc::c_int,
+        >,
+        arg: *mut ::libc::c_void,
+    ) -> ::libc::c_int;
 }
 extern "C" {
-    pub fn dwfl_frame_pc(state: *mut Dwfl_Frame, pc: *mut Dwarf_Addr,
-                         isactivation: *mut bool) -> bool;
+    pub fn dwfl_frame_pc(
+        state: *mut Dwfl_Frame,
+        pc: *mut Dwarf_Addr,
+        isactivation: *mut bool,
+    ) -> bool;
 }
 extern "C" {
-    pub fn dwelf_elf_gnu_debuglink(elf: *mut Elf, crc: *mut GElf_Word)
-     -> *const ::libc::c_char;
+    pub fn dwelf_elf_gnu_debuglink(elf: *mut Elf, crc: *mut GElf_Word) -> *const ::libc::c_char;
 }
 extern "C" {
-    pub fn dwelf_dwarf_gnu_debugaltlink(dwarf: *mut Dwarf,
-                                        namep: *mut *const ::libc::c_char,
-                                        build_idp: *mut *const ::libc::c_void)
-     -> isize;
+    pub fn dwelf_dwarf_gnu_debugaltlink(
+        dwarf: *mut Dwarf,
+        namep: *mut *const ::libc::c_char,
+        build_idp: *mut *const ::libc::c_void,
+    ) -> isize;
 }
 extern "C" {
-    pub fn dwelf_elf_gnu_build_id(elf: *mut Elf,
-                                  build_idp: *mut *const ::libc::c_void)
-     -> isize;
+    pub fn dwelf_elf_gnu_build_id(elf: *mut Elf, build_idp: *mut *const ::libc::c_void) -> isize;
 }
 extern "C" {
     pub fn dwelf_scn_gnu_compressed_size(scn: *mut Elf_Scn) -> isize;
@@ -1649,16 +2131,17 @@ extern "C" {
 }
 extern "C" {
     pub fn dwelf_strtab_add(st: *mut Dwelf_Strtab, str: *const ::libc::c_char)
-     -> *mut Dwelf_Strent;
+        -> *mut Dwelf_Strent;
 }
 extern "C" {
-    pub fn dwelf_strtab_add_len(st: *mut Dwelf_Strtab,
-                                str: *const ::libc::c_char, len: usize)
-     -> *mut Dwelf_Strent;
+    pub fn dwelf_strtab_add_len(
+        st: *mut Dwelf_Strtab,
+        str: *const ::libc::c_char,
+        len: usize,
+    ) -> *mut Dwelf_Strent;
 }
 extern "C" {
-    pub fn dwelf_strtab_finalize(st: *mut Dwelf_Strtab, data: *mut Elf_Data)
-     -> *mut Elf_Data;
+    pub fn dwelf_strtab_finalize(st: *mut Dwelf_Strtab, data: *mut Elf_Data) -> *mut Elf_Data;
 }
 extern "C" {
     pub fn dwelf_strent_off(se: *mut Dwelf_Strent) -> usize;
@@ -1750,10 +2233,10 @@ pub const DW_TAG_GNU_formal_parameter_pack: _bindgen_ty_6 = 16648;
 pub const DW_TAG_GNU_call_site: _bindgen_ty_6 = 16649;
 pub const DW_TAG_GNU_call_site_parameter: _bindgen_ty_6 = 16650;
 pub const DW_TAG_hi_user: _bindgen_ty_6 = 65535;
-pub type _bindgen_ty_6 = ::libc::c_uint;
+pub type _bindgen_ty_6 = u32;
 pub const DW_CHILDREN_no: _bindgen_ty_7 = 0;
 pub const DW_CHILDREN_yes: _bindgen_ty_7 = 1;
-pub type _bindgen_ty_7 = ::libc::c_uint;
+pub type _bindgen_ty_7 = u32;
 pub const DW_AT_sibling: _bindgen_ty_8 = 1;
 pub const DW_AT_location: _bindgen_ty_8 = 2;
 pub const DW_AT_name: _bindgen_ty_8 = 3;
@@ -1920,7 +2403,7 @@ pub const DW_AT_GNU_all_source_call_sites: _bindgen_ty_8 = 8472;
 pub const DW_AT_GNU_macros: _bindgen_ty_8 = 8473;
 pub const DW_AT_GNU_deleted: _bindgen_ty_8 = 8474;
 pub const DW_AT_hi_user: _bindgen_ty_8 = 16383;
-pub type _bindgen_ty_8 = ::libc::c_uint;
+pub type _bindgen_ty_8 = u32;
 pub const DW_FORM_addr: _bindgen_ty_9 = 1;
 pub const DW_FORM_block2: _bindgen_ty_9 = 3;
 pub const DW_FORM_block4: _bindgen_ty_9 = 4;
@@ -1948,7 +2431,7 @@ pub const DW_FORM_flag_present: _bindgen_ty_9 = 25;
 pub const DW_FORM_ref_sig8: _bindgen_ty_9 = 32;
 pub const DW_FORM_GNU_ref_alt: _bindgen_ty_9 = 7968;
 pub const DW_FORM_GNU_strp_alt: _bindgen_ty_9 = 7969;
-pub type _bindgen_ty_9 = ::libc::c_uint;
+pub type _bindgen_ty_9 = u32;
 pub const DW_OP_addr: _bindgen_ty_10 = 3;
 pub const DW_OP_deref: _bindgen_ty_10 = 6;
 pub const DW_OP_const1u: _bindgen_ty_10 = 8;
@@ -2116,7 +2599,7 @@ pub const DW_OP_GNU_reinterpret: _bindgen_ty_10 = 249;
 pub const DW_OP_GNU_parameter_ref: _bindgen_ty_10 = 250;
 pub const DW_OP_lo_user: _bindgen_ty_10 = 224;
 pub const DW_OP_hi_user: _bindgen_ty_10 = 255;
-pub type _bindgen_ty_10 = ::libc::c_uint;
+pub type _bindgen_ty_10 = u32;
 pub const DW_ATE_void: _bindgen_ty_11 = 0;
 pub const DW_ATE_address: _bindgen_ty_11 = 1;
 pub const DW_ATE_boolean: _bindgen_ty_11 = 2;
@@ -2138,31 +2621,31 @@ pub const DW_ATE_UCS: _bindgen_ty_11 = 17;
 pub const DW_ATE_ASCII: _bindgen_ty_11 = 18;
 pub const DW_ATE_lo_user: _bindgen_ty_11 = 128;
 pub const DW_ATE_hi_user: _bindgen_ty_11 = 255;
-pub type _bindgen_ty_11 = ::libc::c_uint;
+pub type _bindgen_ty_11 = u32;
 pub const DW_DS_unsigned: _bindgen_ty_12 = 1;
 pub const DW_DS_leading_overpunch: _bindgen_ty_12 = 2;
 pub const DW_DS_trailing_overpunch: _bindgen_ty_12 = 3;
 pub const DW_DS_leading_separate: _bindgen_ty_12 = 4;
 pub const DW_DS_trailing_separate: _bindgen_ty_12 = 5;
-pub type _bindgen_ty_12 = ::libc::c_uint;
+pub type _bindgen_ty_12 = u32;
 pub const DW_END_default: _bindgen_ty_13 = 0;
 pub const DW_END_big: _bindgen_ty_13 = 1;
 pub const DW_END_little: _bindgen_ty_13 = 2;
 pub const DW_END_lo_user: _bindgen_ty_13 = 64;
 pub const DW_END_hi_user: _bindgen_ty_13 = 255;
-pub type _bindgen_ty_13 = ::libc::c_uint;
+pub type _bindgen_ty_13 = u32;
 pub const DW_ACCESS_public: _bindgen_ty_14 = 1;
 pub const DW_ACCESS_protected: _bindgen_ty_14 = 2;
 pub const DW_ACCESS_private: _bindgen_ty_14 = 3;
-pub type _bindgen_ty_14 = ::libc::c_uint;
+pub type _bindgen_ty_14 = u32;
 pub const DW_VIS_local: _bindgen_ty_15 = 1;
 pub const DW_VIS_exported: _bindgen_ty_15 = 2;
 pub const DW_VIS_qualified: _bindgen_ty_15 = 3;
-pub type _bindgen_ty_15 = ::libc::c_uint;
+pub type _bindgen_ty_15 = u32;
 pub const DW_VIRTUALITY_none: _bindgen_ty_16 = 0;
 pub const DW_VIRTUALITY_virtual: _bindgen_ty_16 = 1;
 pub const DW_VIRTUALITY_pure_virtual: _bindgen_ty_16 = 2;
-pub type _bindgen_ty_16 = ::libc::c_uint;
+pub type _bindgen_ty_16 = u32;
 pub const DW_LANG_C89: _bindgen_ty_17 = 1;
 pub const DW_LANG_C: _bindgen_ty_17 = 2;
 pub const DW_LANG_Ada83: _bindgen_ty_17 = 3;
@@ -2203,12 +2686,12 @@ pub const DW_LANG_BLISS: _bindgen_ty_17 = 37;
 pub const DW_LANG_lo_user: _bindgen_ty_17 = 32768;
 pub const DW_LANG_Mips_Assembler: _bindgen_ty_17 = 32769;
 pub const DW_LANG_hi_user: _bindgen_ty_17 = 65535;
-pub type _bindgen_ty_17 = ::libc::c_uint;
+pub type _bindgen_ty_17 = u32;
 pub const DW_ID_case_sensitive: _bindgen_ty_18 = 0;
 pub const DW_ID_up_case: _bindgen_ty_18 = 1;
 pub const DW_ID_down_case: _bindgen_ty_18 = 2;
 pub const DW_ID_case_insensitive: _bindgen_ty_18 = 3;
-pub type _bindgen_ty_18 = ::libc::c_uint;
+pub type _bindgen_ty_18 = u32;
 pub const DW_CC_normal: _bindgen_ty_19 = 1;
 pub const DW_CC_program: _bindgen_ty_19 = 2;
 pub const DW_CC_nocall: _bindgen_ty_19 = 3;
@@ -2216,22 +2699,22 @@ pub const DW_CC_pass_by_reference: _bindgen_ty_19 = 4;
 pub const DW_CC_pass_by_value: _bindgen_ty_19 = 5;
 pub const DW_CC_lo_user: _bindgen_ty_19 = 64;
 pub const DW_CC_hi_user: _bindgen_ty_19 = 255;
-pub type _bindgen_ty_19 = ::libc::c_uint;
+pub type _bindgen_ty_19 = u32;
 pub const DW_INL_not_inlined: _bindgen_ty_20 = 0;
 pub const DW_INL_inlined: _bindgen_ty_20 = 1;
 pub const DW_INL_declared_not_inlined: _bindgen_ty_20 = 2;
 pub const DW_INL_declared_inlined: _bindgen_ty_20 = 3;
-pub type _bindgen_ty_20 = ::libc::c_uint;
+pub type _bindgen_ty_20 = u32;
 pub const DW_ORD_row_major: _bindgen_ty_21 = 0;
 pub const DW_ORD_col_major: _bindgen_ty_21 = 1;
-pub type _bindgen_ty_21 = ::libc::c_uint;
+pub type _bindgen_ty_21 = u32;
 pub const DW_DSC_label: _bindgen_ty_22 = 0;
 pub const DW_DSC_range: _bindgen_ty_22 = 1;
-pub type _bindgen_ty_22 = ::libc::c_uint;
+pub type _bindgen_ty_22 = u32;
 pub const DW_DEFAULTED_no: _bindgen_ty_23 = 0;
 pub const DW_DEFAULTED_in_class: _bindgen_ty_23 = 1;
 pub const DW_DEFAULTED_out_of_class: _bindgen_ty_23 = 2;
-pub type _bindgen_ty_23 = ::libc::c_uint;
+pub type _bindgen_ty_23 = u32;
 pub const DW_LNS_copy: _bindgen_ty_24 = 1;
 pub const DW_LNS_advance_pc: _bindgen_ty_24 = 2;
 pub const DW_LNS_advance_line: _bindgen_ty_24 = 3;
@@ -2244,20 +2727,20 @@ pub const DW_LNS_fixed_advance_pc: _bindgen_ty_24 = 9;
 pub const DW_LNS_set_prologue_end: _bindgen_ty_24 = 10;
 pub const DW_LNS_set_epilogue_begin: _bindgen_ty_24 = 11;
 pub const DW_LNS_set_isa: _bindgen_ty_24 = 12;
-pub type _bindgen_ty_24 = ::libc::c_uint;
+pub type _bindgen_ty_24 = u32;
 pub const DW_LNE_end_sequence: _bindgen_ty_25 = 1;
 pub const DW_LNE_set_address: _bindgen_ty_25 = 2;
 pub const DW_LNE_define_file: _bindgen_ty_25 = 3;
 pub const DW_LNE_set_discriminator: _bindgen_ty_25 = 4;
 pub const DW_LNE_lo_user: _bindgen_ty_25 = 128;
 pub const DW_LNE_hi_user: _bindgen_ty_25 = 255;
-pub type _bindgen_ty_25 = ::libc::c_uint;
+pub type _bindgen_ty_25 = u32;
 pub const DW_MACINFO_define: _bindgen_ty_26 = 1;
 pub const DW_MACINFO_undef: _bindgen_ty_26 = 2;
 pub const DW_MACINFO_start_file: _bindgen_ty_26 = 3;
 pub const DW_MACINFO_end_file: _bindgen_ty_26 = 4;
 pub const DW_MACINFO_vendor_ext: _bindgen_ty_26 = 255;
-pub type _bindgen_ty_26 = ::libc::c_uint;
+pub type _bindgen_ty_26 = u32;
 pub const DW_MACRO_define: _bindgen_ty_27 = 1;
 pub const DW_MACRO_undef: _bindgen_ty_27 = 2;
 pub const DW_MACRO_start_file: _bindgen_ty_27 = 3;
@@ -2272,7 +2755,7 @@ pub const DW_MACRO_define_strx: _bindgen_ty_27 = 11;
 pub const DW_MACRO_undef_strx: _bindgen_ty_27 = 12;
 pub const DW_MACRO_lo_user: _bindgen_ty_27 = 224;
 pub const DW_MACRO_hi_user: _bindgen_ty_27 = 255;
-pub type _bindgen_ty_27 = ::libc::c_uint;
+pub type _bindgen_ty_27 = u32;
 pub const DW_CFA_advance_loc: _bindgen_ty_28 = 64;
 pub const DW_CFA_offset: _bindgen_ty_28 = 128;
 pub const DW_CFA_restore: _bindgen_ty_28 = 192;
@@ -2306,10 +2789,10 @@ pub const DW_CFA_GNU_window_save: _bindgen_ty_28 = 45;
 pub const DW_CFA_GNU_args_size: _bindgen_ty_28 = 46;
 pub const DW_CFA_GNU_negative_offset_extended: _bindgen_ty_28 = 47;
 pub const DW_CFA_high_user: _bindgen_ty_28 = 63;
-pub type _bindgen_ty_28 = ::libc::c_uint;
+pub type _bindgen_ty_28 = u32;
 pub const DW_CIE_ID_32: _bindgen_ty_29 = 4294967295;
 pub const DW_CIE_ID_64: _bindgen_ty_29 = 18446744073709551615;
-pub type _bindgen_ty_29 = ::libc::c_ulong;
+pub type _bindgen_ty_29 = u64;
 pub const DW_EH_PE_absptr: _bindgen_ty_30 = 0;
 pub const DW_EH_PE_omit: _bindgen_ty_30 = 255;
 pub const DW_EH_PE_uleb128: _bindgen_ty_30 = 1;
@@ -2327,4 +2810,4 @@ pub const DW_EH_PE_datarel: _bindgen_ty_30 = 48;
 pub const DW_EH_PE_funcrel: _bindgen_ty_30 = 64;
 pub const DW_EH_PE_aligned: _bindgen_ty_30 = 80;
 pub const DW_EH_PE_indirect: _bindgen_ty_30 = 128;
-pub type _bindgen_ty_30 = ::libc::c_uint;
+pub type _bindgen_ty_30 = u32;

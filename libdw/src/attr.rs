@@ -174,7 +174,7 @@ impl<'dw> Clone for Attribute<'dw> {
     fn clone(&self) -> Self {
         unsafe {
             Attribute {
-                inner: (*self.as_ptr()).into(),
+                inner: ffi::Dwarf_Attribute { ..*self.as_ptr() }.into(),
                 phantom: PhantomData,
             }
         }
