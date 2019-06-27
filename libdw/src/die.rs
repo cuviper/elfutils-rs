@@ -13,6 +13,7 @@ use super::Attribute;
 use super::Dwarf;
 use super::Result;
 
+#[repr(transparent)]
 pub struct Die<'dw> {
     inner: UnsafeCell<ffi::Dwarf_Die>,
     phantom: PhantomData<&'dw Dwarf<'dw>>,
