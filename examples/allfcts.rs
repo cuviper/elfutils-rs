@@ -3,11 +3,7 @@
 use std::env;
 use std::error::Error;
 
-fn main() {
-    try_main().unwrap();
-}
-
-fn try_main() -> Result<(), Box<dyn Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     for arg in env::args_os().skip(1) {
         let dw = libdw::Dwarf::open(arg)?;
         // TODO setup_alt

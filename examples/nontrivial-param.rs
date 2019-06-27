@@ -11,11 +11,7 @@ use std::ffi::{CStr, CString};
 use std::env;
 use std::error::Error;
 
-fn main() {
-    try_main().unwrap();
-}
-
-fn try_main() -> Result<(), Box<dyn Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     for arg in env::args_os().skip(1) {
         let dwfl = Dwfl::open(arg)?;
         for dw in dwfl.dwarfs() {
