@@ -1,5 +1,4 @@
-use ffi;
-use libc;
+use crate::ffi;
 use std::error;
 use std::fmt;
 use std::io;
@@ -17,7 +16,7 @@ macro_rules! raw_ffi {
 macro_rules! ffi {
     ($func:ident ($($arg:expr),*)) => ({
         let result = raw_ffi!($func($($arg),*));
-        ::error::IntoResult::into_result(result)
+        crate::error::IntoResult::into_result(result)
     })
 }
 
@@ -27,7 +26,7 @@ macro_rules! ffi_check {
         if result != $error {
             Ok(result)
         } else {
-            Err(::Error::last())
+            Err(crate::Error::last())
         }
     })
 }
@@ -144,7 +143,7 @@ impl error::Error for Error {
 
 impl fmt::Display for Error {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.kind {
             ErrorKind::Dw(errno) => {
                 let msg = errmsg(errno);

@@ -1,5 +1,4 @@
-use ffi;
-use libelf;
+use crate::ffi;
 use std::ptr;
 
 use std::fmt;
@@ -20,12 +19,12 @@ pub struct Dwarf<'dw> {
 enum DwarfKind<'dw> {
     Raw,
     File(fs::File),
-    Fd(&'dw AsRawFd),
+    Fd(&'dw dyn AsRawFd),
     Elf(&'dw libelf::Elf<'dw>),
 }
 
 impl<'elf> fmt::Debug for DwarfKind<'elf> {
-    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             DwarfKind::Raw => fmt.debug_tuple("Raw").finish(),
             DwarfKind::File(ref f) => fmt.debug_tuple("File").field(f).finish(),
@@ -87,7 +86,7 @@ impl<'dw> Dwarf<'dw> {
     /// let dw = libdw::Dwarf::from_elf(&elf).unwrap();
     /// ```
     #[inline]
-    pub fn from_elf(elf: &'dw libelf::Elf) -> Result<Dwarf<'dw>> {
+    pub fn from_elf(elf: &'dw libelf::Elf<'_>) -> Result<Dwarf<'dw>> {
         let ptr = elf.as_ptr();
         let dwarf = ffi!(dwarf_begin_elf(ptr, ffi::Dwarf_Cmd::DWARF_C_READ, ptr::null_mut()))?;
         Ok(Dwarf::new(dwarf, DwarfKind::Elf(elf)))

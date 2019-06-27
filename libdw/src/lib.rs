@@ -1,23 +1,21 @@
-extern crate libc;
-extern crate libelf;
-extern crate libdw_sys as ffi;
+use libdw_sys as ffi;
 
 pub mod raw {
-    pub use ffi::*;
+    pub use crate::ffi::*;
 }
 
 #[macro_use]
 mod error;
-pub use error::{Error, Result};
+pub use crate::error::{Error, Result};
 
 mod dwarf;
-pub use dwarf::Dwarf;
+pub use crate::dwarf::Dwarf;
 
 mod units;
-pub use units::{CompileUnits, CompileUnit, TypeUnits, TypeUnit};
+pub use crate::units::{CompileUnits, CompileUnit, TypeUnits, TypeUnit};
 
 mod die;
-pub use die::{Die, DieChildren};
+pub use crate::die::{Die, DieChildren};
 
 mod attr;
-pub use attr::{Attribute, AttributeValue};
+pub use crate::attr::{Attribute, AttributeValue};

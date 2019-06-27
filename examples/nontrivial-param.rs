@@ -2,10 +2,6 @@
 //!
 //! [1]: https://github.com/cuviper/nontrivial-param
 
-extern crate cpp_demangle;
-extern crate libdw;
-extern crate libdwfl;
-
 use cpp_demangle::Symbol;
 use libdw::{raw, Die};
 use libdwfl::Dwfl;
@@ -19,7 +15,7 @@ fn main() {
     try_main().unwrap();
 }
 
-fn try_main() -> Result<(), Box<Error>> {
+fn try_main() -> Result<(), Box<dyn Error>> {
     for arg in env::args_os().skip(1) {
         let dwfl = Dwfl::open(arg)?;
         for dw in dwfl.dwarfs() {
@@ -34,7 +30,7 @@ fn try_main() -> Result<(), Box<Error>> {
     Ok(())
 }
 
-fn process_function(function: &Die) -> libdw::Result<bool> {
+fn process_function(function: &Die<'_>) -> libdw::Result<bool> {
     let file = match function.decl_file() {
         Ok(file) if !in_system_header(file) => file,
         _ => return Ok(true),
@@ -67,7 +63,7 @@ fn in_system_header(file: &CStr) -> bool {
     bytes.starts_with(b"/usr/") && !bytes.starts_with(b"/usr/src/debug/")
 }
 
-fn has_nontrivial_type(die: &Die) -> bool {
+fn has_nontrivial_type(die: &Die<'_>) -> bool {
     die.attr(raw::DW_AT_type)
         .and_then(|attr| attr.get_die())
         .map(|ty| match ty.tag() {
@@ -81,7 +77,7 @@ fn has_nontrivial_type(die: &Die) -> bool {
         .unwrap_or(false)
 }
 
-fn function_name<'dw>(function: &'dw Die) -> Cow<'dw, CStr> {
+fn function_name<'dw>(function: &'dw Die<'_>) -> Cow<'dw, CStr> {
     let linkage_name = function.attr_integrate(raw::DW_AT_linkage_name)
         .or_else(|_| function.attr_integrate(raw::DW_AT_MIPS_linkage_name))
         .and_then(|attr| attr.get_string());

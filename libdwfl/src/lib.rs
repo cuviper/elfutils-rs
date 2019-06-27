@@ -1,10 +1,8 @@
-extern crate libc;
-extern crate libdw_sys as ffi;
-extern crate libdw;
+use libdw_sys as ffi;
 
 #[macro_use]
 mod error;
-pub use error::{Error, Result};
+pub use crate::error::{Error, Result};
 
 mod dwfl;
-pub use dwfl::Dwfl;
+pub use crate::dwfl::Dwfl;

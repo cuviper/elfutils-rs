@@ -1,4 +1,4 @@
-use ffi;
+use crate::ffi;
 
 use std::cell::UnsafeCell;
 use std::ffi::CStr;
@@ -45,7 +45,7 @@ impl<'dw> Default for Attribute<'dw> {
 }
 
 impl<'dw> fmt::Debug for Attribute<'dw> {
-    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt.debug_tuple("Attribute")
             .field(unsafe { &*self.as_ptr() })
             .finish()
@@ -187,14 +187,14 @@ mod tests {
     #[test]
     fn attr_size() {
         use std::mem::size_of;
-        assert_eq!(size_of::<::Attribute<'static>>(),
-                   size_of::<::ffi::Dwarf_Attribute>());
+        assert_eq!(size_of::<crate::Attribute<'static>>(),
+                   size_of::<crate::ffi::Dwarf_Attribute>());
     }
 
     #[test]
     fn attr_align() {
         use std::mem::align_of;
-        assert_eq!(align_of::<::Attribute<'static>>(),
-                   align_of::<::ffi::Dwarf_Attribute>());
+        assert_eq!(align_of::<crate::Attribute<'static>>(),
+                   align_of::<crate::ffi::Dwarf_Attribute>());
     }
 }

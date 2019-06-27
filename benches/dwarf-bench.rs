@@ -3,9 +3,6 @@
 
 #![feature(test)]
 
-extern crate libc;
-extern crate libdw;
-extern crate libdw_sys;
 extern crate test;
 
 use std::env;
@@ -50,7 +47,7 @@ fn info_dies(b: &mut test::Bencher) {
         Ok(())
     });
 
-    fn recurse_die(die: &Die) -> Result<()> {
+    fn recurse_die(die: &Die<'_>) -> Result<()> {
         test::black_box(die);
 
         if die.has_children()? {
@@ -76,7 +73,7 @@ fn info_iter(b: &mut test::Bencher) {
         Ok(())
     });
 
-    fn recurse_die(die: &Die) -> Result<()> {
+    fn recurse_die(die: &Die<'_>) -> Result<()> {
         for attr in &die.attrs()? {
             test::black_box(attr);
         }
@@ -104,7 +101,7 @@ fn info_nested(b: &mut test::Bencher) {
         Ok(())
     });
 
-    fn recurse_die(die: &Die) -> Result<()> {
+    fn recurse_die(die: &Die<'_>) -> Result<()> {
         die.for_each_attr(|attr| {
             test::black_box(attr);
             Ok(true)
@@ -132,7 +129,7 @@ fn info_nest_unchecked(b: &mut test::Bencher) {
         Ok(())
     });
 
-    fn recurse_die(die: &Die) -> Result<()> {
+    fn recurse_die(die: &Die<'_>) -> Result<()> {
         unsafe {
             die.for_each_attr_unchecked(|attr| {
                 test::black_box(attr);
@@ -152,10 +149,7 @@ fn info_nest_unchecked(b: &mut test::Bencher) {
 
 
 mod orig {
-    use libc;
     use libdw_sys as libdw;
-    use std;
-    use test;
 
     use std::os::unix::io::AsRawFd;
 

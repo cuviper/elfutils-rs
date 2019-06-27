@@ -1,13 +1,12 @@
-extern crate libc;
-extern crate libelf_sys as ffi;
+use libelf_sys as ffi;
 
 pub mod raw {
-    pub use ffi::*;
+    pub use crate::ffi::*;
 }
 
 #[macro_use]
 mod error;
-pub use error::{Error, Result};
+pub use crate::error::{Error, Result};
 
 mod elf;
-pub use elf::Elf;
+pub use crate::elf::Elf;

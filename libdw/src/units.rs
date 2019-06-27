@@ -1,7 +1,7 @@
-use ffi;
+use crate::ffi;
 use std::ptr;
 
-use ffi::Dwarf_Off;
+use crate::ffi::Dwarf_Off;
 
 use super::Result;
 use super::Dwarf;

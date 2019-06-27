@@ -1,6 +1,5 @@
-use ffi;
+use crate::ffi;
 
-use libc;
 use std::any::Any;
 use std::cell::UnsafeCell;
 use std::ffi::CStr;
@@ -36,7 +35,7 @@ impl<'dw> Default for Die<'dw> {
 }
 
 impl<'dw> fmt::Debug for Die<'dw> {
-    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt.debug_tuple("Die")
             .field(unsafe { &*self.as_ptr() })
             .finish()
@@ -50,21 +49,21 @@ impl<'dw> Die<'dw> {
     }
 
     #[inline]
-    pub fn from_offset(dwarf: &'dw Dwarf, offset: u64) -> Result<Die<'dw>> {
+    pub fn from_offset(dwarf: &'dw Dwarf<'_>, offset: u64) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_offdie(dwarf.as_ptr(), offset, die.as_ptr()))?;
         Ok(die)
     }
 
     #[inline]
-    pub fn from_type_offset(dwarf: &'dw Dwarf, offset: u64) -> Result<Die<'dw>> {
+    pub fn from_type_offset(dwarf: &'dw Dwarf<'_>, offset: u64) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_offdie_types(dwarf.as_ptr(), offset, die.as_ptr()))?;
         Ok(die)
     }
 
     #[inline]
-    pub fn from_address(dwarf: &'dw Dwarf, address: u64) -> Result<Die<'dw>> {
+    pub fn from_address(dwarf: &'dw Dwarf<'_>, address: u64) -> Result<Die<'dw>> {
         let die = Die::default();
         ffi!(dwarf_addrdie(dwarf.as_ptr(), address, die.as_ptr()))?;
         Ok(die)
@@ -483,7 +482,7 @@ fn dwarf_cb_map<T>(cont: Result<bool>, result: &mut Result<T>) -> libc::c_uint {
 
 
 struct CallbackGuard {
-    payload: Option<Box<Any + Send>>
+    payload: Option<Box<dyn Any + Send>>
 }
 
 impl CallbackGuard {
@@ -533,15 +532,15 @@ mod tests {
     #[test]
     fn die_size() {
         use std::mem::size_of;
-        assert_eq!(size_of::<::Die<'static>>(),
-                   size_of::<::ffi::Dwarf_Die>());
+        assert_eq!(size_of::<crate::Die<'static>>(),
+                   size_of::<crate::ffi::Dwarf_Die>());
     }
 
     #[test]
     fn die_align() {
         use std::mem::align_of;
-        assert_eq!(align_of::<::Die<'static>>(),
-                   align_of::<::ffi::Dwarf_Die>());
+        assert_eq!(align_of::<crate::Die<'static>>(),
+                   align_of::<crate::ffi::Dwarf_Die>());
     }
 
     fn current() -> Dwarf<'static> {

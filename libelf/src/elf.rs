@@ -1,6 +1,5 @@
-use ffi;
+use crate::ffi;
 
-use libc;
 use std::fmt;
 use std::fs;
 use std::path::Path;
@@ -21,12 +20,12 @@ pub struct Elf<'elf> {
 enum ElfKind<'elf> {
     Raw,
     File(fs::File),
-    Fd(&'elf AsRawFd),
+    Fd(&'elf dyn AsRawFd),
     Bytes(&'elf [u8]),
 }
 
 impl<'elf> fmt::Debug for ElfKind<'elf> {
-    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             ElfKind::Raw => fmt.debug_tuple("Raw").finish(),
             ElfKind::File(ref f) => fmt.debug_tuple("File").field(f).finish(),

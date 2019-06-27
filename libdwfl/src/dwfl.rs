@@ -1,12 +1,10 @@
-use ffi;
+use crate::ffi;
 
-use libc;
 use std::ffi::CString;
 use std::os::unix::ffi::OsStrExt;
 use std::path::Path;
 use std::ptr;
 
-use libdw;
 use libdw::Dwarf;
 
 use super::Result;
@@ -49,7 +47,7 @@ impl Dwfl {
     }
 
     #[inline]
-    pub fn dwarfs(&self) -> Dwarfs {
+    pub fn dwarfs(&self) -> Dwarfs<'_> {
         Dwarfs {
             dwfl: self,
             offset: 0,

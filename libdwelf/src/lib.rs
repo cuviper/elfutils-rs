@@ -1,13 +1,11 @@
-extern crate libdw_sys as ffi;
-extern crate libdw;
-extern crate libelf;
+use libdw_sys as ffi;
 
 use std::ffi::CStr;
 use std::ptr;
 use std::slice;
 
 #[inline]
-pub fn gnu_debuglink<'elf>(elf: &'elf libelf::Elf) -> libelf::Result<Option<(&'elf CStr, u32)>> {
+pub fn gnu_debuglink<'elf>(elf: &'elf libelf::Elf<'_>) -> libelf::Result<Option<(&'elf CStr, u32)>> {
     let mut crc = 0;
     let namep = unsafe {
         ffi::dwelf_elf_gnu_debuglink(elf.as_ptr(), &mut crc)
@@ -24,7 +22,7 @@ pub fn gnu_debuglink<'elf>(elf: &'elf libelf::Elf) -> libelf::Result<Option<(&'e
 
 #[inline]
 pub fn gnu_debugaltlink<'dw>(
-    dwarf: &'dw libdw::Dwarf,
+    dwarf: &'dw libdw::Dwarf<'_>,
 ) -> libdw::Result<Option<(&'dw CStr, &'dw [u8])>> {
     let mut namep = ptr::null();
     let mut build_idp = ptr::null();
@@ -46,8 +44,6 @@ pub fn gnu_debugaltlink<'dw>(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn self_debuglink() {
         use std::env;
