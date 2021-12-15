@@ -19,7 +19,7 @@ include = [
 dependencies = [ "libdw-dev" ]
 
 [build-dependencies]
-pkg-config = "0.3.8"
+pkg-config = "0.3.15"
 
 [dependencies]
 libc = "0.2"
