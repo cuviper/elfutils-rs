@@ -144,6 +144,7 @@ fn info_nest_unchecked(b: &mut test::Bencher) {
 mod orig {
     use libdw_sys as libdw;
 
+    use std::mem::MaybeUninit;
     use std::os::unix::io::AsRawFd;
 
     use super::test_path;
@@ -182,33 +183,29 @@ mod orig {
 
                 let offdie = offset + header_size as u64;
                 let mut stack = Vec::new();
-                let mut die;
+                let mut die = MaybeUninit::uninit();
                 unsafe {
-                    die = std::mem::uninitialized();
-                    let res = libdw::dwarf_offdie(dwarf, offdie, &mut die);
-                    assert_eq!(res, &mut die as *mut _);
+                    let res = libdw::dwarf_offdie(dwarf, offdie, die.as_mut_ptr());
+                    assert_eq!(res, die.as_mut_ptr());
                 };
                 stack.push(die);
 
                 loop {
                     let res = unsafe {
-                        libdw::dwarf_getattrs(&mut die, Some(info_elfutils_attr), null, 0)
+                        libdw::dwarf_getattrs(die.as_mut_ptr(), Some(info_elfutils_attr), null, 0)
                     };
                     assert_eq!(res, 1);
 
-                    let mut next_die;
-                    let res = unsafe {
-                        next_die = std::mem::uninitialized();
-                        libdw::dwarf_child(&mut die, &mut next_die)
-                    };
+                    let mut next_die = MaybeUninit::uninit();
+                    let res =
+                        unsafe { libdw::dwarf_child(die.as_mut_ptr(), next_die.as_mut_ptr()) };
                     assert!(res >= 0);
 
                     if res > 0 {
                         // No child, so read sibling
                         loop {
                             let res = unsafe {
-                                next_die = std::mem::uninitialized();
-                                libdw::dwarf_siblingof(&mut die, &mut next_die)
+                                libdw::dwarf_siblingof(die.as_mut_ptr(), next_die.as_mut_ptr())
                             };
                             assert!(res >= 0);
 
