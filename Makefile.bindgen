@@ -50,7 +50,7 @@ $(LIBELF): $(LIBELF_H) $(LIBELF_DEPS)
 	    --impl-debug \
 	    --raw-line '#![allow(bad_style)]' \
 	    --ctypes-prefix=::libc \
-	    --raw-line 'use libc::{time_t, uid_t, gid_t, mode_t};' \
+	    --raw-line 'use ::libc::{gid_t, mode_t, size_t, time_t, uid_t};' \
 	    --output $@ -- $(CPPFLAGS)
 
 LIBDW_H = libdw-sys/src/lib.h
@@ -74,8 +74,8 @@ $(LIBDW): $(LIBDW_H) $(LIBDW_DEPS)
 	    --impl-debug \
 	    --raw-line '#![allow(bad_style)]' \
 	    --ctypes-prefix=::libc \
-	    --raw-line 'use libc::{FILE, pid_t};' \
-	    --raw-line 'use libelf_sys::*;' \
+	    --raw-line 'use ::libc::{pid_t, size_t, ssize_t, FILE};' \
+	    --raw-line 'use ::libelf_sys::*;' \
 	    --output $@ -- $(CPPFLAGS)
 
 
