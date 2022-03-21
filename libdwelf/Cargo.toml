@@ -1,11 +1,11 @@
 [package]
 name = "libdwelf"
-version = "0.0.6"
+version = "0.1.0"
 repository = "https://github.com/cuviper/elfutils-rs"
 authors = ["Josh Stone <jistone@redhat.com>"]
 description = "Bindings to elfutils"
-license = "MIT/Apache-2.0"
-edition = "2018"
+license = "MIT OR Apache-2.0"
+edition = "2021"
 include = [
     "Cargo.toml",
     "LICENSE-*",
@@ -20,14 +20,14 @@ dependencies = [ "libdw-dev" ]
 [dependencies.libdw-sys]
 optional = false
 path = "../libdw-sys"
-version = "0.0.6"
+version = "0.1.0"
 
 [dependencies.libdw]
 optional = false
 path = "../libdw"
-version = "0.0.6"
+version = "0.1.0"
 
 [dependencies.libelf]
 optional = false
 path = "../libelf"
-version = "0.0.6"
+version = "0.1.0"
