@@ -41,7 +41,7 @@ path = "libelf"
 version = "0.0.6"
 
 [dev-dependencies]
-cpp_demangle = "0.2.5"
+cpp_demangle = "0.3"
 libc = "0.2"
 rustc-demangle = "0.1.15"
 
