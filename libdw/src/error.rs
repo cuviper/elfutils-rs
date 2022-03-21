@@ -132,10 +132,10 @@ fn errmsg(errno: libc::c_int) -> &'static CStr {
 
 impl error::Error for Error {
     #[inline]
-    fn description(&self) -> &str {
+    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
         match self.kind {
-            ErrorKind::Dw(errno) => errmsg(errno).to_str().unwrap_or("libdw error"),
-            ErrorKind::Io(ref error) => error.description(),
+            ErrorKind::Dw(_) => None,
+            ErrorKind::Io(ref error) => Some(error),
         }
     }
 }
