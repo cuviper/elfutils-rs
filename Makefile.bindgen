@@ -28,27 +28,28 @@ $(LIBELF32): CPPFLAGS+=-m32
 $(LIBELF64): CPPFLAGS+=-m64
 $(LIBELF): $(LIBELF_H) $(LIBELF_DEPS)
 	$(BG) $(BGFLAGS) $< \
-	    --no-recursive-whitelist \
-	    --whitelist-function '(elf|elf32|elf64|gelf)_.*' \
-	    --whitelist-type 'Elf|(Elf|Elf32|Elf64|GElf)_.*' \
-	    --whitelist-var 'ELF.*' \
-	    --whitelist-var 'AT_.*' \
-	    --whitelist-var '(DT|DF|DTF)_.*' \
-	    --whitelist-var '(EF|EFA|EI|EM|ET|EV)_.*' \
-	    --whitelist-var '(LITUSE|LL)_.*' \
-	    --whitelist-var 'MIPS_.*' \
-	    --whitelist-var 'NT_.*' \
-	    --whitelist-var '(ODK|OEX|OHW|OHWA\d|OPAD)_.*' \
-	    --whitelist-var '(PF|PN|PT)_.*' \
-	    --whitelist-var '(PPC|PPC64)_.*' \
-	    --whitelist-var '(R|RHF)_.*' \
-	    --whitelist-var '(SHF|SHN|SHT)_.*' \
-	    --whitelist-var '(STB|STN|STO|STT|STV)_.*' \
-	    --whitelist-var 'SYMINFO_.*' \
-	    --whitelist-var 'VER_.*' \
+	    --no-recursive-allowlist \
+	    --allowlist-function '(elf|elf32|elf64|gelf)_.*' \
+	    --allowlist-type 'Elf|(Elf|Elf32|Elf64|GElf)_.*' \
+	    --allowlist-var 'ELF.*' \
+	    --allowlist-var 'AT_.*' \
+	    --allowlist-var '(DT|DF|DTF)_.*' \
+	    --allowlist-var '(EF|EFA|EI|EM|ET|EV)_.*' \
+	    --allowlist-var '(LITUSE|LL)_.*' \
+	    --allowlist-var 'MIPS_.*' \
+	    --allowlist-var 'NT_.*' \
+	    --allowlist-var '(ODK|OEX|OHW|OHWA\d|OPAD)_.*' \
+	    --allowlist-var '(PF|PN|PT)_.*' \
+	    --allowlist-var '(PPC|PPC64)_.*' \
+	    --allowlist-var '(R|RHF)_.*' \
+	    --allowlist-var '(SHF|SHN|SHT)_.*' \
+	    --allowlist-var '(STB|STN|STO|STT|STV)_.*' \
+	    --allowlist-var 'SYMINFO_.*' \
+	    --allowlist-var 'VER_.*' \
 	    --constified-enum-module 'Elf_(Cmd|Kind|Type)' \
 	    --impl-debug \
 	    --raw-line '#![allow(bad_style)]' \
+	    --no-size_t-is-usize \
 	    --ctypes-prefix=::libc \
 	    --raw-line 'use ::libc::{gid_t, mode_t, size_t, time_t, uid_t};' \
 	    --output $@ -- $(CPPFLAGS)
@@ -64,15 +65,17 @@ $(LIBDW32): CPPFLAGS+=-m32
 $(LIBDW64): CPPFLAGS+=-m64
 $(LIBDW): $(LIBDW_H) $(LIBDW_DEPS)
 	$(BG) $(BGFLAGS) $< \
-	    --no-recursive-whitelist \
-	    --whitelist-function '(dwarf|dwfl|dwelf)_.*' \
-	    --whitelist-type 'Dwarf|Dwarf_.*' \
-	    --whitelist-type 'Dwfl|Dwfl_.*|argp' \
-	    --whitelist-type 'Dwelf_.*' \
-	    --whitelist-var '(DW|DWARF)_.*' \
+	    --no-recursive-allowlist \
+	    --allowlist-function '(dwarf|dwfl|dwelf)_.*' \
+	    --allowlist-type 'Dwarf|Dwarf_.*' \
+	    --allowlist-type 'Dwfl|Dwfl_.*|argp' \
+	    --allowlist-type 'Dwelf_.*' \
+	    --allowlist-var '(DW|DWARF)_.*' \
+	    --blocklist-function '.*_(debuginfod)_.*' \
 	    --constified-enum-module 'Dwarf_Cmd' \
 	    --impl-debug \
 	    --raw-line '#![allow(bad_style)]' \
+	    --no-size_t-is-usize \
 	    --ctypes-prefix=::libc \
 	    --raw-line 'use ::libc::{pid_t, size_t, ssize_t, FILE};' \
 	    --raw-line 'use ::libelf_sys::*;' \
